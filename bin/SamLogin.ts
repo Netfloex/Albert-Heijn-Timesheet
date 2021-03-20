@@ -18,7 +18,7 @@ export default class SamLogin {
 		return this.db.get("token").value();
 	}
 	get expiry() {
-		return this.db.get("expiry").value();
+		return this.db.get("expiry").value() ?? 0;
 	}
 	set token(value) {
 		this.db
@@ -38,6 +38,7 @@ export default class SamLogin {
 	}
 	async login() {
 		await this.db.read();
+
 		if (Date.now() > this.expiry) {
 			console.log("Token is expired");
 			var session = await this.getSession();
@@ -52,6 +53,7 @@ export default class SamLogin {
 				this.token = token;
 			}
 		}
+
 		return this.token;
 	}
 
