@@ -1,19 +1,32 @@
 console.clear();
-console.log("Started");
 import express from "express";
 import SamLogin from "./bin/SamLogin";
 import config from "./config.json";
+import colors from "colors/safe";
 
-const Sam = new SamLogin(config);
+const sam = new SamLogin(config);
 const app = express();
-console.time("init");
-Sam.init().then(() => {
-	console.timeEnd("init");
 
+sam.init().then(() => {
+	console.log(colors.green("Started"));
 	app.get("/appie", async (_, res) => {
 		console.time("Appie");
-		res.json(await Sam.login());
-		console.timeEnd("Appie");
+
+		sam.login()
+			.then(async () => {
+				var ts = await sam.timesheet();
+
+				res.end(ts);
+			})
+			.catch(e => {
+				if (e == true) {
+					res.json({ error: "Password Incorrect" });
+				}
+				throw e;
+			})
+			.finally(() => {
+				console.timeEnd("Appie");
+			});
 	});
 	app.listen(4444);
 });
