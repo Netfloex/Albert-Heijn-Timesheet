@@ -13,9 +13,11 @@
   "license": "ISC",
   "dependencies": {
     "@types/express": "^4.17.11",
+    "@types/lowdb": "^1.0.9",
     "@types/node": "^14.14.35",
     "axios": "^0.21.1",
     "express": "^4.17.1",
+    "lowdb": "^1.0.0",
     "ts-node-dev": "^1.1.6"
   }
 }
