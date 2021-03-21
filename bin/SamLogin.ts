@@ -8,7 +8,7 @@ type Schema = {
 	expiry: number;
 };
 const timesheetURL = "wrkbrn_jct/etm/time/timesheet/etmTnsMonth.jsp";
-const EXPIRY = 60 * 60 * 1000 * 12;
+const EXPIRY = 60 * 60 * 1000;
 
 export default class SamLogin {
 	private db: low.LowdbAsync<Schema>;
@@ -26,10 +26,13 @@ export default class SamLogin {
 	}
 
 	set token(value) {
-		this.db
-			.set("token", value)
-			.set("expiry", Date.now() + EXPIRY)
-			.write();
+		this.db.set("expiry", Date.now() + EXPIRY).write();
+		if (value) {
+			this.db //
+				.set("token", value)
+				.set("created", new Date().toLocaleString())
+				.write();
+		}
 	}
 
 	constructor({ username, password }: { username: string; password: string }) {
@@ -103,6 +106,7 @@ export default class SamLogin {
 			});
 			if (typeof res.data == "string") {
 				console.log(colors.green("Opgehaald!"));
+				this.token = ""; // Renew the expiry
 				return res.data;
 			} else {
 				if (res.data.operation == "login") {
