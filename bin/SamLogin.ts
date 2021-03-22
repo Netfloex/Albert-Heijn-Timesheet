@@ -2,6 +2,7 @@ import axios, { AxiosError, AxiosInstance, AxiosResponse } from "axios";
 import FileAsync from "lowdb/adapters/FileAsync";
 import low from "lowdb";
 import colors from "colors/safe";
+import cheerio from "cheerio";
 
 type Schema = {
 	token: string;
@@ -73,7 +74,26 @@ export default class SamLogin {
 	}
 
 	async timesheet() {
-		return await this.requests.timesheet();
+		var html = await this.requests.timesheet();
+		return this.parseTimesheet(html);
+	}
+
+	private parseTimesheet(html: string) {
+		var $ = cheerio.load(html);
+		var shiftsElements = $("td[class*=calendarCellRegular]:not(.calendarCellRegularCurrent:has(.calCellData)) table").toArray();
+		var shifts = shiftsElements.map(element => {
+			var date = element.attribs["title"].replace("Details van ", "");
+
+			var [start, end] = $("p span", element)
+				.toArray()
+				.map(el => new Date(`${date} ${$(el.firstChild).text()}`));
+
+			return {
+				start,
+				end,
+			};
+		});
+		return shifts;
 	}
 
 	private firstCookie(headers: AxiosResponse["headers"]) {
@@ -106,7 +126,7 @@ export default class SamLogin {
 			});
 			if (typeof res.data == "string") {
 				console.log(colors.green("Opgehaald!"));
-				this.token = ""; // Renew the expiry
+				this.token = ""; // Renew the expiry date
 				return res.data;
 			} else {
 				if (res.data.operation == "login") {

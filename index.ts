@@ -15,8 +15,7 @@ sam.init().then(() => {
 		sam.login()
 			.then(async () => {
 				var ts = await sam.timesheet();
-
-				res.end(ts);
+				res.json(ts);
 			})
 			.catch(e => {
 				if (e == true) {
