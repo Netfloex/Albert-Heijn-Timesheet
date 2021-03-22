@@ -7,6 +7,16 @@ import cheerio from "cheerio";
 type Schema = {
 	token: string;
 	expiry: number;
+	shifts: Record<
+		string,
+		{
+			updated: string;
+			parsed: {
+				start: string;
+				end: string;
+			};
+		}
+	>;
 };
 const timesheetURL = "wrkbrn_jct/etm/time/timesheet/etmTnsMonth.jsp";
 const EXPIRY = 60 * 60 * 1000;
@@ -73,9 +83,24 @@ export default class SamLogin {
 		return;
 	}
 
-	async timesheet() {
-		var html = await this.requests.timesheet();
-		return this.parseTimesheet(html);
+	async timesheet(date?: Date) {
+		this.db.read();
+		var when = this.monthYear(date);
+		var cache = `shifts.${when}`;
+		if (this.db.has(cache).value()) {
+			var value = this.db.get(cache).value();
+			if (this.monthYear() != when || Date.now() - new Date(value.updated).getTime() < EXPIRY) {
+				return value;
+			}
+		}
+		var html = await this.requests.timesheet(when);
+		var parsed = {
+			updated: new Date(),
+			parsed: this.parseTimesheet(html),
+		};
+		this.db.set(cache, parsed).write();
+
+		return parsed;
 	}
 
 	private parseTimesheet(html: string) {
@@ -98,6 +123,9 @@ export default class SamLogin {
 
 	private firstCookie(headers: AxiosResponse["headers"]) {
 		return headers["set-cookie"][0].split(";")[0] as string;
+	}
+	private monthYear(date = new Date()) {
+		return `${date.getMonth() + 1}/${date.getFullYear()}`;
 	}
 
 	private requests = {
