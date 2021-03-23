@@ -3,6 +3,9 @@
         "outDir": "./dist",
         "target": "ES5",
         "esModuleInterop": true,
-        "resolveJsonModule": true
+        "resolveJsonModule": true,
+        "lib": [
+            "ES2019.Array"
+        ]
     }
 }

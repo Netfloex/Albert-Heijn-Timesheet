@@ -90,7 +90,13 @@ export default class SamLogin {
 		if (this.db.has(cache).value()) {
 			var value = this.db.get(cache).value();
 			if (this.monthYear() != when || Date.now() - new Date(value.updated).getTime() < EXPIRY) {
-				return value;
+				return value as {
+					updated: Date;
+					parsed: {
+						start: Date;
+						end: Date;
+					}[];
+				};
 			}
 		}
 		var html = await this.requests.timesheet(when);
