@@ -51,7 +51,7 @@ export default class SamLogin {
 			baseURL: "https://sam.ahold.com/",
 		});
 		this.http.interceptors.request.use(c => {
-			console.log(`${colors.yellow("[REQUEST]")}: ${c.url}`);
+			console.log(`${colors.yellow(`[${c.method.toUpperCase()}]`)}: ${c.url}`);
 			return c;
 		});
 		this.username = username;
@@ -88,8 +88,10 @@ export default class SamLogin {
 		var when = this.monthYear(date);
 		var cache = `shifts.${when}`;
 		if (this.db.has(cache).value()) {
+			const now = new Date();
+			var thisMonthTheFirst = new Date(now.getFullYear(), now.getMonth(), 1);
 			var value = this.db.get(cache).value();
-			if (this.monthYear() != when || Date.now() - new Date(value.updated).getTime() < EXPIRY) {
+			if (thisMonthTheFirst > date || Date.now() - new Date(value.updated).getTime() < EXPIRY) {
 				return value as {
 					updated: Date;
 					parsed: {
@@ -159,7 +161,6 @@ export default class SamLogin {
 				maxRedirects: 0,
 			});
 			if (typeof res.data == "string") {
-				console.log(colors.green("Opgehaald!"));
 				this.token = ""; // Renew the expiry date
 				return res.data;
 			} else {
