@@ -3,6 +3,7 @@
 ### Features
 
 -   Albert Heijn shifts timesheet
+-   Nginx Top Stats
 
 ### Install
 
