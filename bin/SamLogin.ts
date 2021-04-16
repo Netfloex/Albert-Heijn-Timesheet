@@ -65,39 +65,46 @@ export default class SamLogin {
 
 	async login({ expired = false } = {}) {
 		await this.db.read();
+
 		if (this.db.get("error").value()) {
 			console.log(colors.yellow("Error var is set, see store.json"));
-			throw true;
+			return "Password was incorrect last time.";
 		}
+
 		if (expired || Date.now() > this.expiry) {
 			console.log(colors.gray("Token is expired"));
+
 			var session = await this.requests.session();
-			var token = await this.requests.login(session).catch((err: AxiosError) => {
-				if (err?.response?.status === 200) {
+			try {
+				var token = await this.requests.login(session);
+				this.token = token;
+				return false;
+			} catch (error) {
+				const err = error as AxiosError;
+
+				if (err.response.status === 200) {
 					this.db.set("error", true).write();
-					console.log(colors.red("Password Login Failed!"));
-					throw true;
+					const msg = "Password Login Failed!";
+					console.log(colors.red(msg));
+					return msg;
 				} else {
 					throw err;
 				}
-			});
-			if (token) {
-				this.token = token;
 			}
 		}
-
-		return;
 	}
 
-	async timesheet(date?: Date) {
+	async timesheet({ date, cachedOnly }: { date?: Date; cachedOnly?: boolean }) {
 		await this.db.read();
 		var when = this.monthYear(date);
 		var cache = `shifts.${when}`;
+
 		if (this.db.has(cache).value()) {
 			const now = new Date();
 			var thisMonthTheFirst = new Date(now.getFullYear(), now.getMonth(), 1);
 			var value = this.db.get(cache).value();
-			if (thisMonthTheFirst > date || Date.now() - new Date(value.updated).getTime() < EXPIRY) {
+
+			if (thisMonthTheFirst > date || Date.now() - new Date(value.updated).getTime() < EXPIRY || cachedOnly) {
 				return value as {
 					updated: Date;
 					parsed: {
@@ -107,6 +114,8 @@ export default class SamLogin {
 				};
 			}
 		}
+		if (cachedOnly) return;
+
 		var html = await this.requests.timesheet(when);
 		var parsed = {
 			updated: new Date(),
