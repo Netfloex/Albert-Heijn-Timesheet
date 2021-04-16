@@ -7,6 +7,7 @@ import cheerio from "cheerio";
 type Schema = {
 	token: string;
 	expiry: number;
+	error: boolean;
 	shifts: Record<
 		string,
 		{
@@ -64,12 +65,17 @@ export default class SamLogin {
 
 	async login({ expired = false } = {}) {
 		await this.db.read();
-
+		if (this.db.get("error").value()) {
+			console.log(colors.yellow("Error var is set, see store.json"));
+			throw true;
+		}
 		if (expired || Date.now() > this.expiry) {
 			console.log(colors.gray("Token is expired"));
 			var session = await this.requests.session();
 			var token = await this.requests.login(session).catch((err: AxiosError) => {
 				if (err?.response?.status === 200) {
+					this.db.set("error", true).write();
+					console.log(colors.red("Password Login Failed!"));
 					throw true;
 				} else {
 					throw err;
@@ -84,7 +90,7 @@ export default class SamLogin {
 	}
 
 	async timesheet(date?: Date) {
-		this.db.read();
+		await this.db.read();
 		var when = this.monthYear(date);
 		var cache = `shifts.${when}`;
 		if (this.db.has(cache).value()) {

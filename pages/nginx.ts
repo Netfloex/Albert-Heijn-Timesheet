@@ -1,6 +1,5 @@
 import { RequestHandler } from "express";
 import { createPool } from "mariadb";
-process.env.mariadb = "mariadb://root:rpI6708!@localhost/nginx";
 
 const pool = createPool(process.env.mariadb);
 
@@ -9,12 +8,13 @@ const sql = async (sql: string) => {
 	conn.release();
 	return await conn.query(sql);
 };
-const countValues = async (key: string) => await sql("SELECT key as one, count(key) AS count FROM requests GROUP BY one ORDER BY count DESC".replace(/key/g, key));
+
+const countValues = async (key: string, name: string) => await sql(`SELECT ${key} as ${name}, count(${key}) AS count FROM requests GROUP BY ${name} ORDER BY count DESC LIMIT 10`);
 
 const json = (value: () => Promise<any>): RequestHandler => async (_, res) => res.json(await value());
 
-const jsonCount = (key: string) => json(async () => await countValues(key));
+const jsonCount = (key: string, name: string) => json(async () => await countValues(key, name));
 
-export const ips = jsonCount("ip");
-export const useragents = jsonCount("`user-agent`");
-export const urls = jsonCount("concat(`host`, `url`)");
+export const ips = jsonCount("ip", "ip");
+export const useragents = jsonCount("`user-agent`", "`user-agent`");
+export const urls = jsonCount("concat(`host`, `url`)", "url");

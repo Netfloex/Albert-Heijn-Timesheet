@@ -1,8 +1,10 @@
 import { RequestHandler } from "express";
 import SamLogin from "../bin/SamLogin";
-import config from "../config.json";
 
-const sam = new SamLogin(config);
+const sam = new SamLogin({
+	username: process.env.ahusername,
+	password: process.env.ahpassword,
+});
 sam.init();
 
 const Appie: RequestHandler = async (_, res) => {
