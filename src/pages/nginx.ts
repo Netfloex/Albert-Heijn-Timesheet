@@ -1,7 +1,9 @@
 import { RequestHandler } from "express";
 import { createPool } from "mariadb";
 
-const pool = createPool(process.env.mariadb);
+import env from "../bin/env";
+
+const pool = createPool(env.mariadb);
 
 const sql = async (sql: string) => {
 	var conn = await pool.getConnection();

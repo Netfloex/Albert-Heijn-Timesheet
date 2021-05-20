@@ -1,9 +1,11 @@
 import { RequestHandler } from "express";
 import SamLogin from "../bin/SamLogin";
 
+import env from "../bin/env";
+
 const sam = new SamLogin({
-	username: process.env.ahusername,
-	password: process.env.ahpassword,
+	username: env.ahusername,
+	password: env.ahpassword
 });
 sam.init();
 
@@ -29,7 +31,7 @@ const Appie: RequestHandler = async (_, res) => {
 			res.json({
 				updated: resolved[0].updated,
 				error,
-				parsed: resolved.flatMap(t => t.parsed),
+				parsed: resolved.flatMap(t => t.parsed)
 			});
 		})
 		.finally(() => {

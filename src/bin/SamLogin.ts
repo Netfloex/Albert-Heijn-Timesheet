@@ -1,8 +1,11 @@
 import axios, { AxiosError, AxiosInstance, AxiosResponse } from "axios";
 import FileAsync from "lowdb/adapters/FileAsync";
 import low from "lowdb";
-import colors from "colors/safe";
+import colors from "chalk";
 import cheerio from "cheerio";
+
+import { join } from "path";
+import env from "./env";
 
 type Schema = {
 	token: string;
@@ -49,7 +52,7 @@ export default class SamLogin {
 
 	constructor({ username, password }: { username: string; password: string }) {
 		this.http = axios.create({
-			baseURL: "https://sam.ahold.com/",
+			baseURL: "https://sam.ahold.com/"
 		});
 		this.http.interceptors.request.use(c => {
 			console.log(`${colors.yellow(`[${c.method.toUpperCase()}]`)}: ${c.url}`);
@@ -60,7 +63,7 @@ export default class SamLogin {
 	}
 
 	async init() {
-		this.db = await low(new FileAsync<Schema>("store.json"));
+		this.db = await low(new FileAsync<Schema>(join(env.path ?? ".", "store.json")));
 	}
 
 	async login({ expired = false } = {}) {
@@ -119,7 +122,7 @@ export default class SamLogin {
 		var html = await this.requests.timesheet(when);
 		var parsed = {
 			updated: new Date(),
-			parsed: this.parseTimesheet(html),
+			parsed: this.parseTimesheet(html)
 		};
 		this.db.set(cache, parsed).write();
 
@@ -138,7 +141,7 @@ export default class SamLogin {
 
 			return {
 				start,
-				end,
+				end
 			};
 		});
 		return shifts;
@@ -164,7 +167,7 @@ export default class SamLogin {
 				{
 					headers: { Cookie: session },
 					maxRedirects: 0,
-					validateStatus: s => s == 302,
+					validateStatus: s => s == 302
 				}
 			);
 			return this.firstCookie(res.headers);
@@ -173,7 +176,7 @@ export default class SamLogin {
 		timesheet: async (when?: string): Promise<string> => {
 			var res = await this.http(`${timesheetURL}?NEW_MONTH_YEAR=${when ?? ""}`, {
 				headers: { Cookie: this.token },
-				maxRedirects: 0,
+				maxRedirects: 0
 			});
 			if (typeof res.data == "string") {
 				this.token = ""; // Renew the expiry date
@@ -188,6 +191,6 @@ export default class SamLogin {
 			console.error("Unknown Error");
 			console.log(res.data);
 			return "Unknown Error";
-		},
+		}
 	};
 }
