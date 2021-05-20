@@ -5,7 +5,7 @@
   "main": "dist/index.js",
   "scripts": {
     "build": "tsc",
-    "dev": "ts-node-dev index.ts --respawn --transpileOnly",
+    "dev": "ts-node-dev src/index.ts --respawn --transpileOnly",
     "start": "node ."
   },
   "keywords": [],
@@ -22,5 +22,8 @@
     "lowdb": "^1.0.0",
     "mariadb": "^2.5.3",
     "ts-node-dev": "^1.1.6"
+  },
+  "devDependencies": {
+    "typescript": "^4.2.4"
   }
 }
