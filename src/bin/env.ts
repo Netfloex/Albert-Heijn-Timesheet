@@ -1,3 +1,5 @@
+import Env from "../models/env";
+
 const required = ["AHUSERNAME", "AHPASSWORD", "MARIADB", "PRIVATEDATA"];
 var unset = required.filter(env => !process.env[env]);
 
@@ -7,15 +9,6 @@ if (unset.length) {
 
 const e = process.env;
 
-export type Env = {
-	ahusername: string;
-	ahpassword: string;
-	mariadb: string;
-	privatedata: string;
-
-	path?: string;
-	port?: string;
-};
 const env: Env = {
 	ahusername: e.AHUSERNAME,
 	ahpassword: e.AHPASSWORD,

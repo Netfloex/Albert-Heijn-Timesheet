@@ -5,28 +5,14 @@ import colors from "chalk";
 import cheerio from "cheerio";
 
 import { join } from "path";
+import Store, { Month, Shift } from "../models/store";
 import env from "./env";
 
-type Schema = {
-	token: string;
-	expiry: number;
-	error: boolean;
-	shifts: Record<
-		string,
-		{
-			updated: string;
-			parsed: {
-				start: string;
-				end: string;
-			};
-		}
-	>;
-};
 const timesheetURL = "wrkbrn_jct/etm/time/timesheet/etmTnsMonth.jsp";
 const EXPIRY = 60 * 60 * 1000;
 
 export default class SamLogin {
-	private db: low.LowdbAsync<Schema>;
+	private db: low.LowdbAsync<Store>;
 	private http: AxiosInstance;
 
 	private username: string;
@@ -63,7 +49,8 @@ export default class SamLogin {
 	}
 
 	async init() {
-		this.db = await low(new FileAsync<Schema>(join(env.path ?? ".", "store.json")));
+		this.db = await low(new FileAsync<Store>(join(env.path ?? ".", "store.json")));
+		this.db.defaults({ shifts: {} }).write();
 	}
 
 	async login({ expired = false } = {}) {
@@ -97,39 +84,34 @@ export default class SamLogin {
 		}
 	}
 
-	async timesheet({ date, cachedOnly }: { date?: Date; cachedOnly?: boolean }) {
+	async timesheet({ date, cachedOnly }: { date?: Date; cachedOnly?: boolean }): Promise<Month> {
 		await this.db.read();
 		var when = this.monthYear(date);
-		var cache = `shifts.${when}`;
+		var cache = this.db.get("shifts");
 
-		if (this.db.has(cache).value()) {
+		if (cache.has(when).value()) {
 			const now = new Date();
 			var thisMonthTheFirst = new Date(now.getFullYear(), now.getMonth(), 1);
-			var value = this.db.get(cache).value();
+			var value = cache.get(when).value();
 
 			if (thisMonthTheFirst > date || Date.now() - new Date(value.updated).getTime() < EXPIRY || cachedOnly) {
-				return value as {
-					updated: Date;
-					parsed: {
-						start: Date;
-						end: Date;
-					}[];
-				};
+				return value;
 			}
 		}
 		if (cachedOnly) return;
 
 		var html = await this.requests.timesheet(when);
-		var parsed = {
-			updated: new Date(),
+		var parsed: Month = {
+			updated: new Date().toJSON(),
 			parsed: this.parseTimesheet(html)
 		};
-		this.db.set(cache, parsed).write();
+
+		cache.set(when, parsed).write();
 
 		return parsed;
 	}
 
-	private parseTimesheet(html: string) {
+	private parseTimesheet(html: string): Shift[] {
 		var $ = cheerio.load(html);
 		var shiftsElements = $("td[class*=calendarCellRegular]:not(.calendarCellRegularCurrent:has(.calCellData)) table").toArray();
 		var shifts = shiftsElements.map(element => {
@@ -137,7 +119,7 @@ export default class SamLogin {
 
 			var [start, end] = $("p span", element)
 				.toArray()
-				.map(el => new Date(`${date} ${$(el.firstChild).text()}`));
+				.map(el => new Date(`${date} ${$(el.firstChild).text()}`).toJSON());
 
 			return {
 				start,
