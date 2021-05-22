@@ -1,6 +1,5 @@
 import axios, { AxiosError, AxiosInstance, AxiosResponse } from "axios";
-import FileAsync from "lowdb/adapters/FileAsync";
-import low from "lowdb";
+import Database from "./storage";
 import colors from "chalk";
 import cheerio from "cheerio";
 
@@ -12,29 +11,24 @@ const timesheetURL = "wrkbrn_jct/etm/time/timesheet/etmTnsMonth.jsp";
 const EXPIRY = 60 * 60 * 1000;
 
 export default class SamLogin {
-	private db: low.LowdbAsync<Store>;
+	private db: Database<Store>;
 	private http: AxiosInstance;
 
 	private username: string;
 	private password: string;
 
-	get token() {
-		return this.db.get("token").value();
-	}
-
-	get expiry() {
-		return this.db.get("expiry").value() ?? 0;
-	}
-
-	set token(value) {
-		this.db.set("expiry", Date.now() + EXPIRY).write();
-		if (value) {
-			this.db //
-				.set("token", value)
-				.set("created", new Date().toLocaleString())
-				.write();
-		}
-	}
+	private getToken = () => this.db.data.token;
+	private isExpired = () => Date.now() > (this.db.data.expiry ?? 0);
+	private updateExpiry = () => {
+		this.db.data.expiry = Date.now() + EXPIRY;
+		this.db.write();
+	};
+	private setToken = (token: string) => {
+		this.updateExpiry();
+		this.db.data.token = token;
+		this.db.data.created = new Date().toLocaleString();
+		this.db.write();
+	};
 
 	constructor({ username, password }: { username: string; password: string }) {
 		this.http = axios.create({
@@ -46,34 +40,30 @@ export default class SamLogin {
 		});
 		this.username = username;
 		this.password = password;
-	}
-
-	async init() {
-		this.db = await low(new FileAsync<Store>(join(env.path ?? ".", "store.json")));
-		this.db.defaults({ shifts: {} }).write();
+		this.db = new Database<Store>(join(env.path ?? ".", "store.json"), { shifts: {} });
 	}
 
 	async login({ expired = false } = {}) {
-		await this.db.read();
+		this.db.read();
 
-		if (this.db.get("error").value()) {
+		if (this.db.data.error) {
 			console.log(colors.yellow("Error var is set, see store.json"));
 			return "Password was incorrect last time.";
 		}
 
-		if (expired || Date.now() > this.expiry) {
+		if (expired || this.isExpired()) {
 			console.log(colors.gray("Token is expired"));
 
 			var session = await this.requests.session();
 			try {
 				var token = await this.requests.login(session);
-				this.token = token;
-				return false;
+				this.setToken(token);
 			} catch (error) {
 				const err = error as AxiosError;
 
 				if (err.response.status === 200) {
-					this.db.set("error", true).write();
+					this.db.data.error = true;
+					this.db.write();
 					const msg = "Password Login Failed!";
 					console.log(colors.red(msg));
 					return msg;
@@ -85,28 +75,32 @@ export default class SamLogin {
 	}
 
 	async timesheet({ date, cachedOnly }: { date?: Date; cachedOnly?: boolean }): Promise<Month> {
-		await this.db.read();
+		this.db.read();
 		var when = this.monthYear(date);
-		var cache = this.db.get("shifts");
 
-		if (cache.has(when).value()) {
+		var cache = this.db.data.shifts;
+
+		if (cache.hasOwnProperty(when)) {
 			const now = new Date();
 			var thisMonthTheFirst = new Date(now.getFullYear(), now.getMonth(), 1);
-			var value = cache.get(when).value();
+			var value = cache[when];
 
 			if (thisMonthTheFirst > date || Date.now() - new Date(value.updated).getTime() < EXPIRY || cachedOnly) {
 				return value;
 			}
 		}
+
 		if (cachedOnly) return;
 
 		var html = await this.requests.timesheet(when);
+
 		var parsed: Month = {
 			updated: new Date().toJSON(),
 			parsed: this.parseTimesheet(html)
 		};
+		this.db.data.shifts[when] = parsed;
 
-		cache.set(when, parsed).write();
+		this.db.write();
 
 		return parsed;
 	}
@@ -157,15 +151,15 @@ export default class SamLogin {
 
 		timesheet: async (when?: string): Promise<string> => {
 			var res = await this.http(`${timesheetURL}?NEW_MONTH_YEAR=${when ?? ""}`, {
-				headers: { Cookie: this.token },
+				headers: { Cookie: this.getToken() },
 				maxRedirects: 0
 			});
 			if (typeof res.data == "string") {
-				this.token = ""; // Renew the expiry date
+				this.updateExpiry();
 				return res.data;
 			} else {
 				if (res.data.operation == "login") {
-					console.log("Token Expired During request, ms ago: " + (Date.now() - this.expiry));
+					console.log("Token Expired During request");
 					await this.login({ expired: true });
 					return await this.requests.timesheet(when);
 				}

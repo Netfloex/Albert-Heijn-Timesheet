@@ -7,14 +7,13 @@ const sam = new SamLogin({
 	username: env.ahusername,
 	password: env.ahpassword
 });
-sam.init();
 
 const Appie: RequestHandler = async (_, res) => {
 	console.time("Appie");
 
 	sam.login()
 		.then(async error => {
-			var cachedOnly = error != false;
+			var cachedOnly = error != undefined;
 
 			var ts = [sam.timesheet({ cachedOnly })];
 			if (new Date().getDate() >= 15) {

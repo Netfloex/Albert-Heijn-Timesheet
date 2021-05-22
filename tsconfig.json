@@ -4,6 +4,7 @@
         "target": "ES5",
         "esModuleInterop": true,
         "resolveJsonModule": true,
+        "incremental": true,
         "lib": [
             "ES2019.Array"
         ]
