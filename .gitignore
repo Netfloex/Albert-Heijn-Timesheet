@@ -1,4 +1,4 @@
 node_modules/
 dist/
 store.json
-ecosystem.config.js
+.env

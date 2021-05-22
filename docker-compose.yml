@@ -1,0 +1,14 @@
+version: "3"
+services:
+    api:
+        image: netfloex/api:latest
+        container_name: api
+        ports:
+            - 2000:3000
+        volumes:
+            - ./db:/db
+        env_file: .env
+# networks:
+#     default:
+#         external:
+#             name: nginx
