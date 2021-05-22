@@ -5,14 +5,27 @@
 -   Albert Heijn shifts timesheet
 -   Nginx Top Stats
 
-### Install
+### Environment Variables
+
+```
+PRIVATEDATA=User Agent for nginx data
+MARIADB=mariadb://root:password@hostname/table
+AHUSERNAME=pnl
+AHPASSWORD=password
+DBPATH=/db
+```
+
+### Development
 
 ```
 git clone https://github.com/Netfloex/Api Sam-Taen-Api
 cd Sam-Taen-Api
-npm install
-npm run build
-npm start
+yarn
+yarn dev
 ```
 
-Check http://localhost:4444
+### Docker
+
+See [docker-compose.yml](docker-compose.yml)
+
+Create a `.env` file
