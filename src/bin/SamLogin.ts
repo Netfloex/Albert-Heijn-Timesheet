@@ -32,7 +32,8 @@ export default class SamLogin {
 
 	constructor({ username, password }: { username: string; password: string }) {
 		this.http = axios.create({
-			baseURL: "https://sam.ahold.com/"
+			baseURL: "https://sam.ahold.com/",
+			timeout: 5000
 		});
 		this.http.interceptors.request.use(c => {
 			console.log(`${colors.yellow(`[${c.method.toUpperCase()}]`)}: ${c.url}`);
