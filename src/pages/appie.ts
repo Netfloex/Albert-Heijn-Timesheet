@@ -1,4 +1,4 @@
-import { RequestHandler, Response } from "express";
+import { Request, RequestHandler, Response } from "express";
 import SamLogin from "../bin/SamLogin";
 
 import env from "../bin/env";
@@ -7,13 +7,24 @@ const sam = new SamLogin({
 	username: env.ahusername,
 	password: env.ahpassword
 });
+const ifIsNumber = (test: any, set: (n: number) => number) => {
+	if (typeof test == "string" && !isNaN(parseInt(test))) {
+		console.log(test);
 
-const afterLogin = async (error, res: Response) => {
+		set(parseInt(test));
+	}
+};
+const afterLogin = async (error, req: Request, res: Response) => {
 	var cachedOnly = error != undefined;
-	var { config, ...error } = error;
+	if (cachedOnly) delete error.config;
 
-	var ts = [sam.timesheet({ cachedOnly })];
-	if (new Date().getDate() >= 15) {
+	const date = new Date();
+	ifIsNumber(req.query.month, (n) => date.setMonth(n - 1));
+	ifIsNumber(req.query.year, (n) => date.setFullYear(n));
+
+	var ts = [sam.timesheet({ cachedOnly, date })];
+
+	if (!date && new Date().getDate() >= 15) {
 		const now = new Date();
 		var nextMonth = new Date(now.getFullYear(), now.getMonth() + 1, 1);
 		ts.push(sam.timesheet({ date: nextMonth, cachedOnly }));
@@ -26,16 +37,15 @@ const afterLogin = async (error, res: Response) => {
 	res.json({
 		updated: resolved[0].updated,
 		error,
-		parsed: resolved.flatMap(t => t.parsed)
+		parsed: resolved.flatMap((t) => t.parsed)
 	});
 };
 
-const Appie: RequestHandler = async (_, res) => {
+const Appie: RequestHandler = async (req, res) => {
 	console.time("Appie");
-
 	sam.login()
-		.then(e => afterLogin(e, res))
-		.catch(e => afterLogin(e, res))
+		.then((e) => afterLogin(e, req, res))
+		.catch((e) => afterLogin(e, req, res))
 		.finally(() => {
 			console.timeEnd("Appie");
 		});
