@@ -9,8 +9,6 @@ const sam = new SamLogin({
 });
 const ifIsNumber = (test: any, set: (n: number) => number) => {
 	if (typeof test == "string" && !isNaN(parseInt(test))) {
-		console.log(test);
-
 		set(parseInt(test));
 	}
 };

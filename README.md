@@ -3,13 +3,10 @@
 ### Features
 
 -   Albert Heijn shifts timesheet
--   Nginx Top Stats
 
 ### Environment Variables
 
 ```
-PRIVATEDATA=User Agent for nginx data
-MARIADB=mariadb://root:password@hostname/table
 AHUSERNAME=pnl
 AHPASSWORD=password
 DBPATH=/db
