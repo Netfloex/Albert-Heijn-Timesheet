@@ -15,7 +15,8 @@ const env: Env = {
 
 	path: e.DBPATH,
 	port: e.PORT,
-	redirect: e.REDIRECT
+	redirect: e.REDIRECT,
+	cors: e.CORS
 };
 
 export default env;

@@ -5,5 +5,6 @@ type Env = {
 	path?: string;
 	port?: string;
 	redirect?: string;
+	cors?: string;
 };
 export default Env;
