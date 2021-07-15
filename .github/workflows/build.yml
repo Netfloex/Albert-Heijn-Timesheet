@@ -15,10 +15,15 @@ jobs:
               uses: actions/setup-node@v1
               with:
                   node-version: 12
-            - name: Install all dependencies
+
+            - name: Cache Dependencies
+              uses: c-hive/gha-yarn-cache@v2
+
+            - name: Install Dependencies
               run: yarn install
             - name: Test Typescript
               run: yarn test
+
     docker:
         runs-on: ubuntu-latest
         needs: typescript
