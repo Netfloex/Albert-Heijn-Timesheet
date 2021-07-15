@@ -8,7 +8,9 @@ const app = express();
 
 console.log(colors.green("Started"));
 
-app.get("/", (req, res) => res.redirect("https://github.com/Netfloex/Api"));
+app.get("/", (_, res) =>
+	res.redirect(env.redirect ?? "https://github.com/Netfloex/Api")
+);
 app.get("/appie", appie);
 
 app.listen(env.port ?? 3000);

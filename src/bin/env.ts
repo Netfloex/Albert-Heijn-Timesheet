@@ -14,7 +14,8 @@ const env: Env = {
 	ahpassword: e.AHPASSWORD,
 
 	path: e.DBPATH,
-	port: e.PORT
+	port: e.PORT,
+	redirect: e.REDIRECT
 };
 
 export default env;
