@@ -2,3 +2,4 @@ node_modules/
 dist/
 store.json
 .env
+.next

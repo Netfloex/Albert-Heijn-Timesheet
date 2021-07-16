@@ -1,12 +1,29 @@
 {
-    "compilerOptions": {
-        "outDir": "./dist",
-        "target": "ES5",
-        "esModuleInterop": true,
-        "resolveJsonModule": true,
-        "incremental": true,
-        "lib": [
-            "ES2019.Array"
-        ]
-    }
+  "compilerOptions": {
+    "outDir": "./dist",
+    "target": "ES5",
+    "esModuleInterop": true,
+    "resolveJsonModule": true,
+    "incremental": true,
+    "lib": [
+      "ES2019.Array"
+    ],
+    "allowJs": true,
+    "skipLibCheck": true,
+    "strict": false,
+    "forceConsistentCasingInFileNames": true,
+    "noEmit": true,
+    "module": "esnext",
+    "moduleResolution": "node",
+    "isolatedModules": true,
+    "jsx": "preserve"
+  },
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
 }
