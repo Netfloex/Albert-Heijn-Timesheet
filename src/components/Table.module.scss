@@ -1,0 +1,12 @@
+@use "variables.scss" as colors;
+
+.styledTable {
+	padding: 10px;
+	background-color: colors.$secondary-background;
+	border-radius: 10px;
+	width: 100%;
+
+	td {
+		text-align: center;
+	}
+}

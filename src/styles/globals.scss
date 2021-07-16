@@ -1,0 +1,7 @@
+@use "variables.scss" as colors;
+@import "colors.scss";
+
+body {
+	background-color: colors.$background;
+	color: colors.$text;
+}

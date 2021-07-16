@@ -1,3 +1,5 @@
+import styles from "./Table.module.scss";
+
 import { FC } from "react";
 
 type ColDef = Array<{
@@ -14,13 +16,9 @@ type ColDef = Array<{
 const Table: FC<{
 	data: Record<string, string>[];
 	colDef: ColDef;
-}> = ({
-	//
-	data,
-	colDef
-}) => {
+}> = ({ data, colDef }) => {
 	return (
-		<table className="styled-table">
+		<table className={styles.styledTable}>
 			<thead>
 				<tr>
 					{colDef.map((col) => (

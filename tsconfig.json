@@ -2,9 +2,11 @@
 	"compilerOptions": {
 		"baseUrl": ".",
 		"paths": {
+			"@src/*": ["src/*"],
 			"@components/*": ["src/components/*"],
 			"@models/*": ["src/models/*"],
-			"@utils/*": ["src/utils/*"]
+			"@utils/*": ["src/utils/*"],
+			"@styles/*": ["src/styles/*"]
 		},
 		"outDir": "./dist",
 		"target": "ES5",
