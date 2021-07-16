@@ -2,15 +2,16 @@ import { GetStaticProps, NextPage } from "next";
 import { Month } from "@models/store";
 import env from "@utils/env";
 import SamLogin from "@utils/SamLogin";
+import Dashboard from "@components/Dashboard";
 
-const Home: NextPage<{ shifts: Month; error?: string }> = ({
-	shifts,
+const Home: NextPage<{ timesheet: Month; error?: string }> = ({
+	timesheet,
 	error
 }) => {
 	if (error) {
 		return <>{error}</>;
 	}
-	return <pre>{JSON.stringify(shifts, null, "\t")}</pre>;
+	return <Dashboard timesheet={timesheet} />;
 };
 
 export const getStaticProps: GetStaticProps = async () => {
@@ -29,11 +30,11 @@ export const getStaticProps: GetStaticProps = async () => {
 
 	await sam.login();
 
-	const shifts = await sam.timesheet({ date: new Date() });
+	const timesheet = await sam.timesheet({ date: new Date() });
 
 	return {
 		props: {
-			shifts
+			timesheet
 		}
 	};
 };
