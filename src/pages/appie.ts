@@ -7,6 +7,7 @@ const sam = new SamLogin({
 	username: env.ahusername,
 	password: env.ahpassword
 });
+// eslint-disable-next-line no-unused-vars
 const ifIsNumber = (test: any, set: (n: number) => number) => {
 	if (typeof test == "string" && !isNaN(parseInt(test))) {
 		set(parseInt(test));
