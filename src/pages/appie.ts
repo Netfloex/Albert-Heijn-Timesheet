@@ -1,7 +1,7 @@
 import { Request, RequestHandler, Response } from "express";
-import SamLogin from "../bin/SamLogin";
+import SamLogin from "../utils/SamLogin";
 
-import env from "../bin/env";
+import env from "../utils/env";
 
 const sam = new SamLogin({
 	username: env.ahusername,
