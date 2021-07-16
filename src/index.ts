@@ -2,7 +2,7 @@ import express from "express";
 import colors from "chalk";
 import appie from "./pages/appie";
 import cors from "cors";
-import env from "./bin/env";
+import env from "./utils/env";
 
 const app = express();
 
