@@ -66,11 +66,11 @@ export default class SamLogin {
 		this.username = username;
 		this.password = password;
 
-		this.db = new Database<Store>(join(env.path ?? ".", "store.json"), { shifts: {} });
+		this.db = new Database<Store>(join(env.path ?? process.cwd(), "store.json"), { shifts: {} });
 	}
 
 	async login({ expired = false } = {}) {
-		await this.db.read();
+		await this.db.init();
 
 		if (this.db.data.error) {
 			console.log(colors.yellow("Error var is set, see store.json"));
@@ -106,7 +106,7 @@ export default class SamLogin {
 
 		var cache = this.db.data.shifts;
 
-		if (cache.hasOwnProperty(when)) {
+		if (when in cache) {
 			const now = new Date();
 			var thisMonthTheFirst = new Date(now.getFullYear(), now.getMonth(), 1);
 			var value = cache[when];
