@@ -4,7 +4,7 @@ import colors from "chalk";
 import cheerio from "cheerio";
 
 import { join } from "path";
-import Store, { Month, Shift } from "../models/store";
+import Store, { Month, Shift } from "@models/store";
 import env from "./env";
 
 const timesheetURL = "wrkbrn_jct/etm/time/timesheet/etmTnsMonth.jsp";
@@ -33,40 +33,32 @@ export default class SamLogin {
 		await this.db.write();
 	};
 
-	constructor({ username, password }: { username: string; password: string }) {
+	constructor({
+		username,
+		password
+	}: {
+		username: string;
+		password: string;
+	}) {
 		this.http = axios.create({
 			baseURL: "https://sam.ahold.com/",
 			timeout: 5000
 		});
-		this.http.interceptors.response.use(
-			(response) => {
-				console.timeEnd(response.config.url);
-				return response;
-			},
-			(error) => {
-				console.timeEnd(error.response.config.url);
-				return Promise.reject(error);
-			}
-		);
 
-		this.http.interceptors.request.use(
-			function (config) {
-				console.time(config.url);
-				return config;
-			},
-			function (error) {
-				return Promise.reject(error);
-			}
-		);
 		this.http.interceptors.request.use((c) => {
-			console.log(`${colors.yellow(`[${c.method.toUpperCase()}]`)}: ${c.url}`);
+			console.log(
+				`${colors.yellow(`[${c.method.toUpperCase()}]`)}: ${c.url}`
+			);
 			return c;
 		});
 
 		this.username = username;
 		this.password = password;
 
-		this.db = new Database<Store>(join(env.path ?? process.cwd(), "store.json"), { shifts: {} });
+		this.db = new Database<Store>(
+			join(env.path ?? process.cwd(), "store.json"),
+			{ shifts: {} }
+		);
 	}
 
 	async login({ expired = false } = {}) {
@@ -101,17 +93,31 @@ export default class SamLogin {
 		}
 	}
 
-	async timesheet({ date, cachedOnly }: { date?: Date; cachedOnly?: boolean }): Promise<Month> {
+	async timesheet({
+		date,
+		cachedOnly
+	}: {
+		date?: Date;
+		cachedOnly?: boolean;
+	}): Promise<Month> {
 		var when = this.monthYear(date);
 
 		var cache = this.db.data.shifts;
 
 		if (when in cache) {
 			const now = new Date();
-			var thisMonthTheFirst = new Date(now.getFullYear(), now.getMonth(), 1);
+			var thisMonthTheFirst = new Date(
+				now.getFullYear(),
+				now.getMonth(),
+				1
+			);
 			var value = cache[when];
 
-			if (thisMonthTheFirst > date || Date.now() - new Date(value.updated).getTime() < EXPIRY || cachedOnly) {
+			if (
+				thisMonthTheFirst > date ||
+				Date.now() - new Date(value.updated).getTime() < EXPIRY ||
+				cachedOnly
+			) {
 				return value;
 			}
 		}
@@ -133,13 +139,17 @@ export default class SamLogin {
 
 	private parseTimesheet(html: string): Shift[] {
 		var $ = cheerio.load(html);
-		var shiftsElements = $("td[class*=calendarCellRegular]:not(.calendarCellRegularCurrent:has(.calCellData)) table").toArray();
+		var shiftsElements = $(
+			"td[class*=calendarCellRegular]:not(.calendarCellRegularCurrent:has(.calCellData)) table"
+		).toArray();
 		var shifts = shiftsElements.map((element) => {
 			var date = element.attribs["title"].replace("Details van ", "");
 
 			var [start, end] = $("p span", element)
 				.toArray()
-				.map((el) => new Date(`${date} ${$(el.firstChild).text()}`).toJSON());
+				.map((el) =>
+					new Date(`${date} ${$(el.firstChild).text()}`).toJSON()
+				);
 
 			return {
 				start,
@@ -176,10 +186,13 @@ export default class SamLogin {
 		},
 
 		timesheet: async (when?: string): Promise<string> => {
-			var res = await this.http(`${timesheetURL}?NEW_MONTH_YEAR=${when ?? ""}`, {
-				headers: { Cookie: this.getToken() },
-				maxRedirects: 0
-			});
+			var res = await this.http(
+				`${timesheetURL}?NEW_MONTH_YEAR=${when ?? ""}`,
+				{
+					headers: { Cookie: this.getToken() },
+					maxRedirects: 0
+				}
+			);
 			if (typeof res.data == "string") {
 				await this.updateExpiry();
 				return res.data;

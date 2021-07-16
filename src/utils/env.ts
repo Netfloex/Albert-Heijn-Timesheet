@@ -1,4 +1,4 @@
-import Env from "../models/env";
+import Env from "@models/env";
 
 const required = ["AHUSERNAME", "AHPASSWORD"];
 var unset = required.filter((env) => !process.env[env]);
