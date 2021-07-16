@@ -1,11 +1,11 @@
 import axios, { AxiosError, AxiosInstance, AxiosResponse } from "axios";
-import Database from "./storage";
+import Database from "@utils/storage";
 import colors from "chalk";
 import cheerio from "cheerio";
 
 import { join } from "path";
 import Store, { Month, Shift } from "@models/store";
-import env from "./env";
+import env from "@utils/env";
 
 const timesheetURL = "wrkbrn_jct/etm/time/timesheet/etmTnsMonth.jsp";
 const EXPIRY = 60 * 60 * 1000;
@@ -79,7 +79,7 @@ export default class SamLogin {
 				.catch(async (error) => {
 					const err = error as AxiosError;
 
-					if (err.response.status === 200) {
+					if (err?.response?.status === 200) {
 						const msg = "Password Login Failed!";
 						console.log(colors.red(msg));
 
