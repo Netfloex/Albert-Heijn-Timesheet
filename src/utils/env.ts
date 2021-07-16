@@ -3,10 +3,6 @@ import Env from "@models/env";
 const required = ["AHUSERNAME", "AHPASSWORD"];
 var unset = required.filter((env) => !process.env[env]);
 
-if (unset.length) {
-	throw new Error(`${unset.join(", ")} environment variable(s) is not set.`);
-}
-
 const e = process.env;
 
 const env: Env = {
@@ -16,7 +12,14 @@ const env: Env = {
 	path: e.DBPATH,
 	port: e.PORT,
 	redirect: e.REDIRECT,
-	cors: e.CORS
+	cors: e.CORS,
+
+	complete: true
 };
+
+if (unset.length) {
+	console.warn(`${unset.join(", ")} environment variable(s) is not set.`);
+	env.complete = false;
+}
 
 export default env;
