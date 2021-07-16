@@ -18,16 +18,19 @@ export default class SamLogin {
 	private password: string;
 
 	private getToken = () => this.db.data.token;
+
 	private isExpired = () => Date.now() > (this.db.data.expiry ?? 0);
-	private updateExpiry = () => {
+
+	private updateExpiry = async (): Promise<void> => {
 		this.db.data.expiry = Date.now() + EXPIRY;
-		this.db.write();
+		await this.db.write();
 	};
-	private setToken = (token: string) => {
-		this.updateExpiry();
+
+	private setToken = async (token: string): Promise<void> => {
+		await this.updateExpiry();
 		this.db.data.token = token;
 		this.db.data.created = new Date().toLocaleString();
-		this.db.write();
+		await this.db.write();
 	};
 
 	constructor({ username, password }: { username: string; password: string }) {
@@ -35,17 +38,39 @@ export default class SamLogin {
 			baseURL: "https://sam.ahold.com/",
 			timeout: 5000
 		});
-		this.http.interceptors.request.use(c => {
+		this.http.interceptors.response.use(
+			(response) => {
+				console.timeEnd(response.config.url);
+				return response;
+			},
+			(error) => {
+				console.timeEnd(error.response.config.url);
+				return Promise.reject(error);
+			}
+		);
+
+		this.http.interceptors.request.use(
+			function (config) {
+				console.time(config.url);
+				return config;
+			},
+			function (error) {
+				return Promise.reject(error);
+			}
+		);
+		this.http.interceptors.request.use((c) => {
 			console.log(`${colors.yellow(`[${c.method.toUpperCase()}]`)}: ${c.url}`);
 			return c;
 		});
+
 		this.username = username;
 		this.password = password;
+
 		this.db = new Database<Store>(join(env.path ?? ".", "store.json"), { shifts: {} });
 	}
 
 	async login({ expired = false } = {}) {
-		this.db.read();
+		await this.db.read();
 
 		if (this.db.data.error) {
 			console.log(colors.yellow("Error var is set, see store.json"));
@@ -56,27 +81,27 @@ export default class SamLogin {
 			console.log(colors.gray("Token is expired"));
 
 			var session = await this.requests.session();
-			try {
-				var token = await this.requests.login(session);
-				this.setToken(token);
-			} catch (error) {
-				const err = error as AxiosError;
+			await this.requests
+				.login(session)
+				.then(this.setToken)
+				.catch(async (error) => {
+					const err = error as AxiosError;
 
-				if (err.response.status === 200) {
-					this.db.data.error = true;
-					this.db.write();
-					const msg = "Password Login Failed!";
-					console.log(colors.red(msg));
-					return msg;
-				} else {
-					throw err;
-				}
-			}
+					if (err.response.status === 200) {
+						const msg = "Password Login Failed!";
+						console.log(colors.red(msg));
+
+						this.db.data.error = true;
+						await this.db.write();
+						return msg;
+					} else {
+						throw err;
+					}
+				});
 		}
 	}
 
 	async timesheet({ date, cachedOnly }: { date?: Date; cachedOnly?: boolean }): Promise<Month> {
-		this.db.read();
 		var when = this.monthYear(date);
 
 		var cache = this.db.data.shifts;
@@ -101,7 +126,7 @@ export default class SamLogin {
 		};
 		this.db.data.shifts[when] = parsed;
 
-		this.db.write();
+		await this.db.write();
 
 		return parsed;
 	}
@@ -109,12 +134,12 @@ export default class SamLogin {
 	private parseTimesheet(html: string): Shift[] {
 		var $ = cheerio.load(html);
 		var shiftsElements = $("td[class*=calendarCellRegular]:not(.calendarCellRegularCurrent:has(.calCellData)) table").toArray();
-		var shifts = shiftsElements.map(element => {
+		var shifts = shiftsElements.map((element) => {
 			var date = element.attribs["title"].replace("Details van ", "");
 
 			var [start, end] = $("p span", element)
 				.toArray()
-				.map(el => new Date(`${date} ${$(el.firstChild).text()}`).toJSON());
+				.map((el) => new Date(`${date} ${$(el.firstChild).text()}`).toJSON());
 
 			return {
 				start,
@@ -144,7 +169,7 @@ export default class SamLogin {
 				{
 					headers: { Cookie: session },
 					maxRedirects: 0,
-					validateStatus: s => s == 302
+					validateStatus: (s) => s == 302
 				}
 			);
 			return this.firstCookie(res.headers);
@@ -156,7 +181,7 @@ export default class SamLogin {
 				maxRedirects: 0
 			});
 			if (typeof res.data == "string") {
-				this.updateExpiry();
+				await this.updateExpiry();
 				return res.data;
 			} else {
 				if (res.data.operation == "login") {

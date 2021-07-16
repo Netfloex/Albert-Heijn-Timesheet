@@ -1,36 +1,32 @@
-import fs from "fs";
-import { dirname, basename } from "path";
+import { outputJson, pathExists, readJson } from "fs-extra";
 
 class Database<Schema> {
 	public data: Schema;
 	private path: string;
 	private defaults: Schema;
+
 	// @ts-expect-error
 	constructor(path: string, defaults: Schema = {}) {
 		this.path = path;
 		this.defaults = defaults;
-		if (!fs.existsSync(path)) {
-			fs.mkdirSync(dirname(path), { recursive: true });
-			this.data = defaults;
-			this.write();
-		}
-		this.read();
 	}
 
-	private serialize = (data: Schema): string => JSON.stringify(data, null, "\t");
-	private deserialize = (data: string): Schema => JSON.parse(data);
-
-	public write(): void {
-		fs.writeFileSync(this.path, this.serialize(this.data));
-	}
-	public read(): void {
-		const data = fs.readFileSync(this.path).toString();
-		try {
-			const parsed = this.deserialize(data);
-			this.data = parsed;
-		} catch (error) {
+	public async init(): Promise<void> {
+		if (await pathExists(this.path)) {
+			await this.read();
+		} else {
 			this.data = this.defaults;
+			await this.write();
 		}
+	}
+
+	public async write(): Promise<void> {
+		await outputJson(this.path, this.data, { spaces: "\t" });
+	}
+
+	public async read(): Promise<void> {
+		const data: Schema = await readJson(this.path, { throws: false });
+		this.data = data ?? this.defaults;
 	}
 }
 export default Database;
