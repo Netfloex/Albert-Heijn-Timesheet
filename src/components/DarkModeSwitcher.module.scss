@@ -1,10 +1,11 @@
 @use "variables" as colors;
+@use "sass:math";
 
 $width: 36px;
 $padding-x: 3px;
 $padding-y: 2px;
 $slider-padding: 3px;
-$slider-width: $width/3;
+$slider-size: math.div($width, 3);
 
 .switcher {
 	display: flex;
@@ -23,8 +24,8 @@ $slider-width: $width/3;
 		border-radius: 5px;
 
 		.slider {
-			width: $width/3;
-			height: $width/3;
+			width: $slider-size;
+			height: $slider-size;
 			padding: $slider-padding;
 			background-color: colors.$tertiary-background;
 			border-radius: 100%;
@@ -39,7 +40,7 @@ $slider-width: $width/3;
 	.wrapper {
 		.slider {
 			transform: translateX(
-				$width - $padding-x * 2 - $slider-padding * 2 - $slider-width
+				$width - $padding-x * 2 - $slider-padding * 2 - $slider-size
 			);
 		}
 	}
