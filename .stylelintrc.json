@@ -9,6 +9,7 @@
 		"at-rule-no-unknown": null,
 		"declaration-colon-newline-after": null,
 		"selector-pseudo-class-no-unknown": null,
-		"no-invalid-position-at-import-rule": null
+		"no-invalid-position-at-import-rule": null,
+		"no-descending-specificity": null
 	}
 }

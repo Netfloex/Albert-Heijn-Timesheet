@@ -10,6 +10,7 @@ $slider-size: math.div($width, 3);
 .switcher {
 	display: flex;
 	align-items: center;
+	cursor: pointer;
 
 	.text {
 		margin-right: 1ch;
@@ -19,9 +20,9 @@ $slider-size: math.div($width, 3);
 		position: relative;
 		width: $width;
 		padding: $padding-y $padding-x;
-		border-width: 0;
+		border: 0;
 		background-color: colors.$quinary-background;
-		border-radius: 5px;
+		border-radius: $width;
 
 		.slider {
 			width: $slider-size;

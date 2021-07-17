@@ -3,6 +3,7 @@
 @import "colors";
 
 body {
+	margin: 0;
 	background-color: colors.$background;
 	color: colors.$text;
 }

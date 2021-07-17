@@ -8,15 +8,15 @@ const DarkModeSwitcher: FC = () => {
 	const { theme, setTheme } = useTheme();
 
 	return (
-		<div className={styles.switcher}>
+		<div
+			className={styles.switcher}
+			onMouseDown={(e) => {
+				e.preventDefault();
+				setTheme(theme == "dark" ? "light" : "dark");
+			}}
+		>
 			<div className={styles.text}>Darkmode</div>
-			<button
-				className={styles.wrapper}
-				onMouseDown={(e) => {
-					e.preventDefault();
-					setTheme(theme == "dark" ? "light" : "dark");
-				}}
-			>
+			<button className={styles.wrapper}>
 				<div className={styles.slider}></div>
 			</button>
 		</div>
