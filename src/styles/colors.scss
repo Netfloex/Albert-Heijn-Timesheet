@@ -2,11 +2,20 @@ html,
 .light {
 	--background: #fff;
 	--secondary-background: #e9ecef;
+	--tertiary-background: #dee2e6;
+	--quaternary-background: #ced4da;
+	--quinary-background: #adb5bd;
+	--primary: #fa5252;
 	--text: #212529;
 }
 
+html,
 .dark {
 	--background: #212529;
 	--secondary-background: #343a40;
+	--tertiary-background: #495057;
+	--quaternary-background: #868e96;
+	--quinary-background: #adb5bd;
+
 	--text: #fff;
 }

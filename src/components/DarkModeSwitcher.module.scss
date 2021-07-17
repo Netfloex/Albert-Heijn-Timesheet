@@ -1,0 +1,48 @@
+@use "variables" as colors;
+
+$width: 36px;
+$padding-x: 3px;
+$padding-y: 2px;
+$slider-padding: 3px;
+$slider-width: $width/3;
+
+.switcher {
+	display: flex;
+	align-items: center;
+	.text {
+		margin-right: 1ch;
+	}
+	.wrapper {
+		background-color: colors.$quinary-background;
+		width: $width;
+		padding: $padding-y $padding-x;
+
+		border-radius: 5px;
+		border-width: 0px;
+
+		position: relative;
+
+		.slider {
+			width: $width/3;
+			height: $width/3;
+			padding: $slider-padding;
+			background-color: colors.$tertiary-background;
+
+			border-radius: 100%;
+
+			transition: transform 0.3s;
+		}
+	}
+}
+
+// Dark Mode
+
+:global .dark :local {
+	.wrapper {
+		.slider {
+			transform: translateX(
+				$width - $padding-x * 2 - $slider-padding * 2 - $slider-width
+			);
+		}
+	}
+}

@@ -13,7 +13,9 @@ const Schedule: FC<{ timesheet: Month }> = ({ timesheet }) => {
 	timesheet.parsed.forEach((shift) => {
 		const startDate = DateTime.fromISO(shift.start);
 		const endDate = DateTime.fromISO(shift.end);
+
 		const weekWithYear = startDate.weekNumber + startDate.year * 100;
+
 		perWeek[weekWithYear] ??= {};
 		perWeek[weekWithYear][startDate.weekdayLong] =
 			startDate.toFormat("T") + " ~ " + endDate.toFormat("T");
