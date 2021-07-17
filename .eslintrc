@@ -17,16 +17,16 @@
 					"order": "asc"
 				},
 				"groups": [
-					"object",
+					"sibling",
 					["builtin", "external"],
-					["sibling", "parent"],
+					["parent"],
 					"internal",
 					"type"
 				],
 				"pathGroups": [
 					{
-						"pattern": "**.scss",
-						"group": "object"
+						"pattern": "@**",
+						"group": "internal"
 					},
 					{
 						"pattern": "@models/**",

@@ -1,6 +1,6 @@
-import { useTheme } from "next-themes";
-
 import styles from "./DarkModeSwitcher.module.scss";
+
+import { useTheme } from "next-themes";
 
 import type { FC } from "react";
 

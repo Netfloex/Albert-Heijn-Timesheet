@@ -13,12 +13,16 @@ type ColDef = Array<{
  * @param props.colDef - How the columns should be rendered
  */
 
+const Render: FC<{ Element: FC }> = ({ Element }) => {
+	return <Element />;
+};
 const Table: FC<{
-	data: Record<string, string>[];
+	data: Record<string, FC>[];
 	colDef: ColDef;
-}> = ({ data, colDef }) => {
+	className?: string;
+}> = ({ data, colDef, className = "" }) => {
 	return (
-		<table className={styles.styledTable}>
+		<table className={`${styles.styledTable} ${className}`.trim()}>
 			<thead>
 				<tr>
 					{colDef.map((col) => (
@@ -30,7 +34,13 @@ const Table: FC<{
 				{data.map((data, row) => (
 					<tr key={row}>
 						{colDef.map((col) => (
-							<td key={col.prop}>{data[col.prop]}</td>
+							<>
+								{data[col.prop] ? (
+									<Render Element={data[col.prop]} />
+								) : (
+									<td key={col.prop} />
+								)}
+							</>
 						))}
 					</tr>
 				))}
