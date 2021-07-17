@@ -1,11 +1,11 @@
-import Table from "@components/Table";
-
 import { DateTime, Info } from "luxon";
 
-type ShiftsPerWeek = Record<string, string>[];
+import Table from "@components/Table";
 
 import { Month } from "@models/store";
-import { FC } from "react";
+import type { FC } from "react";
+
+type ShiftsPerWeek = Record<string, string>[];
 
 const Schedule: FC<{ timesheet: Month }> = ({ timesheet }) => {
 	const perWeek: ShiftsPerWeek = [];

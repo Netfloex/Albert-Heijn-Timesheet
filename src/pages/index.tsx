@@ -1,8 +1,10 @@
 import { GetStaticProps, NextPage } from "next";
-import { Month } from "@models/store";
-import env from "@utils/env";
-import SamLogin from "@utils/SamLogin";
+
 import Dashboard from "@components/Dashboard";
+import SamLogin from "@utils/SamLogin";
+import env from "@utils/env";
+
+import { Month } from "@models/store";
 
 const Home: NextPage<{ timesheet: Month; error?: string }> = ({
 	timesheet,

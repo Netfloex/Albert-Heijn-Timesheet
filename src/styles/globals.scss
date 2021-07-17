@@ -1,5 +1,6 @@
-@use "variables" as colors;
 @import "colors";
+
+@use "variables" as colors;
 
 body {
 	background-color: colors.$background;

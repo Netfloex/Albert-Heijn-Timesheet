@@ -1,6 +1,6 @@
 import styles from "./Table.module.scss";
 
-import { FC } from "react";
+import type { FC } from "react";
 
 type ColDef = Array<{
 	prop: string;

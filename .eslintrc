@@ -1,3 +1,40 @@
 {
-	"extends": ["next", "next/core-web-vitals", "plugin:prettier/recommended"]
+	"extends": [
+		"plugin:@next/next/recommended",
+		"next/core-web-vitals",
+		"plugin:prettier/recommended",
+		"plugin:css-modules/recommended",
+		"plugin:import/recommended"
+	],
+	"plugins": ["css-modules", "import"],
+	"rules": {
+		"import/first": ["error"],
+		"import/newline-after-import": ["error"],
+		"import/order": [
+			"error",
+			{
+				"alphabetize": {
+					"order": "asc"
+				},
+				"groups": [
+					"object",
+					["builtin", "external"],
+					["sibling", "parent"],
+					"internal",
+					"type"
+				],
+				"pathGroups": [
+					{
+						"pattern": "**.scss",
+						"group": "object"
+					},
+					{
+						"pattern": "@models/**",
+						"group": "type"
+					}
+				],
+				"newlines-between": "always"
+			}
+		]
+	}
 }
