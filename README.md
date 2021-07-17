@@ -1,4 +1,4 @@
-# Albert Heijn shifts timesheet
+# Albert Heijn Shifts Timesheet
 
 <!-- ### Features
 
@@ -15,8 +15,8 @@ DBPATH=/db
 ### Development
 
 ```
-git clone https://github.com/Netfloex/Api Sam-Taen-Api
-cd Sam-Taen-Api
+git clone https://github.com/Netfloex/Albert-Heijn-Timesheet
+cd Albert-Heijn-Timesheet
 yarn
 yarn dev
 ```
