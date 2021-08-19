@@ -29,15 +29,22 @@ export const getStaticProps: GetStaticProps = async () => {
 		password: env.ahpassword
 	});
 
-	await sam.login();
+	try {
+		await sam.login();
+		const timesheet = await sam.timesheet({ date: new Date() });
 
-	const timesheet = await sam.timesheet({ date: new Date() });
-
-	return {
-		props: {
-			timesheet
-		}
-	};
+		return {
+			props: {
+				timesheet
+			}
+		};
+	} catch (error) {
+		return {
+			props: {
+				error: error?.toString()
+			}
+		};
+	}
 };
 
 export default Home;

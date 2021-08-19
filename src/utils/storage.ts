@@ -5,10 +5,10 @@ class Database<Schema> {
 	private path: string;
 	private defaults: Schema;
 
-	// @ts-expect-error
-	constructor(path: string, defaults: Schema = {}) {
+	constructor(path: string, defaults: Schema) {
 		this.path = path;
 		this.defaults = defaults;
+		this.data = defaults;
 	}
 
 	public async init(): Promise<void> {

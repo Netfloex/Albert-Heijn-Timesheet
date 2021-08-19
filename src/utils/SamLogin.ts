@@ -67,7 +67,7 @@ export default class SamLogin {
 
 		if (this.db.data.error) {
 			console.log(colors.yellow("Error var is set, see store.json"));
-			return "Password was incorrect last time.";
+			throw new Error("Password was incorrect last time");
 		}
 
 		if (expired || this.isExpired()) {
@@ -200,8 +200,10 @@ export default class SamLogin {
 			} else {
 				if (res.data.operation == "login") {
 					console.log("Token Expired During request");
-					await this.login({ expired: true });
-					return await this.requests.timesheet(when);
+
+					await this.login({ expired: true }).then(
+						async () => await this.requests.timesheet(when)
+					);
 				}
 			}
 			console.error("Unknown Error");
