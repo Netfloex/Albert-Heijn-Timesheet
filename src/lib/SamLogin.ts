@@ -3,12 +3,13 @@ import colors from "chalk";
 import cheerio from "cheerio";
 import { join } from "path";
 
+import Database from "@lib/store";
 import { storePath } from "@utils/env";
-import Database from "@utils/storage";
 
 import Store, { Month, Shift } from "@models/store";
 
 const timesheetURL = "wrkbrn_jct/etm/time/timesheet/etmTnsMonth.jsp";
+
 const EXPIRY = 60 * 60 * 1000;
 
 export default class SamLogin {

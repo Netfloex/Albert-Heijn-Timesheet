@@ -2,7 +2,7 @@ import type { GetStaticProps, NextPage } from "next";
 
 import Dashboard from "@components/Dashboard";
 
-import SamLogin from "@utils/SamLogin";
+import SamLogin from "@lib/SamLogin";
 import { username, password } from "@utils/env";
 
 import { Month } from "@models/store";

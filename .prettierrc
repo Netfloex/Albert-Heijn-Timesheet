@@ -10,7 +10,7 @@
 		".*scss$",
 		"^\\w+",
 		"^@components/*",
-		"^@utils/.*",
+		"(@lib/.*)|(@utils/.*)",
 		"^@models/.*"
 	],
 	"importOrderSeparation": true
