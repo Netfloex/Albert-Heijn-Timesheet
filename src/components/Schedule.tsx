@@ -1,12 +1,12 @@
 import styles from "./Schedule.module.scss";
 
 import { DateTime, Info } from "luxon";
+import type { FC } from "react";
 
 import ShiftItem from "@components/ShiftItem";
 import Table from "@components/Table";
 
 import type { Month } from "@models/store";
-import type { FC } from "react";
 
 type ShiftsPerWeek = Record<string, FC>[];
 

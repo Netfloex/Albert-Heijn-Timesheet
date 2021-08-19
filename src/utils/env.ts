@@ -1,25 +1,8 @@
-import Env from "@models/env";
+import { join } from "path";
 
-const required = ["AHUSERNAME", "AHPASSWORD"];
-var unset = required.filter((env) => !process.env[env]);
+const { env } = process;
 
-const e = process.env;
+export const username = env.AH_USERNAME;
+export const password = env.AH_PASSWORD;
 
-const env: Env = {
-	ahusername: e.AHUSERNAME,
-	ahpassword: e.AHPASSWORD,
-
-	path: e.DBPATH,
-	port: e.PORT,
-	redirect: e.REDIRECT,
-	cors: e.CORS,
-
-	complete: true
-};
-
-if (unset.length) {
-	console.warn(`${unset.join(", ")} environment variable(s) is not set.`);
-	env.complete = false;
-}
-
-export default env;
+export const storePath = env.STORE_PATH ?? join(process.cwd(), "store.json");

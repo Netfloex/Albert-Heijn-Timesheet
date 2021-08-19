@@ -16,7 +16,7 @@
 		"lib": ["ES2019.Array"],
 		"allowJs": true,
 		"skipLibCheck": true,
-		"strict": false,
+		"strict": true,
 		"forceConsistentCasingInFileNames": true,
 		"noEmit": true,
 		"module": "esnext",

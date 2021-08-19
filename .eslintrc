@@ -2,39 +2,18 @@
 	"extends": [
 		"plugin:@next/next/recommended",
 		"next/core-web-vitals",
+		"plugin:@typescript-eslint/recommended",
 		"plugin:prettier/recommended",
 		"plugin:css-modules/recommended",
 		"plugin:import/recommended"
 	],
-	"plugins": ["css-modules", "import"],
+	"plugins": ["@typescript-eslint", "css-modules", "import"],
 	"rules": {
+		"@typescript-eslint/no-non-null-assertion": 0,
+		"@typescript-eslint/explicit-function-return-type": ["error"],
 		"import/first": ["error"],
-		"import/newline-after-import": ["error"],
-		"import/order": [
-			"error",
-			{
-				"alphabetize": {
-					"order": "asc"
-				},
-				"groups": [
-					"sibling",
-					["builtin", "external"],
-					["parent"],
-					"internal",
-					"type"
-				],
-				"pathGroups": [
-					{
-						"pattern": "@**",
-						"group": "internal"
-					},
-					{
-						"pattern": "@models/**",
-						"group": "type"
-					}
-				],
-				"newlines-between": "always"
-			}
-		]
-	}
+		"import/newline-after-import": ["error"]
+	},
+
+	"ignorePatterns": "*.js"
 }

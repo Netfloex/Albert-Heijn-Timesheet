@@ -1,9 +1,11 @@
+import type { GetStaticProps, NextPage } from "next";
+
 import Dashboard from "@components/Dashboard";
+
 import SamLogin from "@utils/SamLogin";
-import env from "@utils/env";
+import { username, password } from "@utils/env";
 
 import { Month } from "@models/store";
-import type { GetStaticProps, NextPage } from "next";
 
 const Home: NextPage<{ timesheet: Month; error?: string }> = ({
 	timesheet,
@@ -16,7 +18,7 @@ const Home: NextPage<{ timesheet: Month; error?: string }> = ({
 };
 
 export const getStaticProps: GetStaticProps = async () => {
-	if (!env.complete) {
+	if (!username || !password) {
 		return {
 			props: {
 				error: "ENV Is Incomplete"
@@ -24,9 +26,10 @@ export const getStaticProps: GetStaticProps = async () => {
 			revalidate: 1
 		};
 	}
+
 	const sam = new SamLogin({
-		username: env.ahusername,
-		password: env.ahpassword
+		username,
+		password
 	});
 
 	try {

@@ -1,9 +1,9 @@
 import styles from "./ShiftItem.module.scss";
 
 import { DateTime, Interval } from "luxon";
+import type { FC } from "react";
 
 import type { Shift } from "@models/store";
-import type { FC } from "react";
 
 const ShiftItem: FC<{ shift: Shift }> = ({ shift }) => {
 	const interval = Interval.fromISO(shift.start + "/" + shift.end);

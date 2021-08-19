@@ -1,10 +1,11 @@
 import styles from "./Dashboard.module.scss";
 
+import type { FC } from "react";
+
 import DarkModeSwitcher from "@components/DarkModeSwitcher";
 import Schedule from "@components/Schedule";
 
 import { Month } from "@models/store";
-import type { FC } from "react";
 
 const Dashboard: FC<{ timesheet: Month }> = ({ timesheet }) => (
 	<>

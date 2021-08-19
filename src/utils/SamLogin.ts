@@ -3,7 +3,7 @@ import colors from "chalk";
 import cheerio from "cheerio";
 import { join } from "path";
 
-import env from "@utils/env";
+import { storePath } from "@utils/env";
 import Database from "@utils/storage";
 
 import Store, { Month, Shift } from "@models/store";
@@ -18,9 +18,9 @@ export default class SamLogin {
 	private username: string;
 	private password: string;
 
-	private getToken = () => this.db.data.token;
+	private getToken = (): string | undefined => this.db.data.token;
 
-	private isExpired = () => Date.now() > (this.db.data.expiry ?? 0);
+	private isExpired = (): boolean => Date.now() > (this.db.data.expiry ?? 0);
 
 	private updateExpiry = async (): Promise<void> => {
 		this.db.data.expiry = Date.now() + EXPIRY;
@@ -48,7 +48,7 @@ export default class SamLogin {
 
 		this.http.interceptors.request.use((c) => {
 			console.log(
-				`${colors.yellow(`[${c.method.toUpperCase()}]`)}: ${c.url}`
+				`${colors.yellow(`[${c.method?.toUpperCase()}]`)}: ${c.url}`
 			);
 			return c;
 		});
@@ -56,13 +56,10 @@ export default class SamLogin {
 		this.username = username;
 		this.password = password;
 
-		this.db = new Database<Store>(
-			join(env.path ?? process.cwd(), "store.json"),
-			{ shifts: {} }
-		);
+		this.db = new Database<Store>(join(storePath), { shifts: {} });
 	}
 
-	async login({ expired = false } = {}) {
+	async login({ expired = false } = {}): Promise<void> {
 		await this.db.init();
 
 		if (this.db.data.error) {
@@ -73,7 +70,7 @@ export default class SamLogin {
 		if (expired || this.isExpired()) {
 			console.log(colors.gray("Token is expired"));
 
-			var session = await this.requests.session();
+			const session = await this.requests.session();
 			await this.requests
 				.login(session)
 				.then(this.setToken)
@@ -94,40 +91,31 @@ export default class SamLogin {
 		}
 	}
 
-	async timesheet({
-		date,
-		cachedOnly
-	}: {
-		date?: Date;
-		cachedOnly?: boolean;
-	}): Promise<Month> {
-		var when = this.monthYear(date);
+	async timesheet({ date = new Date() }: { date?: Date }): Promise<Month> {
+		const when = this.monthYear(date);
 
-		var cache = this.db.data.shifts;
+		const cache = this.db.data.shifts;
 
 		if (when in cache) {
 			const now = new Date();
-			var thisMonthTheFirst = new Date(
+			const thisMonthTheFirst = new Date(
 				now.getFullYear(),
 				now.getMonth(),
 				1
 			);
-			var value = cache[when];
+			const value = cache[when];
 
 			if (
 				thisMonthTheFirst > date ||
-				Date.now() - new Date(value.updated).getTime() < EXPIRY ||
-				cachedOnly
+				Date.now() - new Date(value.updated).getTime() < EXPIRY
 			) {
 				return value;
 			}
 		}
 
-		if (cachedOnly) return;
+		const html = await this.requests.timesheet(when);
 
-		var html = await this.requests.timesheet(when);
-
-		var parsed: Month = {
+		const parsed: Month = {
 			updated: new Date().toJSON(),
 			parsed: this.parseTimesheet(html)
 		};
@@ -139,17 +127,17 @@ export default class SamLogin {
 	}
 
 	private parseTimesheet(html: string): Shift[] {
-		var $ = cheerio.load(html);
-		var shiftsElements = $(
+		const $ = cheerio.load(html);
+		const shiftsElements = $(
 			"td[class*=calendarCellRegular]:not(.calendarCellRegularCurrent:has(.calCellData)) table"
 		).toArray();
-		var shifts = shiftsElements.map((element) => {
-			var date = element.attribs["title"].replace("Details van ", "");
+		const shifts = shiftsElements.map((element) => {
+			const date = element.attribs["title"].replace("Details van ", "");
 
-			var [start, end] = $("p span", element)
+			const [start, end] = $("p span", element)
 				.toArray()
 				.map((el) =>
-					new Date(`${date} ${$(el.firstChild).text()}`).toJSON()
+					new Date(`${date} ${$(el.firstChild!).text()}`).toJSON()
 				);
 
 			return {
@@ -160,22 +148,22 @@ export default class SamLogin {
 		return shifts;
 	}
 
-	private firstCookie(headers: AxiosResponse["headers"]) {
+	private firstCookie(headers: AxiosResponse["headers"]): string {
 		return headers["set-cookie"][0].split(";")[0] as string;
 	}
-	private monthYear(date = new Date()) {
+	private monthYear(date: Date): string {
 		return `${date.getMonth() + 1}/${date.getFullYear()}`;
 	}
 
 	private requests = {
-		session: async () => {
-			var res = await this.http(timesheetURL);
+		session: async (): Promise<string> => {
+			const res = await this.http(timesheetURL);
 			return this.firstCookie(res.headers);
 		},
 
-		login: async (session: string) => {
-			var res = await this.http.post(
-				"pkmslogin.form", //
+		login: async (session: string): Promise<string> => {
+			const res = await this.http.post(
+				"pkmslogin.form",
 				`username=${this.username}&password=${this.password}&login-form-type=pwd`,
 				{
 					headers: { Cookie: session },
@@ -187,7 +175,7 @@ export default class SamLogin {
 		},
 
 		timesheet: async (when?: string): Promise<string> => {
-			var res = await this.http(
+			const res = await this.http(
 				`${timesheetURL}?NEW_MONTH_YEAR=${when ?? ""}`,
 				{
 					headers: { Cookie: this.getToken() },
