@@ -3,9 +3,10 @@ import type { GetStaticProps, NextPage } from "next";
 import Dashboard from "@components/Dashboard";
 
 import SamLogin from "@lib/SamLogin";
-import { username, password } from "@utils/env";
+import Store from "@lib/store";
+import { username, password, storePath } from "@utils/env";
 
-import { Month } from "@models/store";
+import Schema, { Month } from "@models/store";
 
 const Home: NextPage<{ timesheet: Month; error?: string }> = ({
 	timesheet,
@@ -27,14 +28,18 @@ export const getStaticProps: GetStaticProps = async () => {
 		};
 	}
 
-	const sam = new SamLogin({
+	const store = new Store<Schema>(storePath, { shifts: {} });
+
+	const go = new SamLogin({
 		username,
-		password
+		password,
+		store
 	});
 
+	await store.init();
+
 	try {
-		await sam.login();
-		const timesheet = await sam.timesheet({ date: new Date() });
+		const timesheet = await go.get();
 
 		return {
 			props: {

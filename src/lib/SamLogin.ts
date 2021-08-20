@@ -1,46 +1,48 @@
-import axios, { AxiosError, AxiosInstance, AxiosResponse } from "axios";
+import axios, { AxiosInstance, AxiosResponse } from "axios";
 import colors from "chalk";
 import cheerio from "cheerio";
-import { join } from "path";
 
-import Database from "@lib/store";
-import { storePath } from "@utils/env";
+import Store from "@lib/store";
 
-import Store, { Month, Shift } from "@models/store";
+import Schema, { Month, Shift } from "@models/store";
 
 const timesheetURL = "wrkbrn_jct/etm/time/timesheet/etmTnsMonth.jsp";
 
 const EXPIRY = 60 * 60 * 1000;
+const CACHE_EXPIRY = 60 * 60 * 1000;
 
 export default class SamLogin {
-	private db: Database<Store>;
+	private db: Store<Schema>;
 	private http: AxiosInstance;
 
 	private username: string;
 	private password: string;
 
+	private busy = false;
+
 	private getToken = (): string | undefined => this.db.data.token;
 
-	private isExpired = (): boolean => Date.now() > (this.db.data.expiry ?? 0);
+	private isLoggedIn = (): boolean => Date.now() > (this.db.data.expiry ?? 0);
 
 	private updateExpiry = async (): Promise<void> => {
 		this.db.data.expiry = Date.now() + EXPIRY;
 		await this.db.write();
 	};
 
-	private setToken = async (token: string): Promise<void> => {
-		await this.updateExpiry();
+	private updateToken = async (token: string): Promise<void> => {
 		this.db.data.token = token;
 		this.db.data.created = new Date().toLocaleString();
-		await this.db.write();
+		await this.updateExpiry();
 	};
 
 	constructor({
 		username,
-		password
+		password,
+		store
 	}: {
 		username: string;
 		password: string;
+		store: Store<Schema>;
 	}) {
 		this.http = axios.create({
 			baseURL: "https://sam.ahold.com/",
@@ -56,63 +58,80 @@ export default class SamLogin {
 
 		this.username = username;
 		this.password = password;
-
-		this.db = new Database<Store>(join(storePath), { shifts: {} });
+		this.db = store;
 	}
 
-	async login({ expired = false } = {}): Promise<void> {
-		await this.db.init();
+	public async get(): Promise<Month> {
+		const date = new Date();
+		await this.db.read();
 
+		if (!this.isLoggedIn()) {
+			console.log(colors.gray("Token is expired"));
+			await this.login();
+		}
+
+		const timesheet = await this.timesheet({ date });
+
+		return timesheet;
+	}
+
+	private async login(): Promise<void> {
 		if (this.db.data.error) {
 			console.log(colors.yellow("Error var is set, see store.json"));
 			throw new Error("Password was incorrect last time");
 		}
 
-		if (expired || this.isExpired()) {
-			console.log(colors.gray("Token is expired"));
+		const session = await this.requests.session();
 
-			const session = await this.requests.session();
-			await this.requests
-				.login(session)
-				.then(this.setToken)
-				.catch(async (error) => {
-					const err = error as AxiosError;
+		const token = await this.requests
+			.login(session)
+			.catch(async (error) => {
+				if (
+					axios.isAxiosError(error) &&
+					error.response?.status == 200
+				) {
+					const msg = "Password Login Failed!";
+					console.log(colors.red(msg));
 
-					if (err?.response?.status === 200) {
-						const msg = "Password Login Failed!";
-						console.log(colors.red(msg));
+					this.db.data.error = true;
+					await this.db.write();
 
-						this.db.data.error = true;
-						await this.db.write();
-						return msg;
-					} else {
-						throw err;
-					}
-				});
+					throw new Error(msg);
+				}
+			});
+
+		if (token) {
+			this.updateToken(token);
 		}
 	}
 
-	async timesheet({ date = new Date() }: { date?: Date }): Promise<Month> {
-		const when = this.monthYear(date);
+	private getCache(date: Date): Month | false {
+		const key = this.monthYear(date);
 
 		const cache = this.db.data.shifts;
 
-		if (when in cache) {
-			const now = new Date();
-			const thisMonthTheFirst = new Date(
-				now.getFullYear(),
-				now.getMonth(),
-				1
-			);
-			const value = cache[when];
+		if (key in cache) {
+			const value = cache[key];
 
 			if (
-				thisMonthTheFirst > date ||
-				Date.now() - new Date(value.updated).getTime() < EXPIRY
+				this.monthPassed(date) ||
+				Date.now() - new Date(value.updated).getTime() < CACHE_EXPIRY
 			) {
 				return value;
 			}
 		}
+		return false;
+	}
+
+	private async timesheet({
+		date = new Date()
+	}: {
+		date?: Date;
+	}): Promise<Month> {
+		const when = this.monthYear(date);
+
+		const cache = this.getCache(date);
+		if (cache) return cache;
 
 		const html = await this.requests.timesheet(when);
 
@@ -120,6 +139,7 @@ export default class SamLogin {
 			updated: new Date().toJSON(),
 			parsed: this.parseTimesheet(html)
 		};
+
 		this.db.data.shifts[when] = parsed;
 
 		await this.db.write();
@@ -152,8 +172,18 @@ export default class SamLogin {
 	private firstCookie(headers: AxiosResponse["headers"]): string {
 		return headers["set-cookie"][0].split(";")[0] as string;
 	}
+
 	private monthYear(date: Date): string {
 		return `${date.getMonth() + 1}/${date.getFullYear()}`;
+	}
+	private monthPassed(date: Date): boolean {
+		const now = new Date();
+		const thisMonthTheFirst = new Date(
+			now.getFullYear(),
+			now.getMonth(),
+			1
+		);
+		return thisMonthTheFirst > date;
 	}
 
 	private requests = {
@@ -190,14 +220,14 @@ export default class SamLogin {
 				if (res.data.operation == "login") {
 					console.log("Token Expired During request");
 
-					await this.login({ expired: true }).then(
+					return await this.login().then(
 						async () => await this.requests.timesheet(when)
 					);
 				}
 			}
 			console.error("Unknown Error");
 			console.log(res.data);
-			return "Unknown Error";
+			throw new Error("Unknown Error");
 		}
 	};
 }
