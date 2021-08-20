@@ -7,7 +7,6 @@ import type { Shift } from "@models/store";
 
 const ShiftItem: FC<{ shift: Shift }> = ({ shift }) => {
 	const interval = Interval.fromISO(shift.start + "/" + shift.end);
-	console.log();
 
 	return (
 		<td
@@ -18,10 +17,7 @@ const ShiftItem: FC<{ shift: Shift }> = ({ shift }) => {
 				interval.toDuration().toFormat("h:mm 'hours'")
 			}
 		>
-			<div>
-				{}
-				{interval.start.toFormat("d LLLL")}
-			</div>
+			<div>{interval.start.toFormat("d LLLL")}</div>
 			{interval.toFormat("T", { separator: " ~ " })}
 		</td>
 	);

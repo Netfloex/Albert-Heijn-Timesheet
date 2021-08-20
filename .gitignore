@@ -3,3 +3,4 @@ dist/
 store.json
 .env.local
 .next
+docker-compose.yml

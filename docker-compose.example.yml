@@ -6,10 +6,7 @@ services:
         ports:
             - 2000:3000
         volumes:
-            - ./db:/db
-        env_file: .env
-
-# networks:
-#     default:
-#         external:
-#             name: nginx
+            - ./data:/data
+        environment:
+            AH_USERNAME: username
+            AH_PASSWORD: password

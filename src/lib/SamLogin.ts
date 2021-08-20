@@ -18,11 +18,10 @@ export default class SamLogin {
 	private username: string;
 	private password: string;
 
-	private busy = false;
-
 	private getToken = (): string | undefined => this.db.data.token;
 
-	private isLoggedIn = (): boolean => Date.now() > (this.db.data.expiry ?? 0);
+	private isLoggedIn = (): boolean =>
+		this.db.data.expiry != undefined && Date.now() > this.db.data.expiry;
 
 	private updateExpiry = async (): Promise<void> => {
 		this.db.data.expiry = Date.now() + EXPIRY;

@@ -7,9 +7,9 @@
 ### Environment Variables
 
 ```
-AHUSERNAME=pnl
-AHPASSWORD=password
-DBPATH=/db
+AH_USERNAME=pnl
+AH_PASSWORD=password
+STORE_PATH=/db
 ```
 
 ### Development
