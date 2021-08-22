@@ -1,6 +1,6 @@
 import styles from "./Table.module.scss";
 
-import type { FC } from "react";
+import { FC, Fragment } from "react";
 
 type ColDef = Array<{
 	prop: string;
@@ -20,33 +20,31 @@ const Table: FC<{
 	data: Record<string, FC>[];
 	colDef: ColDef;
 	className?: string;
-}> = ({ data, colDef, className = "" }) => {
-	return (
-		<table className={`${styles.styledTable} ${className}`.trim()}>
-			<thead>
-				<tr>
+}> = ({ data, colDef, className = "" }) => (
+	<table className={`${styles.styledTable} ${className}`.trim()}>
+		<thead>
+			<tr>
+				{colDef.map((col) => (
+					<th key={col.prop}>{col.name ?? col.prop}</th>
+				))}
+			</tr>
+		</thead>
+		<tbody>
+			{data.map((data, row) => (
+				<tr key={row}>
 					{colDef.map((col) => (
-						<th key={col.prop}>{col.name ?? col.prop}</th>
+						<Fragment key={col.prop}>
+							{data[col.prop] ? (
+								<Render Element={data[col.prop]} />
+							) : (
+								<td />
+							)}
+						</Fragment>
 					))}
 				</tr>
-			</thead>
-			<tbody>
-				{data.map((data, row) => (
-					<tr key={row}>
-						{colDef.map((col) => (
-							<>
-								{data[col.prop] ? (
-									<Render Element={data[col.prop]} />
-								) : (
-									<td key={col.prop} />
-								)}
-							</>
-						))}
-					</tr>
-				))}
-			</tbody>
-		</table>
-	);
-};
+			))}
+		</tbody>
+	</table>
+);
 
 export default Table;
