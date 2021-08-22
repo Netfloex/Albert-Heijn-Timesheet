@@ -21,7 +21,7 @@ export default class SamLogin {
 	private getToken = (): string | undefined => this.db.data.token;
 
 	private isLoggedIn = (): boolean =>
-		this.db.data.expiry != undefined && Date.now() > this.db.data.expiry;
+		this.db.data.expiry != undefined && Date.now() < this.db.data.expiry;
 
 	private updateExpiry = async (): Promise<void> => {
 		this.db.data.expiry = Date.now() + EXPIRY;
@@ -65,7 +65,8 @@ export default class SamLogin {
 		await this.db.read();
 
 		if (!this.isLoggedIn()) {
-			console.log(colors.gray("Token is expired"));
+			console.log(colors.gray("Logging In..."));
+
 			await this.login();
 		}
 
@@ -97,10 +98,13 @@ export default class SamLogin {
 
 					throw new Error(msg);
 				}
+
+				throw error;
 			});
 
 		if (token) {
-			this.updateToken(token);
+			await this.updateToken(token);
+			console.log("Logged in");
 		}
 	}
 
@@ -212,12 +216,17 @@ export default class SamLogin {
 					maxRedirects: 0
 				}
 			);
+
 			if (typeof res.data == "string") {
 				await this.updateExpiry();
 				return res.data;
 			} else {
 				if (res.data.operation == "login") {
 					console.log("Token Expired During request");
+
+					delete this.db.data.expiry;
+
+					await this.db.write();
 
 					return await this.login().then(
 						async () => await this.requests.timesheet(when)
