@@ -1,26 +1,22 @@
 import styles from "./ShiftItem.module.scss";
 
-import { DateTime, Interval } from "luxon";
+import { DateTime } from "luxon";
 import type { FC } from "react";
 
-import type { Shift } from "@models/store";
+import { LuxonShift } from "@models/LuxonTimesheet";
 
-const ShiftItem: FC<{ shift: Shift }> = ({ shift }) => {
-	const interval = Interval.fromISO(shift.start + "/" + shift.end);
-
-	return (
-		<td
-			className={styles.shiftItem}
-			title={
-				interval.start.toLocaleString(DateTime.DATE_HUGE) +
-				"\n" +
-				interval.toDuration().toFormat("h:mm 'hours'")
-			}
-		>
-			<div>{interval.start.toFormat("d LLLL")}</div>
-			{interval.toFormat("T", { separator: " ~ " })}
-		</td>
-	);
-};
+const ShiftItem: FC<{ shift: LuxonShift }> = ({ shift }) => (
+	<td
+		className={styles.shiftItem}
+		title={
+			shift.start.toLocaleString(DateTime.DATE_HUGE) +
+			"\n" +
+			shift.interval.toDuration().toFormat("h:mm 'hours'")
+		}
+	>
+		<div>{shift.start.toFormat("d LLLL")}</div>
+		{shift.interval.toFormat("T", { separator: " ~ " })}
+	</td>
+);
 
 export default ShiftItem;

@@ -1,29 +1,29 @@
 import styles from "./Schedule.module.scss";
 
-import { DateTime, Info } from "luxon";
+import { Info } from "luxon";
 import type { FC } from "react";
 
 import ShiftItem from "@components/ShiftItem";
 import Table from "@components/Table";
 
-import type { Month } from "@models/store";
+import useTimesheet from "@utils/useTimesheet";
 
 type ShiftsPerWeek = Record<string, FC>[];
 
-const Schedule: FC<{ timesheet: Month }> = ({ timesheet }) => {
+const Schedule: FC = () => {
+	const timesheet = useTimesheet();
+
 	const perWeek: ShiftsPerWeek = [];
 
-	timesheet.parsed.forEach((shift) => {
-		const startDate = DateTime.fromISO(shift.start);
+	timesheet.shifts.forEach((shift) => {
+		const weekWithYear = shift.start.weekNumber + shift.start.year * 100;
 
-		const weekWithYear = startDate.weekNumber + startDate.year * 100;
-
-		const Week: FC = () => <td>{startDate.weekNumber.toString()}</td>;
+		const Week: FC = () => <td>{shift.start.weekNumber.toString()}</td>;
 
 		perWeek[weekWithYear] ??= { Week };
 
 		const Shift: FC = () => <ShiftItem shift={shift} />;
-		perWeek[weekWithYear][startDate.weekdayLong] = Shift;
+		perWeek[weekWithYear][shift.start.weekdayLong] = Shift;
 	});
 
 	return (

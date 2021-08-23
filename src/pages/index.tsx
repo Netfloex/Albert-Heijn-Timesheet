@@ -1,6 +1,7 @@
 import type { GetStaticProps, NextPage } from "next";
 
 import Dashboard from "@components/Dashboard";
+import TimesheetProvider from "@components/TimesheetProvider";
 
 import SamLogin from "@lib/SamLogin";
 import Store from "@lib/store";
@@ -15,7 +16,11 @@ const Home: NextPage<{ timesheet: Month; error?: string }> = ({
 	if (error) {
 		return <>{error}</>;
 	}
-	return <Dashboard timesheet={timesheet} />;
+	return (
+		<TimesheetProvider timesheet={timesheet}>
+			<Dashboard />
+		</TimesheetProvider>
+	);
 };
 
 export const getStaticProps: GetStaticProps = async () => {
