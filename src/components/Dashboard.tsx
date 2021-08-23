@@ -9,7 +9,9 @@ import Schedule from "@components/Schedule";
 const Dashboard: FC = () => (
 	<>
 		<NextSeo title="Timesheet" />
+
 		<Schedule />
+
 		<footer className={styles.footer}>
 			<div className={styles.left}>Albert Heijn shifts schedule</div>
 			<div className={styles.right}>

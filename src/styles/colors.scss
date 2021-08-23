@@ -1,19 +1,9 @@
-html,
-.light {
-	--background: #fff;
-	--secondary-background: #e9ecef;
-	--tertiary-background: #dee2e6;
-	--quaternary-background: #ced4da;
-	--quinary-background: #adb5bd;
-	--text: #212529;
-}
+$background: var(--background);
+$secondary-background: var(--secondary-background);
+$tertiary-background: var(--tertiary-background);
+$quaternary-background: var(--quaternary-background);
+$quinary-background: var(--quinary-background);
 
-html,
-.dark {
-	--background: #212529;
-	--secondary-background: #343a40;
-	--tertiary-background: #495057;
-	--quaternary-background: #868e96;
-	--quinary-background: #adb5bd;
-	--text: #fff;
-}
+$primary: var(--primary);
+
+$text: var(--text);
