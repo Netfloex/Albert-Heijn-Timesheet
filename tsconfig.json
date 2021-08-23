@@ -2,12 +2,12 @@
 	"compilerOptions": {
 		"baseUrl": ".",
 		"paths": {
-			"@src/*": ["src/*"],
 			"@lib/*": ["src/lib/*"],
 			"@components/*": ["src/components/*"],
 			"@models/*": ["src/models/*"],
 			"@utils/*": ["src/utils/*"],
-			"@styles/*": ["src/styles/*"]
+			"@styles/*": ["src/styles/*"],
+			"@seo-default": ["src/next-seo.config"]
 		},
 		"outDir": "./dist",
 		"target": "ES5",
