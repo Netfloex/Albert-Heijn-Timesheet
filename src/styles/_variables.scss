@@ -1,0 +1,6 @@
+$min-screen-width: var(--min-screen-width);
+
+@mixin rounded {
+	overflow: hidden;
+	border-radius: 0.5rem;
+}

@@ -1,0 +1,13 @@
+@use "variables";
+@use "responsive";
+
+.container {
+	$margin: 20px;
+
+	@include responsive.max-sm {
+		max-width: calc(100% - #{$margin});
+	}
+
+	max-width: calc(#{variables.$min-screen-width} - #{$margin});
+	margin: 10px auto;
+}

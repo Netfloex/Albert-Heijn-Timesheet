@@ -1,14 +1,13 @@
 @use "colors";
+@use "variables";
 
 .styledTable {
-	$margin: 50px;
+	@include variables.rounded;
+
 	$border: 1px solid colors.$quaternary-background;
 
-	overflow: hidden;
-	width: calc(100% - #{$margin * 2});
-	margin: $margin;
+	width: 100%;
 	background-color: colors.$tertiary-background;
-	border-radius: 0.5rem;
 	border-spacing: 0;
 	table-layout: fixed;
 

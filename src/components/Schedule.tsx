@@ -3,6 +3,7 @@ import styles from "./Schedule.module.scss";
 import { Info } from "luxon";
 import type { FC } from "react";
 
+import Container from "@components/Container";
 import ShiftItem from "@components/ShiftItem";
 import Table from "@components/Table";
 
@@ -27,7 +28,7 @@ const Schedule: FC = () => {
 	});
 
 	return (
-		<>
+		<Container>
 			<Table
 				className={styles.table}
 				data={perWeek}
@@ -35,7 +36,7 @@ const Schedule: FC = () => {
 					prop: weekday
 				}))}
 			/>
-		</>
+		</Container>
 	);
 };
 

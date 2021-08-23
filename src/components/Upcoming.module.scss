@@ -1,0 +1,25 @@
+@use "colors";
+@use "variables";
+
+.upcoming {
+	@include variables.rounded;
+	$padding: 10px;
+
+	display: inline-block;
+	background-color: colors.$tertiary-background;
+
+	.title {
+		padding: $padding;
+		margin: 0;
+		background-color: colors.$secondary-background;
+		font-size: 1.5em;
+	}
+
+	.content {
+		padding: $padding;
+
+		.shift {
+			padding: 5px;
+		}
+	}
+}

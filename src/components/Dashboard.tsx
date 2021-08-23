@@ -5,11 +5,13 @@ import { FC } from "react";
 
 import DarkModeSwitcher from "@components/DarkModeSwitcher";
 import Schedule from "@components/Schedule";
+import Upcoming from "@components/Upcoming";
 
 const Dashboard: FC = () => (
 	<>
 		<NextSeo title="Timesheet" />
 
+		<Upcoming />
 		<Schedule />
 
 		<footer className={styles.footer}>
