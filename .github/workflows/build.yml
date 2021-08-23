@@ -51,6 +51,10 @@ jobs:
               with:
                   push: true
                   tags: netfloex/appie:latest
+                  platforms: |
+                      linux/amd64
+                      linux/arm64
+                      linux/arm/v7
 
                   # Cache
                   cache-from: type=gha
