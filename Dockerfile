@@ -1,10 +1,11 @@
-FROM node:alpine AS deps
+ARG NODE_IMAGE=node:12-alpine
+FROM $NODE_IMAGE AS deps
 WORKDIR /app
 
 COPY package.json yarn.lock ./
 RUN yarn install --frozen-lockfile
 
-FROM node:alpine AS builder
+FROM $NODE_IMAGE AS builder
 WORKDIR /app
 
 COPY . .
@@ -12,7 +13,7 @@ COPY --from=deps /app/node_modules ./node_modules
 ENV NEXT_TELEMETRY_DISABLED 1
 RUN yarn build && yarn install --production --ignore-scripts --prefer-offline
 
-FROM node:alpine AS runner
+FROM $NODE_IMAGE AS runner
 WORKDIR /app
 
 ENV NODE_ENV production
