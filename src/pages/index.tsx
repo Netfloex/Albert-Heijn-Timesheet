@@ -52,6 +52,8 @@ export const getStaticProps: GetStaticProps = async () => {
 			}
 		};
 	} catch (error) {
+		console.error(error);
+
 		return {
 			props: {
 				error: error?.toString()

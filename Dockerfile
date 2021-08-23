@@ -1,4 +1,5 @@
 ARG NODE_IMAGE=node:12-alpine
+
 FROM $NODE_IMAGE AS deps
 WORKDIR /app
 
@@ -18,6 +19,7 @@ WORKDIR /app
 
 ENV NODE_ENV production
 ENV STORE_PATH /data/store.json
+ENV FORCE_COLOR 1
 
 COPY --from=builder /app/next.config.js ./
 # COPY --from=builder /app/public ./public

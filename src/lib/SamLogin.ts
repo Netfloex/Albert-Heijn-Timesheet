@@ -1,15 +1,10 @@
 import axios, { AxiosInstance, AxiosResponse } from "axios";
-import colors from "chalk";
 import cheerio from "cheerio";
 
 import Store from "@lib/store";
+import log from "@utils/log";
 
 import Schema, { Month, Shift } from "@models/store";
-
-const timesheetURL = "wrkbrn_jct/etm/time/timesheet/etmTnsMonth.jsp";
-
-const EXPIRY = 60 * 60 * 1000;
-const CACHE_EXPIRY = 60 * 60 * 1000;
 
 export default class SamLogin {
 	private db: Store<Schema>;
@@ -18,13 +13,21 @@ export default class SamLogin {
 	private username: string;
 	private password: string;
 
+	private urls = {
+		base: "https://sam.ahold.com/",
+		timesheet: "wrkbrn_jct/etm/time/timesheet/etmTnsMonth.jsp",
+		login: "pkmslogin.form"
+	};
+	private tokenExpiry = 60 * 60 * 1000;
+	private cacheExpiry = 60 * 60 * 1000;
+
 	private getToken = (): string | undefined => this.db.data.token;
 
 	private isLoggedIn = (): boolean =>
 		this.db.data.expiry != undefined && Date.now() < this.db.data.expiry;
 
 	private updateExpiry = async (): Promise<void> => {
-		this.db.data.expiry = Date.now() + EXPIRY;
+		this.db.data.expiry = Date.now() + this.tokenExpiry;
 		await this.db.write();
 	};
 
@@ -44,14 +47,12 @@ export default class SamLogin {
 		store: Store<Schema>;
 	}) {
 		this.http = axios.create({
-			baseURL: "https://sam.ahold.com/",
+			baseURL: this.urls.base,
 			timeout: 5000
 		});
 
 		this.http.interceptors.request.use((c) => {
-			console.log(
-				`${colors.yellow(`[${c.method?.toUpperCase()}]`)}: ${c.url}`
-			);
+			log.AxiosRequest(c);
 			return c;
 		});
 
@@ -64,20 +65,17 @@ export default class SamLogin {
 		const date = new Date();
 		await this.db.read();
 
-		if (!this.isLoggedIn()) {
-			console.log(colors.gray("Logging In..."));
-
+		if (!this.isLoggedIn() && !this.getCache(date)) {
+			log.Login();
 			await this.login();
 		}
 
-		const timesheet = await this.timesheet({ date });
-
-		return timesheet;
+		return await this.timesheet({ date });
 	}
 
 	private async login(): Promise<void> {
 		if (this.db.data.error) {
-			console.log(colors.yellow("Error var is set, see store.json"));
+			log.ErrorKey();
 			throw new Error("Password was incorrect last time");
 		}
 
@@ -90,13 +88,11 @@ export default class SamLogin {
 					axios.isAxiosError(error) &&
 					error.response?.status == 200
 				) {
-					const msg = "Password Login Failed!";
-					console.log(colors.red(msg));
-
 					this.db.data.error = true;
 					await this.db.write();
 
-					throw new Error(msg);
+					log.LoginFailed();
+					throw new Error("Login Failed!");
 				}
 
 				throw error;
@@ -104,7 +100,7 @@ export default class SamLogin {
 
 		if (token) {
 			await this.updateToken(token);
-			console.log("Logged in");
+			log.LoggedIn();
 		}
 	}
 
@@ -118,7 +114,8 @@ export default class SamLogin {
 
 			if (
 				this.monthPassed(date) ||
-				Date.now() - new Date(value.updated).getTime() < CACHE_EXPIRY
+				Date.now() - new Date(value.updated).getTime() <
+					this.cacheExpiry
 			) {
 				return value;
 			}
@@ -146,6 +143,8 @@ export default class SamLogin {
 		this.db.data.shifts[when] = parsed;
 
 		await this.db.write();
+
+		log.TimesheetDone();
 
 		return parsed;
 	}
@@ -191,13 +190,15 @@ export default class SamLogin {
 
 	private requests = {
 		session: async (): Promise<string> => {
-			const res = await this.http(timesheetURL);
+			log.RequestSession();
+			const res = await this.http(this.urls.timesheet);
 			return this.firstCookie(res.headers);
 		},
 
 		login: async (session: string): Promise<string> => {
+			log.RequestLogin();
 			const res = await this.http.post(
-				"pkmslogin.form",
+				this.urls.login,
 				`username=${this.username}&password=${this.password}&login-form-type=pwd`,
 				{
 					headers: { Cookie: session },
@@ -208,9 +209,10 @@ export default class SamLogin {
 			return this.firstCookie(res.headers);
 		},
 
-		timesheet: async (when?: string): Promise<string> => {
+		timesheet: async (when = ""): Promise<string> => {
+			log.RequestTimesheet();
 			const res = await this.http(
-				`${timesheetURL}?NEW_MONTH_YEAR=${when ?? ""}`,
+				`${this.urls.timesheet}?NEW_MONTH_YEAR=${when}`,
 				{
 					headers: { Cookie: this.getToken() },
 					maxRedirects: 0
@@ -222,7 +224,7 @@ export default class SamLogin {
 				return res.data;
 			} else {
 				if (res.data.operation == "login") {
-					console.log("Token Expired During request");
+					log.TokenIncorrect();
 
 					delete this.db.data.expiry;
 
