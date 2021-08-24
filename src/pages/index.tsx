@@ -3,63 +3,48 @@ import type { GetStaticProps, NextPage } from "next";
 import Dashboard from "@components/Dashboard";
 import TimesheetProvider from "@components/TimesheetProvider";
 
-import SamLogin from "@lib/SamLogin";
-import Store from "@lib/store";
-import { username, password, storePath } from "@utils/env";
+import getTimesheet, { ErrorType } from "@utils/getTimesheet";
 
-import Schema, { Month } from "@models/store";
+import { Month } from "@models/store";
 
-const Home: NextPage<{ timesheet: Month; error?: string }> = ({
-	timesheet,
-	error
-}) => {
-	if (error) {
-		return <>{error}</>;
+type Props = { timesheet: Month } | { error: string };
+
+const Home: NextPage<Props> = (props) => {
+	if ("error" in props) {
+		return <>{props.error}</>;
 	}
 	return (
-		<TimesheetProvider timesheet={timesheet}>
+		<TimesheetProvider timesheet={props.timesheet}>
 			<Dashboard />
 		</TimesheetProvider>
 	);
 };
 
-export const getStaticProps: GetStaticProps = async () => {
-	if (!username || !password) {
-		return {
-			props: {
-				error: "ENV Is Incomplete"
-			},
-			revalidate: 1
-		};
+export const getStaticProps: GetStaticProps<Props> = async () => {
+	const timesheet = await getTimesheet();
+
+	if ("error" in timesheet) {
+		if (timesheet.type == ErrorType.Incomplete) {
+			return {
+				props: {
+					error: timesheet.error
+				},
+				revalidate: 1
+			};
+		} else {
+			return {
+				props: {
+					error: timesheet.error
+				}
+			};
+		}
 	}
 
-	const store = new Store<Schema>(storePath, { shifts: {} });
-
-	const go = new SamLogin({
-		username,
-		password,
-		store
-	});
-
-	await store.init();
-
-	try {
-		const timesheet = await go.get();
-
-		return {
-			props: {
-				timesheet
-			}
-		};
-	} catch (error) {
-		console.error(error);
-
-		return {
-			props: {
-				error: error?.toString()
-			}
-		};
-	}
+	return {
+		props: {
+			timesheet
+		}
+	};
 };
 
 export default Home;

@@ -6,7 +6,7 @@ export type Month = {
 	updated: string;
 	parsed: Shift[];
 };
-type Store = {
+type Schema = {
 	token?: string;
 	expiry?: number;
 	error?: boolean;
@@ -14,4 +14,4 @@ type Store = {
 	shifts: Record<string, Month>;
 };
 
-export default Store;
+export default Schema;
