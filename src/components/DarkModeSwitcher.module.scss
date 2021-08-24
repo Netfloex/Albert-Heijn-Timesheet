@@ -21,7 +21,7 @@ $slider-size: math.div($width, 3);
 		width: $width;
 		padding: $padding-y $padding-x;
 		border: 0;
-		background-color: colors.$quinary-background;
+		background-color: colors.$button-background;
 		border-radius: $width;
 
 		.slider {

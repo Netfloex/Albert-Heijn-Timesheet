@@ -2,21 +2,21 @@
 
 html,
 .light {
-	--background: #fff;
-	--secondary-background: #e9ecef;
-	--tertiary-background: #dee2e6;
-	--quaternary-background: #ced4da;
-	--quinary-background: #adb5bd;
+	--background: #e5e7eb;
+	--secondary-background: #fff;
+	--tertiary-background: #f9fafb;
+	--border-color: #ced4da;
+	--button-background: #adb5bd;
 	--text: #212529;
 }
 
 html,
 .dark {
-	--background: #212529;
-	--secondary-background: #343a40;
-	--tertiary-background: #495057;
-	--quaternary-background: #868e96;
-	--quinary-background: #adb5bd;
+	--background: #222;
+	--secondary-background: #2c2c2c;
+	--tertiary-background: #373737;
+	--border-color: #616161;
+	--button-background: #dee2e6;
 	--text: #fff;
 }
 

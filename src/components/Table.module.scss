@@ -4,8 +4,6 @@
 .styledTable {
 	@include variables.rounded;
 
-	$border: 1px solid colors.$quaternary-background;
-
 	width: 100%;
 	background-color: colors.$tertiary-background;
 	border-spacing: 0;
@@ -13,8 +11,8 @@
 
 	thead tr th,
 	tbody tr td {
-		border-right: $border;
-		border-bottom: $border;
+		border-right: variables.$border;
+		border-bottom: variables.$border;
 
 		&:last-child {
 			border-right: unset;
