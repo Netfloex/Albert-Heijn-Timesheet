@@ -1,12 +1,12 @@
 import axios, { AxiosInstance, AxiosResponse } from "axios";
 import cheerio from "cheerio";
 
-import Store from "@lib/store";
-import log from "@utils/log";
+import type { Store } from "@lib";
+import { log } from "@utils";
 
 import Schema, { Month, Shift } from "@models/store";
 
-export default class SamLogin {
+export class SamLogin {
 	private db: Store<Schema>;
 	private http: AxiosInstance;
 

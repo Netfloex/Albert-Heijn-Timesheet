@@ -1,6 +1,6 @@
 import { outputJson, pathExists, readJson } from "fs-extra";
 
-class Store<Schema> {
+export class Store<Schema> {
 	public data: Schema;
 	private path: string;
 	private defaults: Schema;
@@ -29,5 +29,3 @@ class Store<Schema> {
 		this.data = data ?? this.defaults;
 	}
 }
-
-export default Store;

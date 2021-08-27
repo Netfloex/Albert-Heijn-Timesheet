@@ -5,7 +5,7 @@ import { TimesheetContext } from "@components/TimesheetProvider";
 
 import LuxonTimesheet from "@models/LuxonTimesheet";
 
-const useTimesheet = (): LuxonTimesheet => {
+export const useTimesheet = (): LuxonTimesheet => {
 	const { timesheet } = useContext(TimesheetContext);
 
 	if (!timesheet) {
@@ -29,5 +29,3 @@ const useTimesheet = (): LuxonTimesheet => {
 		shifts: parsedShifts
 	};
 };
-
-export default useTimesheet;

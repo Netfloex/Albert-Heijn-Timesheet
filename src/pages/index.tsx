@@ -1,10 +1,9 @@
 import type { GetStaticProps, NextPage } from "next";
 
-import Dashboard from "@components/Dashboard";
-import Incomplete from "@components/Incomplete";
-import TimesheetProvider from "@components/TimesheetProvider";
+import { TimesheetProvider } from "@components";
+import { Dashboard, Incomplete } from "@components/pages";
 
-import getTimesheet from "@utils/getTimesheet";
+import { getTimesheet } from "@utils/getTimesheet";
 
 import ErrorType from "@models/getTimesheetErrors";
 import { Month } from "@models/store";

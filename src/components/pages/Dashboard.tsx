@@ -3,11 +3,10 @@ import styles from "./Dashboard.module.scss";
 import { NextSeo } from "next-seo";
 import { FC } from "react";
 
-import DarkModeSwitcher from "@components/DarkModeSwitcher";
-import Schedule from "@components/Schedule";
-import Upcoming from "@components/Upcoming";
+import { DarkModeSwitcher } from "@components";
+import { Schedule, Upcoming } from "@components/layout";
 
-const Dashboard: FC = () => (
+export const Dashboard: FC = () => (
 	<>
 		<NextSeo title="Timesheet" />
 
@@ -24,5 +23,3 @@ const Dashboard: FC = () => (
 		</footer>
 	</>
 );
-
-export default Dashboard;

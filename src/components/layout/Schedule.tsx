@@ -3,15 +3,14 @@ import styles from "./Schedule.module.scss";
 import { Info } from "luxon";
 import type { FC } from "react";
 
-import Container from "@components/Container";
-import ShiftItem from "@components/ShiftItem";
-import Table from "@components/Table";
+import { ShiftItem } from "@components";
+import { Container, Table } from "@components/reusable";
 
-import useTimesheet from "@utils/useTimesheet";
+import { useTimesheet } from "@utils";
 
 type ShiftsPerWeek = Record<string, FC>[];
 
-const Schedule: FC = () => {
+export const Schedule: FC = () => {
 	const timesheet = useTimesheet();
 
 	const perWeek: ShiftsPerWeek = [];
@@ -39,5 +38,3 @@ const Schedule: FC = () => {
 		</Container>
 	);
 };
-
-export default Schedule;

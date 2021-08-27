@@ -2,9 +2,12 @@
 	"compilerOptions": {
 		"baseUrl": ".",
 		"paths": {
-			"@lib/*": ["src/lib/*"],
+			"@lib": ["src/lib"],
+			"@components": ["src/components"],
 			"@components/*": ["src/components/*"],
 			"@models/*": ["src/models/*"],
+			"@env": ["src/utils/env"],
+			"@utils": ["src/utils"],
 			"@utils/*": ["src/utils/*"],
 			"@styles/*": ["src/styles/*"],
 			"@seo-default": ["src/next-seo.config"]

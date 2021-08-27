@@ -1,11 +1,11 @@
-import SamLogin from "@lib/SamLogin";
-import Store from "@lib/store";
-import { password, storePath, username } from "@utils/env";
+import { password, storePath, username } from "@env";
+
+import { SamLogin, Store } from "@lib";
 
 import ErrorType, { Error } from "@models/getTimesheetErrors";
 import Schema, { Month } from "@models/store";
 
-const getTimesheet = async (): Promise<Month | Error> => {
+export const getTimesheet = async (): Promise<Month | Error> => {
 	if (!username || !password) {
 		return {
 			error: "Env is incomplete",
@@ -35,5 +35,3 @@ const getTimesheet = async (): Promise<Month | Error> => {
 		};
 	}
 };
-
-export default getTimesheet;

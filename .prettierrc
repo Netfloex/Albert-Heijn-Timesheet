@@ -10,8 +10,8 @@
 	"importOrder": [
 		".*scss$",
 		"^\\w+",
-		"^@components/.*",
-		"^(@lib/.*)|(@utils/.*)|(@seo-default)",
+		"^@components.*",
+		"^(@lib)|(@utils)|(@seo-default)",
 		"^@models/.*"
 	]
 }

@@ -8,7 +8,7 @@ export const TimesheetContext = createContext<Context>({
 	updateTimesheet: undefined
 });
 
-const TimesheetProvider: FC<{ timesheet?: Month }> = ({
+export const TimesheetProvider: FC<{ timesheet?: Month }> = ({
 	timesheet,
 	children
 }) => {
@@ -25,5 +25,3 @@ const TimesheetProvider: FC<{ timesheet?: Month }> = ({
 		</TimesheetContext.Provider>
 	);
 };
-
-export default TimesheetProvider;

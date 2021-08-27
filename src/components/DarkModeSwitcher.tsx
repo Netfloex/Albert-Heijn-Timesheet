@@ -3,7 +3,7 @@ import styles from "./DarkModeSwitcher.module.scss";
 import { useTheme } from "next-themes";
 import type { FC } from "react";
 
-const DarkModeSwitcher: FC = () => {
+export const DarkModeSwitcher: FC = () => {
 	const { theme, setTheme } = useTheme();
 
 	return (
@@ -21,5 +21,3 @@ const DarkModeSwitcher: FC = () => {
 		</div>
 	);
 };
-
-export default DarkModeSwitcher;

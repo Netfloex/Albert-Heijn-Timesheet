@@ -16,7 +16,8 @@ type ColDef = Array<{
 const Render: FC<{ Element: FC }> = ({ Element }) => {
 	return <Element />;
 };
-const Table: FC<{
+
+export const Table: FC<{
 	data: Record<string, FC>[];
 	colDef: ColDef;
 	className?: string;
@@ -46,5 +47,3 @@ const Table: FC<{
 		</tbody>
 	</table>
 );
-
-export default Table;

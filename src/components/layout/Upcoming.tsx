@@ -2,11 +2,11 @@ import styles from "./Upcoming.module.scss";
 
 import { FC } from "react";
 
-import Container from "@components/Container";
+import { Container } from "@components/reusable";
 
-import useTimesheet from "@utils/useTimesheet";
+import { useTimesheet } from "@utils";
 
-const Upcoming: FC = () => {
+export const Upcoming: FC = () => {
 	const timesheet = useTimesheet();
 
 	const upcomingShifts = timesheet.shifts
@@ -34,5 +34,3 @@ const Upcoming: FC = () => {
 		</Container>
 	);
 };
-
-export default Upcoming;

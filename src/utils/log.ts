@@ -33,7 +33,7 @@ const LoginFailed = (): void =>
 const TokenIncorrect = (): void =>
 	error("The token was incorrect, retrying login.");
 
-const log = {
+export const log = {
 	AxiosRequest,
 	RequestSession,
 	RequestLogin,
@@ -45,5 +45,3 @@ const log = {
 	LoginFailed,
 	TokenIncorrect
 };
-
-export default log;

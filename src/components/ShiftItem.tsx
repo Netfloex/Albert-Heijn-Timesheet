@@ -5,7 +5,7 @@ import type { FC } from "react";
 
 import { LuxonShift } from "@models/LuxonTimesheet";
 
-const ShiftItem: FC<{ shift: LuxonShift }> = ({ shift }) => (
+export const ShiftItem: FC<{ shift: LuxonShift }> = ({ shift }) => (
 	<td
 		className={styles.shiftItem}
 		title={
@@ -18,5 +18,3 @@ const ShiftItem: FC<{ shift: LuxonShift }> = ({ shift }) => (
 		{shift.interval.toFormat("T", { separator: " ~ " })}
 	</td>
 );
-
-export default ShiftItem;

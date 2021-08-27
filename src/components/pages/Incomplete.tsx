@@ -1,16 +1,14 @@
-import Dashboard from "./Dashboard";
-import Loading from "./pages/Loading";
-
 import { FC, useContext } from "react";
 import useSWR from "swr";
 
-import Center from "@components/Center";
 import { TimesheetContext } from "@components/TimesheetProvider";
+import { Dashboard, Loading } from "@components/pages";
+import { Center } from "@components/reusable";
 
 import { Error } from "@models/getTimesheetErrors";
 import { Month } from "@models/store";
 
-const Incomplete: FC = () => {
+export const Incomplete: FC = () => {
 	const { updateTimesheet } = useContext(TimesheetContext);
 	const { data, error } = useSWR<Month | Error>("/api");
 
@@ -43,5 +41,3 @@ const Incomplete: FC = () => {
 
 	throw new Error("updateTimesheet is undefined");
 };
-
-export default Incomplete;
