@@ -2,17 +2,8 @@ import SamLogin from "@lib/SamLogin";
 import Store from "@lib/store";
 import { password, storePath, username } from "@utils/env";
 
+import ErrorType, { Error } from "@models/getTimesheetErrors";
 import Schema, { Month } from "@models/store";
-
-type Error = {
-	error: string;
-	type: ErrorType;
-};
-
-export enum ErrorType {
-	Incomplete = 0,
-	Unknown = 1
-}
 
 const getTimesheet = async (): Promise<Month | Error> => {
 	if (!username || !password) {

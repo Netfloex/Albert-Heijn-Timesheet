@@ -1,21 +1,30 @@
 import type { GetStaticProps, NextPage } from "next";
 
 import Dashboard from "@components/Dashboard";
+import Incomplete from "@components/Incomplete";
 import TimesheetProvider from "@components/TimesheetProvider";
 
-import getTimesheet, { ErrorType } from "@utils/getTimesheet";
+import getTimesheet from "@utils/getTimesheet";
 
+import ErrorType from "@models/getTimesheetErrors";
 import { Month } from "@models/store";
 
-type Props = { timesheet: Month } | { error: string };
+type Props = { timesheet: Month } | { error: string; type: ErrorType };
 
 const Home: NextPage<Props> = (props) => {
-	if ("error" in props) {
-		return <>{props.error}</>;
-	}
 	return (
-		<TimesheetProvider timesheet={props.timesheet}>
-			<Dashboard />
+		<TimesheetProvider
+			timesheet={"error" in props ? undefined : props.timesheet}
+		>
+			{"error" in props ? (
+				props.type == ErrorType.Incomplete ? (
+					<Incomplete />
+				) : (
+					<>{props.error}</>
+				)
+			) : (
+				<Dashboard />
+			)}
 		</TimesheetProvider>
 	);
 };
@@ -24,20 +33,12 @@ export const getStaticProps: GetStaticProps<Props> = async () => {
 	const timesheet = await getTimesheet();
 
 	if ("error" in timesheet) {
-		if (timesheet.type == ErrorType.Incomplete) {
-			return {
-				props: {
-					error: timesheet.error
-				},
-				revalidate: 1
-			};
-		} else {
-			return {
-				props: {
-					error: timesheet.error
-				}
-			};
-		}
+		return {
+			props: {
+				...timesheet
+			},
+			revalidate: timesheet.type == ErrorType.Incomplete ? 1 : undefined
+		};
 	}
 
 	return {

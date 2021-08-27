@@ -1,0 +1,18 @@
+@mixin maxSize {
+	position: absolute;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
+}
+
+@mixin centerItems {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.center {
+	@include centerItems;
+	@include maxSize;
+}

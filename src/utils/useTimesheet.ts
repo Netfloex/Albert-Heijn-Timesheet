@@ -6,9 +6,13 @@ import { TimesheetContext } from "@components/TimesheetProvider";
 import LuxonTimesheet from "@models/LuxonTimesheet";
 
 const useTimesheet = (): LuxonTimesheet => {
-	const timesheet = useContext(TimesheetContext);
+	const { timesheet } = useContext(TimesheetContext);
+
 	if (!timesheet) {
-		throw new Error("No timesheet provided TimesheetContext");
+		return {
+			updated: "never",
+			shifts: []
+		};
 	}
 
 	const parsedShifts = timesheet.parsed.map((shift) => {
