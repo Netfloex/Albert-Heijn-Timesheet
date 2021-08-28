@@ -8,11 +8,14 @@ import { Dashboard, Loading, Error as ErrorPage } from "@components/pages";
 import { fetcher } from "@utils";
 
 import type { Error } from "@models/getTimesheetErrors";
-import type { Month } from "@models/store";
+import type { Timesheet } from "@models/store";
 
 export const Incomplete: FC = () => {
 	const { updateTimesheet } = useContext(TimesheetContext);
-	const { data, error } = useSWR<Month | Error, AxiosError>("/api", fetcher);
+	const { data, error } = useSWR<Timesheet | Error, AxiosError>(
+		"/api",
+		fetcher
+	);
 
 	// data? error?
 
@@ -32,7 +35,7 @@ export const Incomplete: FC = () => {
 		return <ErrorPage timesheet={data} />;
 	}
 
-	// data == Month
+	// data == Timesheet
 
 	if (updateTimesheet) {
 		updateTimesheet(data);

@@ -1,10 +1,10 @@
 import { Dispatch, SetStateAction } from "react";
 
-import type { Month } from "@models/store";
+import type { Timesheet } from "@models/store";
 
 type Context = {
-	timesheet?: Month;
-	updateTimesheet?: Dispatch<SetStateAction<Month | undefined>>;
+	timesheet?: Timesheet;
+	updateTimesheet?: Dispatch<SetStateAction<Timesheet | undefined>>;
 };
 
 export default Context;

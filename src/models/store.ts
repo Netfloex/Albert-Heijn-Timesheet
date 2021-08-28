@@ -2,7 +2,7 @@ export type Shift = {
 	start: string;
 	end: string;
 };
-export type Month = {
+export type Timesheet = {
 	updated: string;
 	parsed: Shift[];
 };
@@ -11,7 +11,7 @@ type Schema = {
 	expiry?: number;
 	error?: boolean;
 	created?: string;
-	shifts: Record<string, Month>;
+	shifts: Record<string, Timesheet>;
 };
 
 export default Schema;

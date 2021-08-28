@@ -4,7 +4,7 @@ import cheerio from "cheerio";
 import type { Store } from "@lib";
 import { log } from "@utils";
 
-import Schema, { Month, Shift } from "@models/store";
+import Schema, { Timesheet, Shift } from "@models/store";
 
 export class SamLogin {
 	private db: Store<Schema>;
@@ -61,7 +61,7 @@ export class SamLogin {
 		this.db = store;
 	}
 
-	public async get(): Promise<Month> {
+	public async get(): Promise<Timesheet> {
 		const date = new Date();
 		await this.db.read();
 
@@ -104,7 +104,7 @@ export class SamLogin {
 		}
 	}
 
-	private getCache(date: Date): Month | false {
+	private getCache(date: Date): Timesheet | false {
 		const key = this.monthYear(date);
 
 		const cache = this.db.data.shifts;
@@ -127,7 +127,7 @@ export class SamLogin {
 		date = new Date()
 	}: {
 		date?: Date;
-	}): Promise<Month> {
+	}): Promise<Timesheet> {
 		const when = this.monthYear(date);
 
 		const cache = this.getCache(date);
@@ -135,7 +135,7 @@ export class SamLogin {
 
 		const html = await this.requests.timesheet(when);
 
-		const parsed: Month = {
+		const parsed: Timesheet = {
 			updated: new Date().toJSON(),
 			parsed: this.parseTimesheet(html)
 		};

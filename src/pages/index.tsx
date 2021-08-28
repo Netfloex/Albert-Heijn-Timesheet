@@ -6,9 +6,9 @@ import { Dashboard, Error, Incomplete } from "@components/pages";
 import { getTimesheet } from "@utils/getTimesheet";
 
 import ErrorType from "@models/getTimesheetErrors";
-import type { Month } from "@models/store";
+import type { Timesheet } from "@models/store";
 
-type Props = { timesheet: Month } | { error: string; type: ErrorType };
+type Props = { timesheet: Timesheet } | { error: string; type: ErrorType };
 
 const Home: NextPage<Props> = (props) => {
 	return (
