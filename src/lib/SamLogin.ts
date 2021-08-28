@@ -1,3 +1,5 @@
+import { timesheetCacheDuration } from "@env";
+
 import axios, { AxiosInstance, AxiosResponse } from "axios";
 import cheerio from "cheerio";
 
@@ -19,7 +21,7 @@ export class SamLogin {
 		login: "pkmslogin.form"
 	};
 	private tokenExpiry = 60 * 60 * 1000;
-	private cacheExpiry = 60 * 60 * 1000;
+	private cacheExpiry = timesheetCacheDuration * 1000;
 
 	private getToken = (): string | undefined => this.db.data.token;
 

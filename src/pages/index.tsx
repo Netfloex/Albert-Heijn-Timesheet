@@ -1,3 +1,5 @@
+import { timesheetCacheDuration } from "@env";
+
 import type { GetStaticProps, NextPage } from "next";
 
 import { TimesheetProvider } from "@components";
@@ -42,7 +44,7 @@ export const getStaticProps: GetStaticProps<Props> = async () => {
 		props: {
 			timesheet
 		},
-		revalidate: 3600
+		revalidate: timesheetCacheDuration
 	};
 };
 

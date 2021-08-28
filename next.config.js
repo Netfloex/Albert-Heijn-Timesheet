@@ -11,5 +11,8 @@ module.exports = {
 	},
 	sassOptions: {
 		includePaths: [join(__dirname, "src", "styles")]
+	},
+	env: {
+		TIMESHEET_CACHE: process.env.TIMESHEET_CACHE
 	}
 };
