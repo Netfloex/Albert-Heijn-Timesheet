@@ -6,7 +6,7 @@ import { Dashboard, Error, Incomplete } from "@components/pages";
 import { getTimesheet } from "@utils/getTimesheet";
 
 import ErrorType from "@models/getTimesheetErrors";
-import { Month } from "@models/store";
+import type { Month } from "@models/store";
 
 type Props = { timesheet: Month } | { error: string; type: ErrorType };
 

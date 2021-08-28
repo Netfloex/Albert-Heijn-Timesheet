@@ -3,7 +3,7 @@ import { useContext } from "react";
 
 import { TimesheetContext } from "@components/TimesheetProvider";
 
-import LuxonTimesheet from "@models/LuxonTimesheet";
+import type LuxonTimesheet from "@models/LuxonTimesheet";
 
 export const useTimesheet = (): LuxonTimesheet => {
 	const { timesheet } = useContext(TimesheetContext);

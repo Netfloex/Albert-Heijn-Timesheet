@@ -1,7 +1,7 @@
 import { createContext, FC, useState } from "react";
 
-import Context from "@models/TimesheetContext";
-import { Month } from "@models/store";
+import type Context from "@models/TimesheetContext";
+import type { Month } from "@models/store";
 
 export const TimesheetContext = createContext<Context>({
 	timesheet: undefined,

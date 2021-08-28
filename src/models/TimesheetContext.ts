@@ -1,6 +1,6 @@
 import { Dispatch, SetStateAction } from "react";
 
-import { Month } from "@models/store";
+import type { Month } from "@models/store";
 
 type Context = {
 	timesheet?: Month;

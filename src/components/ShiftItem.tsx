@@ -3,7 +3,7 @@ import styles from "./ShiftItem.module.scss";
 import { DateTime } from "luxon";
 import type { FC } from "react";
 
-import { LuxonShift } from "@models/LuxonTimesheet";
+import type { LuxonShift } from "@models/LuxonTimesheet";
 
 export const ShiftItem: FC<{ shift: LuxonShift }> = ({ shift }) => (
 	<td

@@ -7,8 +7,8 @@ import { Dashboard, Loading, Error as ErrorPage } from "@components/pages";
 
 import { fetcher } from "@utils";
 
-import { Error } from "@models/getTimesheetErrors";
-import { Month } from "@models/store";
+import type { Error } from "@models/getTimesheetErrors";
+import type { Month } from "@models/store";
 
 export const Incomplete: FC = () => {
 	const { updateTimesheet } = useContext(TimesheetContext);

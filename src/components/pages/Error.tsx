@@ -5,7 +5,7 @@ import type { FC } from "react";
 
 import { Center, Card } from "@components/reusable";
 
-import { Error as TimesheetError } from "@models/getTimesheetErrors";
+import type { Error as TimesheetError } from "@models/getTimesheetErrors";
 
 export const Error: FC<{ swr?: AxiosError; timesheet?: TimesheetError }> = ({
 	swr,
