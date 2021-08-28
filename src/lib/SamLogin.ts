@@ -70,7 +70,20 @@ export class SamLogin {
 			await this.login();
 		}
 
-		return await this.timesheet({ date });
+		const promises: Promise<Timesheet>[] = [this.timesheet({ date })];
+
+		if (new Date().getDate() >= 15) {
+			const nextMonth = this.currentMonthTheFirst();
+			nextMonth.setMonth(nextMonth.getMonth() + 1);
+			promises.push(this.timesheet({ date: nextMonth }));
+		}
+
+		const timesheets = await Promise.all(promises);
+
+		return {
+			updated: timesheets[0].updated,
+			parsed: timesheets.flatMap((t) => t.parsed)
+		};
 	}
 
 	private async login(): Promise<void> {
@@ -178,14 +191,13 @@ export class SamLogin {
 	private monthYear(date: Date): string {
 		return `${date.getMonth() + 1}/${date.getFullYear()}`;
 	}
-	private monthPassed(date: Date): boolean {
+	private currentMonthTheFirst(): Date {
 		const now = new Date();
-		const thisMonthTheFirst = new Date(
-			now.getFullYear(),
-			now.getMonth(),
-			1
-		);
-		return thisMonthTheFirst > date;
+
+		return new Date(now.getFullYear(), now.getMonth(), 1);
+	}
+	private monthPassed(date: Date): boolean {
+		return this.currentMonthTheFirst() > date;
 	}
 
 	private requests = {
