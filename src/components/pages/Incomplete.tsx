@@ -1,21 +1,23 @@
+import { AxiosError } from "axios";
 import { FC, useContext } from "react";
 import useSWR from "swr";
 
 import { TimesheetContext } from "@components/TimesheetProvider";
-import { Dashboard, Loading } from "@components/pages";
-import { Center } from "@components/reusable";
+import { Dashboard, Loading, Error as ErrorPage } from "@components/pages";
+
+import { fetcher } from "@utils";
 
 import { Error } from "@models/getTimesheetErrors";
 import { Month } from "@models/store";
 
 export const Incomplete: FC = () => {
 	const { updateTimesheet } = useContext(TimesheetContext);
-	const { data, error } = useSWR<Month | Error>("/api");
+	const { data, error } = useSWR<Month | Error, AxiosError>("/api", fetcher);
 
 	// data? error?
 
 	if (error) {
-		return <>{error}</>;
+		return <ErrorPage swr={error} />;
 	}
 
 	// data?
@@ -27,7 +29,7 @@ export const Incomplete: FC = () => {
 	// data!
 
 	if ("error" in data) {
-		return <Center>{data.error}</Center>;
+		return <ErrorPage timesheet={data} />;
 	}
 
 	// data == Month

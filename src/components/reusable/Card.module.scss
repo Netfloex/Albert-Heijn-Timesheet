@@ -1,0 +1,28 @@
+@use "colors";
+@use "variables";
+@use "responsive";
+
+.card {
+	@include variables.rounded;
+	$padding: 10px;
+
+	display: inline-block;
+	background-color: colors.$tertiary-background;
+
+	@include responsive.max-sm {
+		width: 100%;
+		text-align: center;
+	}
+
+	.title {
+		padding: $padding;
+		border-bottom: variables.$border;
+		margin: 0;
+		background-color: colors.$secondary-background;
+		font-size: 1.5em;
+	}
+
+	.content {
+		padding: $padding;
+	}
+}

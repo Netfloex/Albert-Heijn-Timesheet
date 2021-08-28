@@ -1,7 +1,7 @@
 import type { GetStaticProps, NextPage } from "next";
 
 import { TimesheetProvider } from "@components";
-import { Dashboard, Incomplete } from "@components/pages";
+import { Dashboard, Error, Incomplete } from "@components/pages";
 
 import { getTimesheet } from "@utils/getTimesheet";
 
@@ -19,7 +19,7 @@ const Home: NextPage<Props> = (props) => {
 				props.type == ErrorType.Incomplete ? (
 					<Incomplete />
 				) : (
-					<>{props.error}</>
+					<Error timesheet={props} />
 				)
 			) : (
 				<Dashboard />
