@@ -7,7 +7,7 @@ export type LuxonShift = {
 };
 
 type LuxonTimesheet = {
-	updated: string;
+	updated: DateTime;
 	shifts: LuxonShift[];
 };
 

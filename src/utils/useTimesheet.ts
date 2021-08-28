@@ -1,4 +1,4 @@
-import { Interval } from "luxon";
+import { DateTime, Interval } from "luxon";
 import { useContext } from "react";
 
 import { TimesheetContext } from "@components/TimesheetProvider";
@@ -10,7 +10,7 @@ export const useTimesheet = (): LuxonTimesheet => {
 
 	if (!timesheet) {
 		return {
-			updated: "never",
+			updated: DateTime.invalid("No Timesheet"),
 			shifts: []
 		};
 	}
@@ -25,7 +25,7 @@ export const useTimesheet = (): LuxonTimesheet => {
 	});
 
 	return {
-		updated: timesheet.updated,
+		updated: DateTime.fromISO(timesheet.updated),
 		shifts: parsedShifts
 	};
 };

@@ -8,16 +8,12 @@
 	display: flex;
 	padding: 10px;
 	background-color: colors.$secondary-background;
-}
 
-.left {
-	flex: 1;
-}
+	.flex {
+		flex: 1;
+	}
 
-.right {
-	flex: 1;
-}
-
-.darkmodeWrapper {
-	float: right;
+	.darkmodeWrapper {
+		float: right;
+	}
 }
