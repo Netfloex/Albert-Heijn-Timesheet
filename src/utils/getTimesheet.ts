@@ -2,10 +2,10 @@ import { password, storePath, username } from "@env";
 
 import { SamLogin, Store } from "@lib";
 
-import ErrorType, { Error } from "@models/getTimesheetErrors";
+import { TimesheetError, ErrorType } from "@models/getTimesheetErrors";
 import Schema, { Timesheet } from "@models/store";
 
-export const getTimesheet = async (): Promise<Timesheet | Error> => {
+export const getTimesheet = async (): Promise<Timesheet | TimesheetError> => {
 	if (!username || !password) {
 		return {
 			error: "Env is incomplete",

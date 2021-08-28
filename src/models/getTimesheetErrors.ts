@@ -1,11 +1,9 @@
-export type Error = {
+export type TimesheetError = {
 	error: string;
 	type: ErrorType;
 };
 
-enum ErrorType {
+export enum ErrorType {
 	Incomplete = 0,
 	Unknown = 1
 }
-
-export default ErrorType;

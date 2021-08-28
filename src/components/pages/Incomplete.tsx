@@ -3,16 +3,16 @@ import { FC, useContext } from "react";
 import useSWR from "swr";
 
 import { TimesheetContext } from "@components/TimesheetProvider";
-import { Dashboard, Loading, Error as ErrorPage } from "@components/pages";
+import { Dashboard, Loading, ErrorPage } from "@components/pages";
 
 import { fetcher } from "@utils";
 
-import type { Error } from "@models/getTimesheetErrors";
+import type { TimesheetError } from "@models/getTimesheetErrors";
 import type { Timesheet } from "@models/store";
 
 export const Incomplete: FC = () => {
 	const { updateTimesheet } = useContext(TimesheetContext);
-	const { data, error } = useSWR<Timesheet | Error, AxiosError>(
+	const { data, error } = useSWR<Timesheet | TimesheetError, AxiosError>(
 		"/api",
 		fetcher
 	);

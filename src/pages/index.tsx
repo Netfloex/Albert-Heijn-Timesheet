@@ -1,32 +1,30 @@
 import type { GetStaticProps, NextPage } from "next";
 
 import { TimesheetProvider } from "@components";
-import { Dashboard, Error, Incomplete } from "@components/pages";
+import { Dashboard, ErrorPage, Incomplete } from "@components/pages";
 
 import { getTimesheet } from "@utils/getTimesheet";
 
-import ErrorType from "@models/getTimesheetErrors";
+import { TimesheetError, ErrorType } from "@models/getTimesheetErrors";
 import type { Timesheet } from "@models/store";
 
-type Props = { timesheet: Timesheet } | { error: string; type: ErrorType };
+type Props = { timesheet: Timesheet } | TimesheetError;
 
-const Home: NextPage<Props> = (props) => {
-	return (
-		<TimesheetProvider
-			timesheet={"error" in props ? undefined : props.timesheet}
-		>
-			{"error" in props ? (
-				props.type == ErrorType.Incomplete ? (
-					<Incomplete />
-				) : (
-					<Error timesheet={props} />
-				)
+const isError = (props: Props): props is TimesheetError => "error" in props;
+
+const Home: NextPage<Props> = (props) => (
+	<TimesheetProvider timesheet={isError(props) ? undefined : props.timesheet}>
+		{isError(props) ? (
+			props.type == ErrorType.Incomplete ? (
+				<Incomplete />
 			) : (
-				<Dashboard />
-			)}
-		</TimesheetProvider>
-	);
-};
+				<ErrorPage timesheet={props} />
+			)
+		) : (
+			<Dashboard />
+		)}
+	</TimesheetProvider>
+);
 
 export const getStaticProps: GetStaticProps<Props> = async () => {
 	const timesheet = await getTimesheet();
@@ -43,7 +41,8 @@ export const getStaticProps: GetStaticProps<Props> = async () => {
 	return {
 		props: {
 			timesheet
-		}
+		},
+		revalidate: 3600
 	};
 };
 
