@@ -3,8 +3,7 @@ import styles from "./Error.module.scss";
 import { AxiosError } from "axios";
 import type { FC } from "react";
 
-import { Center } from "@components/reusable";
-import Card from "@components/reusable/Card";
+import { Center, Card } from "@components/reusable";
 
 import { Error as TimesheetError } from "@models/getTimesheetErrors";
 

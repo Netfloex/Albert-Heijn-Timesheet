@@ -3,9 +3,9 @@ import styles from "./Footer.module.scss";
 import type { FC } from "react";
 
 import { DarkModeSwitcher } from "@components/DarkModeSwitcher";
+import { HumanizeTime } from "@components/reusable";
 
 import { useTimesheet } from "@utils";
-import { humanize } from "@utils/humanize";
 
 export const Footer: FC = () => {
 	const { updated } = useTimesheet();
@@ -14,9 +14,7 @@ export const Footer: FC = () => {
 			<div className={styles.flex}>
 				Albert Heijn shifts schedule.
 				<> Updated </>
-				<time dateTime={updated.toISO()}>
-					{humanize(updated.diffNow(), { largest: 1 })}
-				</time>
+				<HumanizeTime date={updated} />
 				<> ago.</>
 			</div>
 			<div className={styles.flex}>

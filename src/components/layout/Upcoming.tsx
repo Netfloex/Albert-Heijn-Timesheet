@@ -2,8 +2,7 @@ import styles from "./Upcoming.module.scss";
 
 import { FC } from "react";
 
-import { Container } from "@components/reusable";
-import Card from "@components/reusable/Card";
+import { Container, Card } from "@components/reusable";
 
 import { useTimesheet } from "@utils";
 
