@@ -1,21 +1,11 @@
-import { AxiosError } from "axios";
-import { FC, useContext } from "react";
-import useSWR from "swr";
+import { FC } from "react";
 
-import { TimesheetContext } from "@components/TimesheetProvider";
-import { Dashboard, Loading, ErrorPage } from "@components/pages";
+import { Dashboard, ErrorPage, Loading } from "@components/pages";
 
-import { fetcher } from "@utils";
-
-import type { TimesheetError } from "@models/getTimesheetErrors";
-import type { Timesheet } from "@models/store";
+import { useSWRUpdateTimesheet } from "@utils";
 
 export const Incomplete: FC = () => {
-	const { updateTimesheet } = useContext(TimesheetContext);
-	const { data, error } = useSWR<Timesheet | TimesheetError, AxiosError>(
-		"/api",
-		fetcher
-	);
+	const { data, error } = useSWRUpdateTimesheet();
 
 	// data? error?
 
@@ -37,12 +27,5 @@ export const Incomplete: FC = () => {
 
 	// data == Timesheet
 
-	if (updateTimesheet) {
-		updateTimesheet(data);
-		return <Dashboard />;
-	}
-
-	// !updateTimesheet
-
-	throw new Error("updateTimesheet is undefined");
+	return <Dashboard />;
 };

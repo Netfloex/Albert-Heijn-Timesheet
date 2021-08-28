@@ -1,9 +1,9 @@
 import humanizeDuration, { Options } from "humanize-duration";
-import { Duration } from "luxon";
+import type { Duration } from "luxon";
 
 export const humanize = (time: Duration, options?: Options): string =>
-	humanizeDuration(time.as("milliseconds"), {
-		largest: 2,
+	humanizeDuration(time.valueOf(), {
+		largest: 1,
 		round: true,
 		conjunction: " and ",
 		serialComma: false,

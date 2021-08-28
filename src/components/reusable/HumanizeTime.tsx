@@ -17,8 +17,8 @@ export const HumanizeTime: FC<{ date: DateTime }> = ({ date }) => {
 	}, [calculate]);
 
 	return (
-		<time dateTime={duration.toISO()}>
-			{humanize(duration, { largest: 1 })}
+		<time suppressHydrationWarning dateTime={date.toISO()}>
+			{humanize(duration)}
 		</time>
 	);
 };

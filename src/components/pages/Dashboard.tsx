@@ -3,13 +3,22 @@ import { FC } from "react";
 
 import { Footer, Schedule, Upcoming } from "@components/layout";
 
-export const Dashboard: FC = () => (
-	<>
-		<NextSeo title="Timesheet" />
+import { useSWRUpdateTimesheet, useTimesheet } from "@utils";
 
-		<Upcoming />
-		<Schedule />
+export const Dashboard: FC = () => {
+	// When the timesheet on the client is old/stale refetch from server
+	const { updated } = useTimesheet();
+	const stale = updated.diffNow().negate().as("seconds") > 30;
+	useSWRUpdateTimesheet(stale);
 
-		<Footer />
-	</>
-);
+	return (
+		<>
+			<NextSeo title="Timesheet" />
+
+			<Upcoming />
+			<Schedule />
+
+			<Footer />
+		</>
+	);
+};
