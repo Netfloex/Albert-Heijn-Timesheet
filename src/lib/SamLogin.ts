@@ -2,6 +2,7 @@ import { timesheetCacheDuration } from "@env";
 
 import axios, { AxiosInstance, AxiosResponse } from "axios";
 import cheerio from "cheerio";
+import { DateTime } from "luxon";
 
 import type { Store } from "@lib";
 import { log } from "@utils";
@@ -21,21 +22,25 @@ export class SamLogin {
 		login: "pkmslogin.form"
 	};
 	private tokenExpiry = 60 * 60 * 1000;
-	private cacheExpiry = timesheetCacheDuration * 1000;
+	private cacheExpiry = timesheetCacheDuration;
 
-	private getToken = (): string | undefined => this.db.data.token;
+	private getToken = (): string | undefined => this.db.data.token.token;
 
 	private isLoggedIn = (): boolean =>
-		this.db.data.expiry != undefined && Date.now() < this.db.data.expiry;
+		this.db.data.token.updated != undefined &&
+		DateTime.fromISO(this.db.data.token.updated)
+			.diffNow()
+			.negate()
+			.valueOf() < this.tokenExpiry;
 
 	private updateExpiry = async (): Promise<void> => {
-		this.db.data.expiry = Date.now() + this.tokenExpiry;
+		this.db.data.token.updated = DateTime.now().toJSON();
 		await this.db.write();
 	};
 
 	private updateToken = async (token: string): Promise<void> => {
-		this.db.data.token = token;
-		this.db.data.created = new Date().toLocaleString();
+		this.db.data.token.token = token;
+		this.db.data.token.created = DateTime.now().toJSON();
 		await this.updateExpiry();
 	};
 
@@ -64,23 +69,35 @@ export class SamLogin {
 	}
 
 	public async get(): Promise<Timesheet> {
-		const date = new Date();
+		const date = DateTime.now();
 		await this.db.read();
 
-		if (!this.isLoggedIn() && !this.getCache(date)) {
-			log.Login();
-			await this.login();
+		const timesheetDates: DateTime[] = [date];
+
+		if (date.day >= 15) {
+			const currentMonth = this.currentMonthTheFirst();
+			const nextMonth = currentMonth.plus({ month: 1 });
+			timesheetDates.push(nextMonth);
 		}
 
-		const promises: Promise<Timesheet>[] = [this.timesheet({ date })];
+		const needsFetch = !timesheetDates.every((date) => this.getCache(date));
 
-		if (new Date().getDate() >= 15) {
-			const nextMonth = this.currentMonthTheFirst();
-			nextMonth.setMonth(nextMonth.getMonth() + 1);
-			promises.push(this.timesheet({ date: nextMonth }));
+		if (needsFetch) {
+			if (!this.isLoggedIn()) {
+				log.Login();
+				await this.login();
+			}
+
+			log.RequestTimesheet();
 		}
 
-		const timesheets = await Promise.all(promises);
+		const timesheets = await Promise.all(
+			timesheetDates.map((date) => this.timesheet({ date }))
+		);
+
+		if (needsFetch) {
+			log.TimesheetDone();
+		}
 
 		return {
 			updated: timesheets[0].updated,
@@ -119,7 +136,7 @@ export class SamLogin {
 		}
 	}
 
-	private getCache(date: Date): Timesheet | false {
+	private getCache(date: DateTime): Timesheet | false {
 		const key = this.monthYear(date);
 
 		const cache = this.db.data.shifts;
@@ -129,8 +146,10 @@ export class SamLogin {
 
 			if (
 				this.monthPassed(date) ||
-				Date.now() - new Date(value.updated).getTime() <
-					this.cacheExpiry
+				DateTime.fromISO(value.updated)
+					.diffNow()
+					.negate()
+					.as("seconds") < this.cacheExpiry
 			) {
 				return value;
 			}
@@ -139,9 +158,9 @@ export class SamLogin {
 	}
 
 	private async timesheet({
-		date = new Date()
+		date = this.currentMonthTheFirst()
 	}: {
-		date?: Date;
+		date?: DateTime;
 	}): Promise<Timesheet> {
 		const when = this.monthYear(date);
 
@@ -158,8 +177,6 @@ export class SamLogin {
 		this.db.data.shifts[when] = parsed;
 
 		await this.db.write();
-
-		log.TimesheetDone();
 
 		return parsed;
 	}
@@ -190,15 +207,13 @@ export class SamLogin {
 		return headers["set-cookie"][0].split(";")[0] as string;
 	}
 
-	private monthYear(date: Date): string {
-		return `${date.getMonth() + 1}/${date.getFullYear()}`;
+	private monthYear(date: DateTime): string {
+		return date.toFormat("L/y");
 	}
-	private currentMonthTheFirst(): Date {
-		const now = new Date();
-
-		return new Date(now.getFullYear(), now.getMonth(), 1);
+	private currentMonthTheFirst(): DateTime {
+		return DateTime.fromObject({ day: 1 });
 	}
-	private monthPassed(date: Date): boolean {
+	private monthPassed(date: DateTime): boolean {
 		return this.currentMonthTheFirst() > date;
 	}
 
@@ -224,7 +239,6 @@ export class SamLogin {
 		},
 
 		timesheet: async (when = ""): Promise<string> => {
-			log.RequestTimesheet();
 			const res = await this.http(
 				`${this.urls.timesheet}?NEW_MONTH_YEAR=${when}`,
 				{
@@ -240,7 +254,7 @@ export class SamLogin {
 				if (res.data.operation == "login") {
 					log.TokenIncorrect();
 
-					delete this.db.data.expiry;
+					this.db.data.token = {};
 
 					await this.db.write();
 

@@ -12,7 +12,7 @@ export const getTimesheet = async (): Promise<Timesheet | TimesheetError> => {
 			type: ErrorType.Incomplete
 		};
 	}
-	const store = new Store<Schema>(storePath, { shifts: {} });
+	const store = new Store<Schema>(storePath, { shifts: {}, token: {} });
 
 	const go = new SamLogin({
 		username,

@@ -6,11 +6,17 @@ export type Timesheet = {
 	updated: string;
 	parsed: Shift[];
 };
-type Schema = {
+
+type Token = {
 	token?: string;
-	expiry?: number;
-	error?: boolean;
 	created?: string;
+	updated?: string;
+};
+
+type Schema = {
+	error?: boolean;
+
+	token: Token;
 	shifts: Record<string, Timesheet>;
 };
 
