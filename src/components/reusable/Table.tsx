@@ -1,11 +1,8 @@
 import styles from "./Table.module.scss";
 
-import { FC, Fragment } from "react";
+import { FC } from "react";
 
-type ColDef = Array<{
-	prop: string;
-	name?: string;
-}>;
+import { ColData, RenderCell, RowData } from "@models/Table";
 
 /**
  * Creates a responsive table
@@ -13,15 +10,17 @@ type ColDef = Array<{
  * @param props.colDef - How the columns should be rendered
  */
 
-const Render: FC<{ Element: FC }> = ({ Element }) => {
-	return <Element />;
-};
-
 export const Table: FC<{
-	data: Record<string, FC>[];
-	colDef: ColDef;
+	data: RowData[];
+	colDef: ColData[];
 	className?: string;
-}> = ({ data, colDef, className = "" }) => (
+	RenderCell: RenderCell;
+}> = ({
+	data,
+	colDef,
+	className = "",
+	RenderCell = ({ children }): JSX.Element => <td>{children}</td>
+}) => (
 	<table className={`${styles.styledTable} ${className}`.trim()}>
 		<thead>
 			<tr>
@@ -34,13 +33,9 @@ export const Table: FC<{
 			{data.map((data, row) => (
 				<tr key={row}>
 					{colDef.map((col) => (
-						<Fragment key={col.prop}>
-							{data[col.prop] ? (
-								<Render Element={data[col.prop]} />
-							) : (
-								<td />
-							)}
-						</Fragment>
+						<RenderCell row={data} col={col} key={col.prop}>
+							{data[col.prop]}
+						</RenderCell>
 					))}
 				</tr>
 			))}

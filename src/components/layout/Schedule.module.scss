@@ -2,4 +2,8 @@
 	th:first-child {
 		width: 6rem;
 	}
+
+	.today {
+		background-color: rgba($color: #000, $alpha: 0.1);
+	}
 }

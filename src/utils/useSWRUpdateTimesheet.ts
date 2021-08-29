@@ -24,8 +24,8 @@ export const useSWRUpdateTimesheet = (
 	);
 
 	useEffect(() => {
-		if (data && updateTimesheet && "parsed" in data) {
-			updateTimesheet(data);
+		if (data && "parsed" in data) {
+			updateTimesheet?.(data);
 		}
 	}, [data, updateTimesheet]);
 

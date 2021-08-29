@@ -6,7 +6,7 @@ import type { FC } from "react";
 import type { LuxonShift } from "@models/LuxonTimesheet";
 
 export const ShiftItem: FC<{ shift: LuxonShift }> = ({ shift }) => (
-	<td
+	<div
 		className={styles.shiftItem}
 		title={
 			shift.start.toLocaleString(DateTime.DATE_HUGE) +
@@ -16,5 +16,5 @@ export const ShiftItem: FC<{ shift: LuxonShift }> = ({ shift }) => (
 	>
 		<div>{shift.start.toFormat("d LLLL")}</div>
 		{shift.interval.toFormat("T", { separator: " ~ " })}
-	</td>
+	</div>
 );

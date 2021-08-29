@@ -1,39 +1,62 @@
 import styles from "./Schedule.module.scss";
 
-import { Info } from "luxon";
+import { DateTime, Info } from "luxon";
 import type { FC } from "react";
 
 import { ShiftItem } from "@components";
 import { Container, Table } from "@components/reusable";
 
-import { useTimesheet } from "@utils";
+import { useShiftsPerWeek } from "@utils";
 
-type ShiftsPerWeek = Record<string, FC>[];
+import { RenderCell } from "@models/Table";
+
+type JSXTableData = Record<
+	string,
+	Record<string, JSX.Element> & { currentWeek?: true }
+>;
 
 export const Schedule: FC = () => {
-	const timesheet = useTimesheet();
+	const { shiftsWeekObject, startWeek, lastWeek, format } =
+		useShiftsPerWeek();
 
-	const perWeek: ShiftsPerWeek = [];
+	const JSXTableData: JSXTableData = {};
 
-	timesheet.shifts.forEach((shift) => {
-		const weekWithYear = shift.start.weekNumber + shift.start.year * 100;
+	for (let i = startWeek; i <= lastWeek; i++) {
+		const shifts = shiftsWeekObject[i] ?? [];
+		const { weekNumber } = DateTime.fromFormat(i.toString(), format);
 
-		const Week: FC = () => <td>{shift.start.weekNumber.toString()}</td>;
+		JSXTableData[weekNumber] ??= { Week: <>{weekNumber}</> };
 
-		perWeek[weekWithYear] ??= { Week };
+		const row = JSXTableData[weekNumber];
 
-		const Shift: FC = () => <ShiftItem shift={shift} />;
-		perWeek[weekWithYear][shift.start.weekdayLong] = Shift;
-	});
+		if (i.toString() == DateTime.now().toFormat(format)) {
+			row.currentWeek = true;
+		}
+		shifts.forEach((shift) => {
+			row[shift.start.weekdayLong] = <ShiftItem shift={shift} />;
+		});
+	}
+
+	const RenderCell: RenderCell = ({ children, row, col }) => {
+		const today = row.currentWeek && col.prop == DateTime.now().weekdayLong;
+
+		return (
+			<td className={today ? styles.today : undefined}>
+				{children ??
+					(today ? DateTime.now().toFormat("d LLLL") : undefined)}
+			</td>
+		);
+	};
 
 	return (
 		<Container>
 			<Table
 				className={styles.table}
-				data={perWeek}
+				data={Object.values(JSXTableData)}
 				colDef={["Week", ...Info.weekdays()].map((weekday) => ({
 					prop: weekday
 				}))}
+				RenderCell={RenderCell}
 			/>
 		</Container>
 	);
