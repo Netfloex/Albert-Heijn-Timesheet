@@ -1,3 +1,15 @@
+@use "variables";
+
 .shift {
-	padding: 5px;
+	padding: 15px;
+	border-bottom: variables.$border;
+
+	.time {
+		margin-left: 10px;
+		float: right;
+	}
+}
+
+.shift:last-child {
+	border-bottom: unset;
 }

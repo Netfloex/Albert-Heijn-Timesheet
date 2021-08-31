@@ -1,5 +1,6 @@
 import styles from "./Upcoming.module.scss";
 
+import { DateTime } from "luxon";
 import { FC } from "react";
 
 import { Container, Card } from "@components/reusable";
@@ -18,10 +19,17 @@ export const Upcoming: FC = () => {
 			<Card title={"Komende shifts:"}>
 				{upcomingShifts.map((shift) => (
 					<div className={styles.shift} key={shift.interval.toISO()}>
-						{shift.start.weekdayLong}
-						<> </>
-						{shift.interval.toFormat("T", { separator: " ~ " })}
-						<br />
+						{shift.start.toLocaleString({
+							weekday: "long",
+							month: "long",
+							day: "numeric"
+						})}
+						:
+						<span className={styles.time}>
+							{shift.interval.toFormat("T", {
+								separator: " - "
+							})}
+						</span>
 					</div>
 				))}
 			</Card>

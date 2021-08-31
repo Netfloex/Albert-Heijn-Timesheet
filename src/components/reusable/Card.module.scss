@@ -2,16 +2,20 @@
 @use "variables";
 @use "responsive";
 
+$padding: 10px;
+
 .card {
 	@include variables.rounded;
-	$padding: 10px;
 
 	display: inline-block;
 	background-color: colors.$tertiary-background;
 
 	@include responsive.max-sm {
 		width: 100%;
-		text-align: center;
+
+		.title {
+			text-align: center;
+		}
 	}
 
 	.title {
@@ -20,9 +24,5 @@
 		margin: 0;
 		background-color: colors.$secondary-background;
 		font-size: 1.5em;
-	}
-
-	.content {
-		padding: $padding;
 	}
 }
