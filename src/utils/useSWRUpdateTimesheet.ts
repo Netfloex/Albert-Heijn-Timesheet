@@ -5,8 +5,8 @@ import useSWR from "swr";
 import { TimesheetContext } from "@components/TimesheetProvider";
 
 import { fetcher } from "@utils";
+import type { TimesheetError } from "@utils/TimesheetError";
 
-import type { TimesheetError } from "@models/getTimesheetErrors";
 import type { Timesheet } from "@models/store";
 
 type Response = Timesheet | TimesheetError;

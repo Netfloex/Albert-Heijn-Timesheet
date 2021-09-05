@@ -5,22 +5,21 @@ import type { GetStaticProps, NextPage } from "next";
 import { TimesheetProvider } from "@components";
 import { Dashboard, ErrorPage, Incomplete } from "@components/pages";
 
+import { TimesheetError } from "@utils/TimesheetError";
 import { getTimesheet } from "@utils/getTimesheet";
 import { useLocale } from "@utils/useLocale";
 
-import { TimesheetError, ErrorType } from "@models/getTimesheetErrors";
+import { ErrorType } from "@models/ErrorType";
 import type { Timesheet } from "@models/store";
 
-type Props = { timesheet: Timesheet } | TimesheetError;
+type Props = Timesheet | TimesheetError;
 
 const isError = (props: Props): props is TimesheetError => "error" in props;
 
 const Home: NextPage<Props> = (props) => {
 	useLocale();
 	return (
-		<TimesheetProvider
-			timesheet={isError(props) ? undefined : props.timesheet}
-		>
+		<TimesheetProvider timesheet={isError(props) ? undefined : props}>
 			{isError(props) ? (
 				props.type == ErrorType.Incomplete ? (
 					<Incomplete />
@@ -37,20 +36,19 @@ const Home: NextPage<Props> = (props) => {
 export const getStaticProps: GetStaticProps<Props> = async () => {
 	const timesheet = await getTimesheet();
 
+	let revalidate: number | undefined = timesheetCacheDuration;
+
 	if ("error" in timesheet) {
-		return {
-			props: {
-				...timesheet
-			},
-			revalidate: timesheet.type == ErrorType.Incomplete ? 1 : undefined
-		};
+		if (timesheet.type == ErrorType.Incomplete) {
+			revalidate = 1;
+		} else {
+			revalidate = undefined;
+		}
 	}
 
 	return {
-		props: {
-			timesheet
-		},
-		revalidate: timesheetCacheDuration
+		props: timesheet,
+		revalidate: revalidate
 	};
 };
 

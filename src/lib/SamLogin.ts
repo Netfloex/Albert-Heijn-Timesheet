@@ -2,11 +2,13 @@ import { timesheetCacheDuration } from "@env";
 
 import axios, { AxiosInstance, AxiosResponse } from "axios";
 import cheerio from "cheerio";
-import { DateTime } from "luxon";
+import { DateTime, Settings } from "luxon";
 
 import type { Store } from "@lib";
 import { log } from "@utils";
+import { TimesheetError } from "@utils/TimesheetError";
 
+import { ErrorType } from "@models/ErrorType";
 import Schema, { Timesheet, Shift } from "@models/store";
 
 export class SamLogin {
@@ -69,6 +71,7 @@ export class SamLogin {
 	}
 
 	public async get(): Promise<Timesheet> {
+		Settings.defaultLocale = "en";
 		const date = DateTime.now();
 		await this.db.read();
 
@@ -108,7 +111,7 @@ export class SamLogin {
 	private async login(): Promise<void> {
 		if (this.db.data.error) {
 			log.ErrorKey();
-			throw new Error("Password was incorrect last time");
+			throw new TimesheetError(ErrorType.IncorrectSaved);
 		}
 
 		const session = await this.requests.session();
@@ -124,7 +127,7 @@ export class SamLogin {
 					await this.db.write();
 
 					log.LoginFailed();
-					throw new Error("Login Failed!");
+					throw new TimesheetError(ErrorType.Incorrect);
 				}
 
 				throw error;

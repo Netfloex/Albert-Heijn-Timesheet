@@ -1,8 +1,11 @@
 import { password, storePath, username } from "@env";
 
-import { SamLogin, Store } from "@lib";
+import axios from "axios";
 
-import { TimesheetError, ErrorType } from "@models/getTimesheetErrors";
+import { SamLogin, Store } from "@lib";
+import { TimesheetError } from "@utils/TimesheetError";
+
+import { ErrorType } from "@models/ErrorType";
 import Schema, { Timesheet } from "@models/store";
 
 export const getTimesheet = async (): Promise<Timesheet | TimesheetError> => {
@@ -27,10 +30,33 @@ export const getTimesheet = async (): Promise<Timesheet | TimesheetError> => {
 
 		return timesheet;
 	} catch (error) {
+		console.log("Error catched in getTimesheet.ts:");
 		console.error(error);
 
+		if (error instanceof TimesheetError) {
+			if (error.type == ErrorType.Incorrect) {
+				return {
+					error: "Username/Password is incorrect",
+					type: ErrorType.Incorrect
+				};
+			}
+			if (error.type == ErrorType.IncorrectSaved) {
+				return {
+					error: "Username/Password was incorrect last try, didn't try again",
+					type: ErrorType.IncorrectSaved
+				};
+			}
+		}
+
+		if (axios.isAxiosError(error)) {
+			return {
+				error: `Error while requesting: '${error.config.url}', ${error.message}`,
+				type: ErrorType.AxiosError
+			};
+		}
+
 		return {
-			error: "toString" in error ? error.toString() : "",
+			error: error instanceof Error ? error.toString() : "",
 			type: ErrorType.Unknown
 		};
 	}
