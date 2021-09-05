@@ -9,7 +9,7 @@ import { log } from "@utils";
 import { TimesheetError } from "@utils/TimesheetError";
 
 import { ErrorType } from "@models/ErrorType";
-import Schema, { Timesheet, Shift } from "@models/store";
+import Schema, { Timesheet, Shift } from "@models/Schema";
 
 export class SamLogin {
 	private db: Store<Schema>;

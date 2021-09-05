@@ -7,7 +7,7 @@ import { TimesheetContext } from "@components/TimesheetProvider";
 import { fetcher } from "@utils";
 import type { TimesheetError } from "@utils/TimesheetError";
 
-import type { Timesheet } from "@models/store";
+import type { Timesheet } from "@models/Schema";
 
 type Response = Timesheet | TimesheetError;
 

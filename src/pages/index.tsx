@@ -10,7 +10,7 @@ import { getTimesheet } from "@utils/getTimesheet";
 import { useLocale } from "@utils/useLocale";
 
 import { ErrorType } from "@models/ErrorType";
-import type { Timesheet } from "@models/store";
+import type { Timesheet } from "@models/Schema";
 
 type Props = Timesheet | TimesheetError;
 

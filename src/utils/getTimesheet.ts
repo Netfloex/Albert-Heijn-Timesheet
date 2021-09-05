@@ -6,7 +6,7 @@ import { SamLogin, Store } from "@lib";
 import { TimesheetError } from "@utils/TimesheetError";
 
 import { ErrorType } from "@models/ErrorType";
-import Schema, { Timesheet } from "@models/store";
+import Schema, { Timesheet } from "@models/Schema";
 
 export const getTimesheet = async (): Promise<Timesheet | TimesheetError> => {
 	if (!username || !password) {

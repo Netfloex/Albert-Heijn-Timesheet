@@ -1,6 +1,6 @@
 import { Dispatch, SetStateAction } from "react";
 
-import type { Timesheet } from "@models/store";
+import type { Timesheet } from "@models/Schema";
 
 type Context = {
 	timesheet?: Timesheet;
