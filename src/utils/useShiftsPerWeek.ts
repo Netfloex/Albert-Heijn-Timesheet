@@ -1,4 +1,5 @@
 import { useTimesheet } from "@utils";
+import { weekIndexFormat } from "@utils/formats";
 
 import { LuxonShift } from "@models/LuxonTimesheet";
 
@@ -8,15 +9,12 @@ export const useShiftsPerWeek = (): {
 	shiftsWeekObject: ShiftsPerWeek;
 	startWeek: number;
 	lastWeek: number;
-	format: "kkkkW";
 } => {
 	const { shifts } = useTimesheet();
 
-	const format = "kkkkW"; // ISO week year, ISO week number
-
 	const shiftsWeekObject: ShiftsPerWeek = {};
 	shifts.forEach((shift) => {
-		const weekWithYear = shift.start.toFormat(format);
+		const weekWithYear = shift.start.toFormat(weekIndexFormat);
 		shiftsWeekObject[weekWithYear] ??= [];
 		shiftsWeekObject[weekWithYear].push(shift);
 	});
@@ -26,7 +24,6 @@ export const useShiftsPerWeek = (): {
 	return {
 		shiftsWeekObject,
 		startWeek: +keys[0],
-		lastWeek: +keys[keys.length - 1],
-		format
+		lastWeek: +keys[keys.length - 1]
 	};
 };

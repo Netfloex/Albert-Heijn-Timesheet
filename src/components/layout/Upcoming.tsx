@@ -6,12 +6,12 @@ import { FC } from "react";
 import { Container, Card } from "@components/reusable";
 
 import { useTimesheet } from "@utils";
+import { dateWithMonthFormat, formatInterval } from "@utils/formats";
 
 export const Upcoming: FC = () => {
 	const timesheet = useTimesheet();
-
 	const upcomingShifts = timesheet.shifts
-		.filter((shift) => shift.start.diffNow().milliseconds > 0)
+		.filter((shift) => shift.start > DateTime.now())
 		.slice(0, 3);
 
 	return (
@@ -21,14 +21,11 @@ export const Upcoming: FC = () => {
 					<div className={styles.shift} key={shift.interval.toISO()}>
 						{shift.start.toLocaleString({
 							weekday: "long",
-							month: "long",
-							day: "numeric"
+							...dateWithMonthFormat
 						})}
 						:
 						<span className={styles.time}>
-							{shift.interval.toFormat("T", {
-								separator: " - "
-							})}
+							{formatInterval(shift.interval)}
 						</span>
 					</div>
 				))}

@@ -7,6 +7,7 @@ import { ShiftItem } from "@components";
 import { Container, Table } from "@components/reusable";
 
 import { useShiftsPerWeek } from "@utils";
+import { dateWithMonthFormat, weekIndexFormat } from "@utils/formats";
 
 import { RenderCell } from "@models/Table";
 
@@ -16,20 +17,22 @@ type JSXTableData = Record<
 >;
 
 export const Schedule: FC = () => {
-	const { shiftsWeekObject, startWeek, lastWeek, format } =
-		useShiftsPerWeek();
+	const { shiftsWeekObject, startWeek, lastWeek } = useShiftsPerWeek();
 
 	const JSXTableData: JSXTableData = {};
 
 	for (let i = startWeek; i <= lastWeek; i++) {
 		const shifts = shiftsWeekObject[i] ?? [];
-		const { weekNumber } = DateTime.fromFormat(i.toString(), format);
+		const { weekNumber } = DateTime.fromFormat(
+			i.toString(),
+			weekIndexFormat
+		);
 
 		JSXTableData[weekNumber] ??= { Week: <>{weekNumber}</> };
 
 		const row = JSXTableData[weekNumber];
 
-		if (i.toString() == DateTime.now().toFormat(format)) {
+		if (i.toString() == DateTime.now().toFormat(weekIndexFormat)) {
 			row.currentWeek = true;
 		}
 		shifts.forEach((shift) => {
@@ -43,7 +46,9 @@ export const Schedule: FC = () => {
 		return (
 			<td className={today ? styles.today : undefined}>
 				{children ??
-					(today ? DateTime.now().toFormat("d LLLL") : undefined)}
+					(today
+						? DateTime.now().toLocaleString(dateWithMonthFormat)
+						: undefined)}
 			</td>
 		);
 	};
