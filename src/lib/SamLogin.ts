@@ -76,7 +76,7 @@ export class SamLogin {
 
 		if (date.day >= 15) {
 			const currentMonth = this.currentMonthTheFirst();
-			const nextMonth = currentMonth.plus({ month: 1 });
+			const nextMonth = currentMonth.plus({ months: 1 });
 			timesheetDates.push(nextMonth);
 		}
 

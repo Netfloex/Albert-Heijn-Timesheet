@@ -30,7 +30,7 @@ export const getTimesheet = async (): Promise<Timesheet | TimesheetError> => {
 		console.error(error);
 
 		return {
-			error: error?.toString(),
+			error: "toString" in error ? error.toString() : "",
 			type: ErrorType.Unknown
 		};
 	}

@@ -31,7 +31,7 @@ const languages = [
 	"zh"
 ];
 /**
- * @type {import('next/dist/next-server/server/config').NextConfig}
+ * @type {import('next').NextConfig}
  **/
 
 module.exports = {
