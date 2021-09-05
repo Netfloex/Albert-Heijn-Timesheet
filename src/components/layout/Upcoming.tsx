@@ -16,7 +16,7 @@ export const Upcoming: FC = () => {
 
 	return (
 		<Container>
-			<Card title={"Komende shifts:"}>
+			<Card title={"Komende shifts:"} paddingContent={false}>
 				{upcomingShifts.map((shift) => (
 					<div className={styles.shift} key={shift.interval.toISO()}>
 						{shift.start.toLocaleString({

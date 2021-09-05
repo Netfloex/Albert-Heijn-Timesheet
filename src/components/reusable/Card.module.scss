@@ -25,4 +25,8 @@ $padding: 10px;
 		background-color: colors.$secondary-background;
 		font-size: 1.5em;
 	}
+
+	.padding {
+		padding: $padding;
+	}
 }
