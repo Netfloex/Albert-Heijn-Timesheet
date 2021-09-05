@@ -2,14 +2,20 @@
 	"compilerOptions": {
 		"baseUrl": ".",
 		"paths": {
-			"@lib": ["src/lib"],
-			"@components": ["src/components"],
 			"@components/*": ["src/components/*"],
 			"@models/*": ["src/models/*"],
-			"@env": ["src/utils/env"],
-			"@utils": ["src/utils"],
-			"@utils/*": ["src/utils/*"],
 			"@styles/*": ["src/styles/*"],
+
+			"@components": ["src/components"],
+			"@lib": ["src/lib"],
+			"@utils": ["src/utils"],
+			"@hooks": ["src/utils/hooks"],
+			"@server": ["src/utils/server"],
+
+			// "@utils/*": ["src/utils/*"],
+
+			"@formats": ["src/utils/formats"],
+			"@env": ["src/utils/server/env"],
 			"@seo-default": ["src/next-seo.config"]
 		},
 		"outDir": "./dist",

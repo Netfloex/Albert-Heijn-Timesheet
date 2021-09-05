@@ -5,9 +5,10 @@ import type { GetStaticProps, NextPage } from "next";
 import { TimesheetProvider } from "@components";
 import { Dashboard, ErrorPage, Incomplete } from "@components/pages";
 
-import { TimesheetError } from "@utils/TimesheetError";
-import { getTimesheet } from "@utils/getTimesheet";
-import { useLocale } from "@utils/useLocale";
+import { useLocale } from "@hooks";
+
+import { getTimesheet } from "@server";
+import { TimesheetError } from "@utils";
 
 import { ErrorType } from "@models/ErrorType";
 import type { Timesheet } from "@models/Schema";

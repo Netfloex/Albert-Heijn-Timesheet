@@ -3,7 +3,7 @@ import styles from "./ShiftItem.module.scss";
 import { DateTime } from "luxon";
 import type { FC } from "react";
 
-import { formatInterval } from "@utils/formats";
+import { formatInterval } from "@formats";
 
 import type { LuxonShift } from "@models/LuxonTimesheet";
 

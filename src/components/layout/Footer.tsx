@@ -5,7 +5,7 @@ import type { FC } from "react";
 import { DarkModeSwitcher } from "@components/DarkModeSwitcher";
 import { HumanizeTime } from "@components/reusable";
 
-import { useTimesheet } from "@utils";
+import { useTimesheet } from "@hooks";
 
 export const Footer: FC = () => {
 	const { updated } = useTimesheet();

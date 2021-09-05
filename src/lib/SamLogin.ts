@@ -5,8 +5,8 @@ import cheerio from "cheerio";
 import { DateTime, Settings } from "luxon";
 
 import type { Store } from "@lib";
-import { log } from "@utils";
-import { TimesheetError } from "@utils/TimesheetError";
+import { log } from "@server";
+import { TimesheetError } from "@utils";
 
 import { ErrorType } from "@models/ErrorType";
 import Schema, { Timesheet, Shift } from "@models/Schema";

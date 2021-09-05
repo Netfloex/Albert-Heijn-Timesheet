@@ -11,7 +11,10 @@
 		".*scss$",
 		"^\\w+",
 		"^@components.*",
-		"^(@lib)|(@utils)|(@seo-default)",
+		"^@hooks$",
+		"^(@lib)|(@utils)|(@server)$",
+		"^@formats$",
+		"^@seo-default$",
 		"^@models/.*"
 	]
 }

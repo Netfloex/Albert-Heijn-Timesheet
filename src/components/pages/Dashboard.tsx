@@ -5,7 +5,7 @@ import { FC } from "react";
 
 import { Footer, Schedule, Upcoming } from "@components/layout";
 
-import { useSWRUpdateTimesheet, useTimesheet } from "@utils";
+import { useSWRUpdateTimesheet, useTimesheet } from "@hooks";
 
 export const Dashboard: FC = () => {
 	// When the timesheet on the client is old/stale refetch from server

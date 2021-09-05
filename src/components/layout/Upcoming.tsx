@@ -5,8 +5,9 @@ import { FC } from "react";
 
 import { Container, Card } from "@components/reusable";
 
-import { useTimesheet } from "@utils";
-import { dateWithMonthFormat, formatInterval } from "@utils/formats";
+import { useTimesheet } from "@hooks";
+
+import { dateWithMonthFormat, formatInterval } from "@formats";
 
 export const Upcoming: FC = () => {
 	const timesheet = useTimesheet();

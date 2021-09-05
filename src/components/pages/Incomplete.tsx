@@ -2,7 +2,7 @@ import { FC } from "react";
 
 import { Dashboard, ErrorPage, Loading } from "@components/pages";
 
-import { useSWRUpdateTimesheet } from "@utils";
+import { useSWRUpdateTimesheet } from "@hooks";
 
 export const Incomplete: FC = () => {
 	const { data, error } = useSWRUpdateTimesheet();

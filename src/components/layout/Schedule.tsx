@@ -6,8 +6,9 @@ import type { FC } from "react";
 import { ShiftItem } from "@components";
 import { Container, Table } from "@components/reusable";
 
-import { useShiftsPerWeek } from "@utils";
-import { dateWithMonthFormat, weekIndexFormat } from "@utils/formats";
+import { useShiftsPerWeek } from "@hooks";
+
+import { dateWithMonthFormat, weekIndexFormat } from "@formats";
 
 import { RenderCell } from "@models/Table";
 

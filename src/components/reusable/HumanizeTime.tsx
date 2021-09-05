@@ -1,7 +1,7 @@
 import { DateTime, Duration } from "luxon";
 import { FC, useCallback, useEffect, useState } from "react";
 
-import { humanize } from "@utils/humanize";
+import { humanize } from "@utils";
 
 export const HumanizeTime: FC<{ date: DateTime }> = ({ date }) => {
 	const calculate = useCallback((): Duration => date.diffNow(), [date]);

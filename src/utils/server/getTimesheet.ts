@@ -3,7 +3,7 @@ import { password, storePath, username } from "@env";
 import axios from "axios";
 
 import { SamLogin, Store } from "@lib";
-import { TimesheetError } from "@utils/TimesheetError";
+import { TimesheetError } from "@utils";
 
 import { ErrorType } from "@models/ErrorType";
 import Schema, { Timesheet } from "@models/Schema";
