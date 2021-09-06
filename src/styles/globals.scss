@@ -1,4 +1,5 @@
 @use "colors";
+@use "responsive";
 
 @import "css-variables";
 @import "responsive";
@@ -8,4 +9,10 @@ body {
 	background-color: colors.$background;
 	color: colors.$text;
 	font-family: "Work Sans", sans-serif;
+}
+
+@include responsive.max-sm {
+	.small-hidden {
+		display: none;
+	}
 }

@@ -12,16 +12,14 @@ export const Footer: FC = () => {
 	return (
 		<footer className={styles.footer}>
 			<div className={styles.flex}>
-				Albert Heijn shifts schedule.
+				<span className="small-hidden">
+					Albert Heijn shifts schedule.
+				</span>
 				<> Updated </>
 				<HumanizeTime date={updated} />
 				<> ago.</>
 			</div>
-			<div className={styles.flex}>
-				<div className={styles.darkmodeWrapper}>
-					<DarkModeSwitcher />
-				</div>
-			</div>
+			<DarkModeSwitcher />
 		</footer>
 	);
 };
