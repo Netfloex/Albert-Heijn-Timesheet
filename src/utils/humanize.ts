@@ -11,5 +11,6 @@ const withDefaultOptions = humanizer({
 export const humanize = (time: Duration, options?: Options): string =>
 	withDefaultOptions(time.valueOf(), {
 		language: time.locale,
+		fallbacks: ["en"],
 		...options
 	});
