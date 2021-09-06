@@ -1,6 +1,6 @@
 import styles from "./Schedule.module.scss";
 
-import { DateTime, Info, Settings } from "luxon";
+import { DateTime, Info } from "luxon";
 import type { FC } from "react";
 
 import { ShiftItem } from "@components";
@@ -19,7 +19,6 @@ type JSXTableData = Record<
 
 export const Schedule: FC = () => {
 	const { shiftsWeekObject, startWeek, lastWeek } = useShiftsPerWeek();
-	console.log(DateTime.now().toLocaleString());
 
 	const [localNow, localWeekdays] = useLuxonLocale(() => [
 		DateTime.now(),
