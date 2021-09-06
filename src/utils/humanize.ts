@@ -7,5 +7,6 @@ export const humanize = (time: Duration, options?: Options): string =>
 		round: true,
 		conjunction: " and ",
 		serialComma: false,
+		language: time.locale,
 		...options
 	});

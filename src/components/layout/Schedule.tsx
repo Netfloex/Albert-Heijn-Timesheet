@@ -1,12 +1,12 @@
 import styles from "./Schedule.module.scss";
 
-import { DateTime, Info } from "luxon";
+import { DateTime, Info, Settings } from "luxon";
 import type { FC } from "react";
 
 import { ShiftItem } from "@components";
 import { Container, Table } from "@components/reusable";
 
-import { useShiftsPerWeek } from "@hooks";
+import { useLuxonLocale, useShiftsPerWeek } from "@hooks";
 
 import { dateWithMonthFormat, weekIndexFormat } from "@formats";
 
@@ -19,6 +19,12 @@ type JSXTableData = Record<
 
 export const Schedule: FC = () => {
 	const { shiftsWeekObject, startWeek, lastWeek } = useShiftsPerWeek();
+	console.log(DateTime.now().toLocaleString());
+
+	const [localNow, localWeekdays] = useLuxonLocale(() => [
+		DateTime.now(),
+		Info.weekdays()
+	]);
 
 	const JSXTableData: JSXTableData = {};
 
@@ -42,13 +48,13 @@ export const Schedule: FC = () => {
 	}
 
 	const RenderCell: RenderCell = ({ children, row, col }) => {
-		const today = row.currentWeek && col.prop == DateTime.now().weekdayLong;
+		const today = row.currentWeek && col.prop == localNow.weekdayLong;
 
 		return (
 			<td className={today ? styles.today : undefined}>
 				{children ??
 					(today
-						? DateTime.now().toLocaleString(dateWithMonthFormat)
+						? localNow.toLocaleString(dateWithMonthFormat)
 						: undefined)}
 			</td>
 		);
@@ -59,7 +65,7 @@ export const Schedule: FC = () => {
 			<Table
 				className={styles.table}
 				data={Object.values(JSXTableData)}
-				colDef={["Week", ...Info.weekdays()].map((weekday) => ({
+				colDef={["Week", ...localWeekdays].map((weekday) => ({
 					prop: weekday
 				}))}
 				RenderCell={RenderCell}
