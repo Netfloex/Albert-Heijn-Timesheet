@@ -1,15 +1,17 @@
 @use "variables";
 
 .shift {
+	display: flex;
+	flex-wrap: wrap;
 	padding: 15px;
 	border-bottom: variables.$border;
 
-	.time {
-		margin-left: 10px;
-		float: right;
+	&:last-child {
+		border-bottom: unset;
 	}
-}
 
-.shift:last-child {
-	border-bottom: unset;
+	.date {
+		flex-grow: 1;
+		margin-right: 2ch;
+	}
 }

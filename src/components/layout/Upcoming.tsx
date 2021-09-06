@@ -20,14 +20,14 @@ export const Upcoming: FC = () => {
 			<Card title={"Komende shifts:"} paddingContent={false}>
 				{upcomingShifts.map((shift) => (
 					<div className={styles.shift} key={shift.interval.toISO()}>
-						{shift.start.toLocaleString({
-							weekday: "long",
-							...dateWithMonthFormat
-						})}
-						:
-						<span className={styles.time}>
-							{formatInterval(shift.interval)}
-						</span>
+						<div className={styles.date}>
+							{shift.start.toLocaleString({
+								weekday: "long",
+								...dateWithMonthFormat
+							})}
+							:
+						</div>
+						<span>{formatInterval(shift.interval)}</span>
 					</div>
 				))}
 			</Card>
