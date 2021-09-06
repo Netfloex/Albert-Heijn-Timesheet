@@ -34,7 +34,7 @@ export const Schedule: FC = () => {
 			weekIndexFormat
 		);
 
-		JSXTableData[weekNumber] ??= { Week: <>{weekNumber}</> };
+		JSXTableData[weekNumber] ??= { 0: <>{weekNumber}</> };
 
 		const row = JSXTableData[weekNumber];
 
@@ -42,12 +42,12 @@ export const Schedule: FC = () => {
 			row.currentWeek = true;
 		}
 		shifts.forEach((shift) => {
-			row[shift.start.weekdayLong] = <ShiftItem shift={shift} />;
+			row[shift.start.weekday] = <ShiftItem shift={shift} />;
 		});
 	}
 
 	const RenderCell: RenderCell = ({ children, row, col }) => {
-		const today = row.currentWeek && col.prop == localNow.weekdayLong;
+		const today = row.currentWeek && col.id == localNow.weekday;
 
 		return (
 			<td className={today ? styles.today : undefined}>
@@ -64,8 +64,9 @@ export const Schedule: FC = () => {
 			<Table
 				className={styles.table}
 				data={Object.values(JSXTableData)}
-				colDef={["Week", ...localWeekdays].map((weekday) => ({
-					prop: weekday
+				colDef={["Week", ...localWeekdays].map((name, id) => ({
+					id,
+					name
 				}))}
 				RenderCell={RenderCell}
 			/>

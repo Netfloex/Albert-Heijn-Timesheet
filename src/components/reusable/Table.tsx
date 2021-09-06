@@ -10,22 +10,21 @@ import { ColData, RenderCell, RowData } from "@models/Table";
  * @param props.colDef - How the columns should be rendered
  */
 
+const defaultRenderCell: RenderCell = ({ children }): JSX.Element => (
+	<td>{children}</td>
+);
+
 export const Table: FC<{
 	data: RowData[];
 	colDef: ColData[];
 	className?: string;
 	RenderCell: RenderCell;
-}> = ({
-	data,
-	colDef,
-	className = "",
-	RenderCell = ({ children }): JSX.Element => <td>{children}</td>
-}) => (
+}> = ({ data, colDef, className = "", RenderCell = defaultRenderCell }) => (
 	<table className={`${styles.styledTable} ${className}`.trim()}>
 		<thead>
 			<tr>
 				{colDef.map((col) => (
-					<th key={col.prop}>{col.name ?? col.prop}</th>
+					<th key={col.id}>{col.name}</th>
 				))}
 			</tr>
 		</thead>
@@ -33,8 +32,8 @@ export const Table: FC<{
 			{data.map((data, row) => (
 				<tr key={row}>
 					{colDef.map((col) => (
-						<RenderCell row={data} col={col} key={col.prop}>
-							{data[col.prop]}
+						<RenderCell row={data} col={col} key={col.id}>
+							{data[col.id]}
 						</RenderCell>
 					))}
 				</tr>
