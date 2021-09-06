@@ -1,9 +1,43 @@
-.table {
-	th:first-child {
-		width: 6rem;
-	}
+@use "responsive";
 
-	.today {
-		background-color: rgba($color: #000, $alpha: 0.1);
+$weekWidth: 6rem;
+$weekWidthSmall: 3rem;
+
+$cellMinWidth: 6rem;
+$cellHeight: 5rem;
+
+.wrapper {
+	overflow: auto;
+	// overflow-y: hidden;
+
+	.table {
+		@include responsive.max-md {
+			font-size: small;
+
+			th {
+				width: $cellMinWidth;
+				font-size: medium;
+			}
+		}
+
+		th {
+			&:first-child {
+				@include responsive.max-md {
+					width: $weekWidthSmall;
+				}
+
+				@include responsive.md {
+					width: $weekWidth;
+				}
+			}
+		}
+
+		td {
+			height: $cellHeight;
+		}
+
+		.today {
+			background-color: rgba($color: #000, $alpha: 0.1);
+		}
 	}
 }

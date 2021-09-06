@@ -1,5 +1,6 @@
 @use "colors";
 @use "variables";
+@use "responsive";
 
 .styledTable {
 	@include variables.rounded;
@@ -24,7 +25,11 @@
 
 		tr {
 			th {
-				padding: 1rem 0;
+				padding: 0.5rem 0;
+
+				@include responsive.sm {
+					padding: 1rem 0;
+				}
 			}
 		}
 	}
@@ -33,6 +38,7 @@
 		tr {
 			td {
 				height: 6rem;
+				padding: 0 0.2rem;
 				text-align: center;
 			}
 

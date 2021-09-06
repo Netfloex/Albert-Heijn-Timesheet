@@ -1,3 +1,4 @@
+/* eslint css-modules/no-unused-class: [2, { markAsUsed: ['max-md', 'md'] }] */
 import styles from "./Schedule.module.scss";
 
 import { DateTime, Info } from "luxon";
@@ -61,15 +62,17 @@ export const Schedule: FC = () => {
 
 	return (
 		<Container>
-			<Table
-				className={styles.table}
-				data={Object.values(JSXTableData)}
-				colDef={["Week", ...localWeekdays].map((name, id) => ({
-					id,
-					name
-				}))}
-				RenderCell={RenderCell}
-			/>
+			<div className={styles.wrapper}>
+				<Table
+					className={styles.table}
+					data={Object.values(JSXTableData)}
+					colDef={["Week", ...localWeekdays].map((name, id) => ({
+						id,
+						name
+					}))}
+					RenderCell={RenderCell}
+				/>
+			</div>
 		</Container>
 	);
 };

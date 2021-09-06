@@ -10,6 +10,12 @@ $width-xxl: 1536px;
 	}
 }
 
+@mixin max-md {
+	@media (max-width: $width-md) {
+		@content;
+	}
+}
+
 @mixin sm {
 	@media (min-width: $width-sm) {
 		@content;
