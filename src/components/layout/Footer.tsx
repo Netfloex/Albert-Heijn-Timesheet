@@ -10,16 +10,19 @@ import { useTimesheet } from "@hooks";
 export const Footer: FC = () => {
 	const { updated } = useTimesheet();
 	return (
-		<footer className={styles.footer}>
-			<div className={styles.flex}>
-				<span className="small-hidden">
-					Albert Heijn shifts schedule.
-				</span>
-				<> Updated </>
-				<HumanizeTime date={updated} />
-				<> ago.</>
-			</div>
-			<DarkModeSwitcher />
-		</footer>
+		<>
+			<div className={styles.footerSize}></div>
+			<footer className={`${styles.footerSize} ${styles.footer}`}>
+				<div className={styles.flex}>
+					<span className="small-hidden">
+						Albert Heijn shifts schedule.
+					</span>
+					<> Updated </>
+					<HumanizeTime date={updated} />
+					<> ago.</>
+				</div>
+				<DarkModeSwitcher />
+			</footer>
+		</>
 	);
 };

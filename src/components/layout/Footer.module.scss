@@ -1,4 +1,10 @@
 @use "colors";
+$height: 22px;
+
+.footerSize {
+	height: $height;
+	padding: 0.5rem;
+}
 
 .footer {
 	position: fixed;
@@ -6,7 +12,6 @@
 	bottom: 0;
 	left: 0;
 	display: flex;
-	padding: 0.5rem;
 	background-color: colors.$secondary-background;
 
 	.flex {
