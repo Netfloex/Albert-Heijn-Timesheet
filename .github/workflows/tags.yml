@@ -1,0 +1,51 @@
+name: docker-build-versioned
+
+on:
+    push:
+        tags:
+            - "v[0-9]+.[0-9]+.[0-9]+"
+
+jobs:
+    docker:
+        runs-on: ubuntu-latest
+        steps:
+            # Setup
+            - name: Get latest tag
+              id: vars
+              run: echo ::set-output name=tag::${GITHUB_REF:10}
+
+            - name: Set up QEMU
+              uses: docker/setup-qemu-action@v1
+              with:
+                  platforms: linux/amd64,linux/arm64,linux/arm/v7
+
+            - name: Set up Docker Buildx
+              uses: docker/setup-buildx-action@v1
+
+            - name: Checkout
+              uses: actions/checkout@v2
+              with:
+                  ref: ${{ steps.vars.outputs.tag }}
+
+            # Login
+            - name: Login to DockerHub
+              uses: docker/login-action@v1
+              with:
+                  username: netfloex
+                  password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+            # Build & Push
+            - name: Build Dockerfile and push
+              uses: docker/build-push-action@v2
+              with:
+                  push: true
+                  context: .
+                  tags: netfloex/appie:${{ steps.vars.outputs.tag }}
+                  platforms: |
+                      linux/amd64
+                      linux/arm64
+                      linux/arm/v7
+
+                  # Cache
+                  cache-from: type=gha
+                  cache-to: type=gha
