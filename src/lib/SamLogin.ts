@@ -207,7 +207,11 @@ export class SamLogin {
 	}
 
 	private firstCookie(headers: AxiosResponse["headers"]): string {
-		return headers["set-cookie"][0].split(";")[0] as string;
+		const header = headers["set-cookie"];
+		if (!header?.length) {
+			throw new TimesheetError(ErrorType.NoCookies);
+		}
+		return header[0].split(";")[0];
 	}
 
 	private monthYear(date: DateTime): string {
@@ -242,10 +246,16 @@ export class SamLogin {
 		},
 
 		timesheet: async (when = ""): Promise<string> => {
+			const token = this.getToken();
+
+			if (!token) {
+				throw new TimesheetError(ErrorType.NoToken);
+			}
+
 			const res = await this.http(
 				`${this.urls.timesheet}?NEW_MONTH_YEAR=${when}`,
 				{
-					headers: { Cookie: this.getToken() },
+					headers: { Cookie: token },
 					maxRedirects: 0
 				}
 			);

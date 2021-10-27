@@ -30,9 +30,6 @@ export const getTimesheet = async (): Promise<Timesheet | TimesheetError> => {
 
 		return timesheet;
 	} catch (error) {
-		console.log("Error catched in getTimesheet.ts:");
-		console.error(error);
-
 		if (error instanceof TimesheetError) {
 			if (error.type == ErrorType.Incorrect) {
 				return {
@@ -46,7 +43,24 @@ export const getTimesheet = async (): Promise<Timesheet | TimesheetError> => {
 					type: ErrorType.IncorrectSaved
 				};
 			}
+
+			if (error.type == ErrorType.NoCookies) {
+				return {
+					error: "No cookies were received from one of the requests, you could try again",
+					type: ErrorType.NoCookies
+				};
+			}
+
+			if (error.type == ErrorType.NoToken) {
+				return {
+					error: "Token was not found before a request, you could try again.",
+					type: ErrorType.NoToken
+				};
+			}
 		}
+
+		console.log("Error catched in getTimesheet.ts:");
+		console.error(error);
 
 		if (axios.isAxiosError(error)) {
 			return {

@@ -3,5 +3,7 @@ export enum ErrorType {
 	Incorrect,
 	IncorrectSaved,
 	AxiosError,
+	NoCookies,
+	NoToken,
 	Unknown
 }
