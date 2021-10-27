@@ -21,7 +21,7 @@ jobs:
               run: yarn install
 
             - name: Test Typescript
-              run: yarn test
+              run: yarn typescript
             - name: Test ESLint
               run: yarn lint
             - name: Test Stylelint
@@ -44,12 +44,11 @@ jobs:
             - name: Login to DockerHub
               uses: docker/login-action@v1
               with:
-                  username: ${{ secrets.DOCKERHUB_USERNAME }}
+                  username: netfloex
                   password: ${{ secrets.DOCKERHUB_TOKEN }}
 
             # Build & Push
             - name: Build Dockerfile and push
-              id: docker_build
               uses: docker/build-push-action@v2
               with:
                   push: true

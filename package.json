@@ -7,9 +7,10 @@
 		"build": "next build",
 		"dev": "next dev",
 		"start": "next start",
-		"test": "tsc --noEmit",
+		"typescript": "tsc --noEmit",
 		"stylelint": "stylelint **/*.scss",
-		"lint": "eslint ."
+		"lint": "eslint . --cache --cache-strategy content --cache-location dist/eslint",
+		"prepare": "husky install"
 	},
 	"keywords": [],
 	"author": "",
@@ -30,7 +31,7 @@
 		"swr": "^1.0.1"
 	},
 	"devDependencies": {
-		"@trivago/prettier-plugin-sort-imports": "^3.0.0",
+		"@trivago/prettier-plugin-sort-imports": "1.4.4",
 		"@types/fs-extra": "^9.0.13",
 		"@types/humanize-duration": "^3.25.1",
 		"@types/luxon": "^2.0.5",
@@ -42,6 +43,7 @@
 		"eslint-config-prettier": "^8.3.0",
 		"eslint-plugin-css-modules": "^2.11.0",
 		"eslint-plugin-prettier": "^4.0.0",
+		"husky": "^7.0.4",
 		"prettier": "^2.4.1",
 		"sass": "^1.43.4",
 		"stylelint": "^14.0.1",
