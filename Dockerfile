@@ -12,7 +12,12 @@ WORKDIR /app
 COPY . .
 COPY --from=deps /app/node_modules ./node_modules
 ENV NEXT_TELEMETRY_DISABLED 1
-RUN yarn build && yarn install --production --ignore-scripts --prefer-offline
+
+# Temporary until Next.js swc updates for arm
+RUN echo '{"presets":["next/babel"]}' > .babelrc
+
+RUN yarn build
+RUN yarn install --production --ignore-scripts --prefer-offline
 
 FROM $NODE_IMAGE AS runner
 WORKDIR /app

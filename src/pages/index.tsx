@@ -5,8 +5,6 @@ import type { GetStaticProps, NextPage } from "next";
 import { TimesheetProvider } from "@components";
 import { Dashboard, ErrorPage, Incomplete } from "@components/pages";
 
-import { useLocale } from "@hooks";
-
 import { getTimesheet } from "@server";
 import { TimesheetError } from "@utils";
 
@@ -17,22 +15,19 @@ type Props = Timesheet | TimesheetError;
 
 const isError = (props: Props): props is TimesheetError => "error" in props;
 
-const Home: NextPage<Props> = (props) => {
-	useLocale();
-	return (
-		<TimesheetProvider timesheet={isError(props) ? undefined : props}>
-			{isError(props) ? (
-				props.type == ErrorType.Incomplete ? (
-					<Incomplete />
-				) : (
-					<ErrorPage timesheet={props} />
-				)
+const Home: NextPage<Props> = (props) => (
+	<TimesheetProvider timesheet={isError(props) ? undefined : props}>
+		{isError(props) ? (
+			props.type == ErrorType.Incomplete ? (
+				<Incomplete />
 			) : (
-				<Dashboard />
-			)}
-		</TimesheetProvider>
-	);
-};
+				<ErrorPage timesheet={props} />
+			)
+		) : (
+			<Dashboard />
+		)}
+	</TimesheetProvider>
+);
 
 export const getStaticProps: GetStaticProps<Props> = async () => {
 	const timesheet = await getTimesheet();
