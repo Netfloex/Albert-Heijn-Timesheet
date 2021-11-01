@@ -1,6 +1,7 @@
 import styles from "./Footer.module.scss";
 
 import type { FC } from "react";
+import { cx } from "src/utils/classnames";
 
 import { DarkModeSwitcher } from "@components/DarkModeSwitcher";
 import { LanguageSwitcher } from "@components/LanguageSwitcher";
@@ -13,7 +14,7 @@ export const Footer: FC = () => {
 	return (
 		<>
 			<div className={styles.footerSize}></div>
-			<footer className={`${styles.footerSize} ${styles.footer}`}>
+			<footer className={cx(styles.footerSize, styles.footer)}>
 				<div className={styles.flex}>
 					<span className="small-hidden">
 						Albert Heijn shifts schedule.

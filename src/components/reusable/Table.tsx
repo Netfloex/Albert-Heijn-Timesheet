@@ -1,3 +1,4 @@
+/* eslint css-modules/no-unused-class: [2, { markAsUsed: ["sm"] }] */
 import styles from "./Table.module.scss";
 
 import { FC } from "react";

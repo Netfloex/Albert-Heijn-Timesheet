@@ -1,4 +1,3 @@
-/* eslint css-modules/no-unused-class: [2, { markAsUsed: ['max-md', 'md'] }] */
 import styles from "./Schedule.module.scss";
 
 import { DateTime, Info } from "luxon";
