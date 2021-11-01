@@ -1,0 +1,50 @@
+@use "colors";
+@use "variables";
+
+.languageWrapper {
+	$background: colors.$tertiary-background;
+	$margin: 0.5rem;
+
+	position: relative;
+
+	&.closed {
+		.popup {
+			display: none;
+		}
+	}
+
+	.caret {
+		@include variables.border;
+
+		border-width: 4px 4px 0;
+		border-color: transparent;
+		border-top-color: colors.$text;
+		margin-left: $margin;
+	}
+
+	.popup {
+		@include variables.border;
+		@include variables.rounded;
+
+		position: absolute;
+		padding: $margin;
+		background-color: $background;
+		transform: translate(0, calc(-100% - 6px));
+
+		.locale {
+			display: block;
+		}
+	}
+
+	.button {
+		@include variables.border;
+		@include variables.rounded;
+
+		display: flex;
+		height: 100%;
+		align-items: center;
+		padding: 0 $margin;
+		margin-right: 1rem;
+		background-color: $background;
+	}
+}

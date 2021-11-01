@@ -1,12 +1,13 @@
 @use "colors";
 
 $min-screen-width: var(--min-screen-width);
-$border: 1px solid colors.$border-color;
+$border: 1px solid colors.$border;
 
 @mixin rounded {
-	// @include border;
-	@include shadow;
+	border-radius: 0.25rem;
+}
 
+@mixin rounded-lg {
 	overflow: hidden;
 	border-radius: 0.5rem;
 }

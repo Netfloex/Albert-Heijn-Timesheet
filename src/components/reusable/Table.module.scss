@@ -3,8 +3,6 @@
 @use "responsive";
 
 .styledTable {
-	@include variables.rounded;
-
 	width: 100%;
 	background-color: colors.$tertiary-background;
 	border-spacing: 0;

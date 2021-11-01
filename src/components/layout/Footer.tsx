@@ -3,6 +3,7 @@ import styles from "./Footer.module.scss";
 import type { FC } from "react";
 
 import { DarkModeSwitcher } from "@components/DarkModeSwitcher";
+import { LanguageSwitcher } from "@components/LanguageSwitcher";
 import { HumanizeTime } from "@components/reusable";
 
 import { useTimesheet } from "@hooks";
@@ -21,6 +22,7 @@ export const Footer: FC = () => {
 					<HumanizeTime date={updated} />
 					<> ago.</>
 				</div>
+				<LanguageSwitcher />
 				<DarkModeSwitcher />
 			</footer>
 		</>

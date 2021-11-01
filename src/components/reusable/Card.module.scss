@@ -5,7 +5,8 @@
 $padding: 10px;
 
 .card {
-	@include variables.rounded;
+	@include variables.rounded-lg;
+	@include variables.shadow;
 
 	display: inline-block;
 	background-color: colors.$tertiary-background;
