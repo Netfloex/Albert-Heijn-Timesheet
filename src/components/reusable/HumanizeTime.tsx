@@ -6,11 +6,11 @@ import { humanize } from "@utils";
 export const HumanizeTime: FC<{ date: DateTime }> = ({ date }) => {
 	const calculate = useCallback((): Duration => date.diffNow(), [date]);
 
-	const [duration, setDuration] = useState(calculate());
+	const [duration, setDuration] = useState(calculate);
 
 	useEffect(() => {
 		const interval = setInterval(() => {
-			setDuration(calculate());
+			setDuration(calculate);
 		}, 1000);
 
 		return (): void => clearInterval(interval);

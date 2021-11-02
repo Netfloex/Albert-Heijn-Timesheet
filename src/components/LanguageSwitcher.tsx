@@ -3,14 +3,24 @@ import styles from "./LanguageSwitcher.module.scss";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { FC, useState, Children } from "react";
-import { cx } from "src/utils/classnames";
+
+import { useOnClickOutside } from "@hooks";
+
+import { cx } from "@utils";
 
 export const LanguageSwitcher: FC = () => {
 	const { locales, locale } = useRouter();
 	const [open, setOpen] = useState<boolean>(false);
 
+	const outsideRef = useOnClickOutside(() => {
+		setOpen(false);
+	});
+
 	return (
-		<div className={cx(styles.languageWrapper, open || styles.closed)}>
+		<div
+			ref={outsideRef}
+			className={cx(styles.languageWrapper, open || styles.closed)}
+		>
 			<div className={styles.popup}>
 				{Children.map(locales, (locale) => (
 					<Link locale={locale} href="/">
@@ -23,7 +33,10 @@ export const LanguageSwitcher: FC = () => {
 					</Link>
 				))}
 			</div>
-			<div className={styles.button} onClick={(): void => setOpen(!open)}>
+			<div
+				className={styles.button}
+				onClick={(): void => setOpen((state) => !state)}
+			>
 				{locale}
 				<span className={styles.caret} />
 			</div>

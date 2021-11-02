@@ -1,13 +1,13 @@
 import styles from "./Footer.module.scss";
 
 import type { FC } from "react";
-import { cx } from "src/utils/classnames";
 
-import { DarkModeSwitcher } from "@components/DarkModeSwitcher";
-import { LanguageSwitcher } from "@components/LanguageSwitcher";
+import { DarkModeSwitcher, LanguageSwitcher } from "@components";
 import { HumanizeTime } from "@components/reusable";
 
 import { useTimesheet } from "@hooks";
+
+import { cx } from "@utils";
 
 export const Footer: FC = () => {
 	const { updated } = useTimesheet();

@@ -23,7 +23,7 @@
 		"esModuleInterop": true,
 		"resolveJsonModule": true,
 		"incremental": true,
-		"lib": ["ES2019.Array"],
+		"lib": ["ES2019.Array", "DOM"],
 		"allowJs": true,
 		"skipLibCheck": true,
 		"strict": true,
