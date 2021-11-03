@@ -1,49 +1,56 @@
 @use "colors";
 @use "variables";
+@use "sass:math";
 
 .languageWrapper {
 	$background: colors.$tertiary-background;
-	$margin: 0.5rem;
+	$padding: 0.5rem;
 
 	position: relative;
 
 	&.closed {
 		.popup {
-			display: none;
+			opacity: 0%;
+			visibility: hidden;
 		}
 	}
 
 	.caret {
-		@include variables.border;
-
 		border-width: 4px 4px 0;
+		border-style: solid;
 		border-color: transparent;
 		border-top-color: colors.$text;
-		margin-left: $margin;
+		margin-left: $padding;
 	}
 
 	.popup {
+		$transition: 0.1s;
+		$height: 10rem;
+
 		@include variables.border;
 		@include variables.rounded;
+		@include variables.shadow;
 
 		position: absolute;
-		padding: $margin;
+		top: calc(($height + $padding * 2) * -1 - 6px);
+		// width: 100%;
+		height: $height;
+		padding: $padding;
 		background-color: $background;
-		transform: translate(0, calc(-100% - 6px));
-
-		.locale {
-			display: block;
-		}
+		overflow-y: auto;
+		// transform: translate(0, calc(-100% - 6px));
+		transition: opacity $transition, visibility $transition;
 	}
 
 	.button {
 		@include variables.border;
 		@include variables.rounded;
+		@include variables.shadow;
 
 		display: flex;
 		height: 100%;
 		align-items: center;
-		padding: 0 $margin;
+		padding: 0 $padding;
 		margin-right: 1rem;
 		background-color: $background;
 	}

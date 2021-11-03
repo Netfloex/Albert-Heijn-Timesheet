@@ -1,43 +1,55 @@
 import styles from "./LanguageSwitcher.module.scss";
 
+import { DateTime } from "luxon";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { FC, useState, Children } from "react";
+import { FC, useState, Children, Fragment } from "react";
 
 import { useOnClickOutside } from "@hooks";
 
-import { cx } from "@utils";
+import { cx, languageOf } from "@utils";
 
 export const LanguageSwitcher: FC = () => {
-	const { locales, locale } = useRouter();
+	const { locales, locale, asPath } = useRouter();
 	const [open, setOpen] = useState<boolean>(false);
 
 	const outsideRef = useOnClickOutside(() => {
 		setOpen(false);
 	});
+	if (!locale || !locales) {
+		return <></>;
+	}
 
 	return (
 		<div
 			ref={outsideRef}
-			className={cx(styles.languageWrapper, open || styles.closed)}
+			className={cx(styles.languageWrapper, open ? false : styles.closed)}
 		>
 			<div className={styles.popup}>
-				{Children.map(locales, (locale) => (
-					<Link locale={locale} href="/">
-						<a
-							className={styles.locale}
-							onClick={(): void => setOpen(false)}
-						>
-							{locale}
-						</a>
-					</Link>
+				{Children.map(locales, (loc) => (
+					<div>
+						<Link locale={loc} href={asPath}>
+							<a
+								onClick={(): void => {
+									setOpen(false);
+									document.cookie = `NEXT_LOCALE=${loc}; expires=${DateTime.now()
+										.plus({ years: 10 })
+										.toHTTP()}`;
+								}}
+							>
+								<span suppressHydrationWarning>
+									{languageOf(loc)}
+								</span>
+							</a>
+						</Link>
+					</div>
 				))}
 			</div>
 			<div
 				className={styles.button}
 				onClick={(): void => setOpen((state) => !state)}
 			>
-				{locale}
+				<span suppressHydrationWarning>{languageOf(locale)}</span>
 				<span className={styles.caret} />
 			</div>
 		</div>
