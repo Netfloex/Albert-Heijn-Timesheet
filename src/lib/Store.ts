@@ -4,6 +4,7 @@ export class Store<Schema> {
 	public data: Schema;
 	private path: string;
 	private defaults: Schema;
+	private initialized = false;
 
 	constructor(path: string, defaults: Schema) {
 		this.path = path;
@@ -12,12 +13,16 @@ export class Store<Schema> {
 	}
 
 	public async init(): Promise<void> {
+		if (this.initialized) return;
+
 		if (await pathExists(this.path)) {
 			await this.read();
 		} else {
 			this.data = this.defaults;
 			await this.write();
 		}
+
+		this.initialized = true;
 	}
 
 	public async write(): Promise<void> {

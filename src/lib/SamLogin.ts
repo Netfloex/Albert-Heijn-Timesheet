@@ -15,8 +15,10 @@ export class SamLogin {
 	private db: Store<Schema>;
 	private http: AxiosInstance;
 
-	private username: string;
-	private password: string;
+	private username?: string;
+	private password?: string;
+
+	private getPromise: Promise<Timesheet> | false = false;
 
 	private urls = {
 		base: "https://sam.ahold.com/",
@@ -51,8 +53,8 @@ export class SamLogin {
 		password,
 		store
 	}: {
-		username: string;
-		password: string;
+		username?: string;
+		password?: string;
 		store: Store<Schema>;
 	}) {
 		this.http = axios.create({
@@ -67,10 +69,23 @@ export class SamLogin {
 
 		this.username = username;
 		this.password = password;
+
 		this.db = store;
 	}
 
 	public async get(): Promise<Timesheet> {
+		if (this.getPromise) {
+			const get = await this.getPromise;
+			this.getPromise = false;
+			return get;
+		} else {
+			const get = this.forceGet();
+			this.getPromise = get;
+			return await get;
+		}
+	}
+
+	private async forceGet(): Promise<Timesheet> {
 		Settings.defaultLocale = "en";
 		const date = DateTime.now();
 		await this.db.read();
@@ -233,6 +248,9 @@ export class SamLogin {
 
 		login: async (session: string): Promise<string> => {
 			log.RequestLogin();
+			if (!this.username || !this.password) {
+				throw new TimesheetError(ErrorType.Incomplete);
+			}
 			const res = await this.http.post(
 				this.urls.login,
 				`username=${this.username}&password=${this.password}&login-form-type=pwd`,

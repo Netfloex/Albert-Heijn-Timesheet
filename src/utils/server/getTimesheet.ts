@@ -8,6 +8,14 @@ import { TimesheetError } from "@utils";
 import { ErrorType } from "@models/ErrorType";
 import Schema, { Timesheet } from "@models/Schema";
 
+const store = new Store<Schema>(storePath, { shifts: {}, token: {} });
+
+const go = new SamLogin({
+	username,
+	password,
+	store
+});
+
 export const getTimesheet = async (): Promise<Timesheet | TimesheetError> => {
 	if (!username || !password) {
 		return {
@@ -15,13 +23,6 @@ export const getTimesheet = async (): Promise<Timesheet | TimesheetError> => {
 			type: ErrorType.Incomplete
 		};
 	}
-	const store = new Store<Schema>(storePath, { shifts: {}, token: {} });
-
-	const go = new SamLogin({
-		username,
-		password,
-		store
-	});
 
 	await store.init();
 
