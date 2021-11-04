@@ -3,7 +3,7 @@ import styles from "./LanguageSwitcher.module.scss";
 import { DateTime } from "luxon";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { FC, useState, Children, Fragment } from "react";
+import { Children, FC, useState } from "react";
 
 import { useOnClickOutside } from "@hooks";
 
@@ -27,22 +27,23 @@ export const LanguageSwitcher: FC = () => {
 		>
 			<div className={styles.popup}>
 				{Children.map(locales, (loc) => (
-					<div>
-						<Link locale={loc} href={asPath}>
-							<a
-								onClick={(): void => {
-									setOpen(false);
-									document.cookie = `NEXT_LOCALE=${loc}; expires=${DateTime.now()
-										.plus({ years: 10 })
-										.toHTTP()}`;
-								}}
-							>
-								<span suppressHydrationWarning>
-									{languageOf(loc)}
-								</span>
-							</a>
-						</Link>
-					</div>
+					<Link locale={loc} href={asPath}>
+						<a
+							className={
+								loc == locales[0] ? styles.first : undefined
+							}
+							onClick={(): void => {
+								setOpen(false);
+								document.cookie = `NEXT_LOCALE=${loc}; expires=${DateTime.now()
+									.plus({ years: 10 })
+									.toHTTP()}`;
+							}}
+						>
+							<span suppressHydrationWarning>
+								{languageOf(loc)}
+							</span>
+						</a>
+					</Link>
 				))}
 			</div>
 			<div

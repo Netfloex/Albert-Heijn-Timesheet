@@ -32,14 +32,24 @@
 		@include variables.shadow;
 
 		position: absolute;
-		top: calc(($height + $padding * 2) * -1 - 6px);
-		// width: 100%;
+		top: calc($height * -1 - 6px);
 		height: $height;
-		padding: $padding;
 		background-color: $background;
+		overflow-x: hidden;
 		overflow-y: auto;
-		// transform: translate(0, calc(-100% - 6px));
 		transition: opacity $transition, visibility $transition;
+
+		a {
+			display: block;
+			padding: $padding;
+			border-top: variables.$border;
+			color: colors.$text;
+			text-decoration: none;
+
+			&.first {
+				border-top: unset;
+			}
+		}
 	}
 
 	.button {
