@@ -19,7 +19,7 @@ const Home: NextPage<Props> = (props) => (
 	<TimesheetProvider timesheet={isError(props) ? undefined : props}>
 		{isError(props) ? (
 			props.type == ErrorType.Incomplete ? (
-				<Incomplete />
+				<Incomplete element={<Dashboard />} />
 			) : (
 				<ErrorPage timesheet={props} />
 			)
@@ -44,7 +44,7 @@ export const getStaticProps: GetStaticProps<Props> = async () => {
 
 	return {
 		props: timesheet,
-		revalidate: revalidate
+		revalidate
 	};
 };
 

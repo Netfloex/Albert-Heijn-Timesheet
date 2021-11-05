@@ -1,6 +1,7 @@
 import { password, storePath, username } from "@env";
 
 import axios from "axios";
+import { DateTime } from "luxon";
 
 import { SamLogin, Store } from "@lib";
 import { TimesheetError } from "@utils";
@@ -16,7 +17,9 @@ const go = new SamLogin({
 	store
 });
 
-export const getTimesheet = async (): Promise<Timesheet | TimesheetError> => {
+export const getTimesheet = async (
+	date?: DateTime
+): Promise<Timesheet | TimesheetError> => {
 	if (!username || !password) {
 		return {
 			error: "Env is incomplete",
@@ -27,7 +30,7 @@ export const getTimesheet = async (): Promise<Timesheet | TimesheetError> => {
 	await store.init();
 
 	try {
-		const timesheet = await go.get();
+		const timesheet = await go.get(date);
 
 		return timesheet;
 	} catch (error) {

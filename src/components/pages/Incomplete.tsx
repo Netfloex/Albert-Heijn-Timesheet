@@ -1,10 +1,10 @@
-import { FC } from "react";
+import { FC, ReactElement } from "react";
 
-import { Dashboard, ErrorPage, Loading } from "@components/pages";
+import { ErrorPage, Loading } from "@components/pages";
 
 import { useSWRUpdateTimesheet } from "@hooks";
 
-export const Incomplete: FC = () => {
+export const Incomplete: FC<{ element: ReactElement }> = ({ element }) => {
 	const { data, error } = useSWRUpdateTimesheet();
 
 	// data? error?
@@ -27,5 +27,5 @@ export const Incomplete: FC = () => {
 
 	// data == Timesheet
 
-	return <Dashboard />;
+	return element;
 };

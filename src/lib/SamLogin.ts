@@ -18,7 +18,7 @@ export class SamLogin {
 	private username?: string;
 	private password?: string;
 
-	private getPromise: Promise<Timesheet> | false = false;
+	private promises: Record<string, Promise<Timesheet>> = {};
 
 	private urls = {
 		base: "https://sam.ahold.com/",
@@ -73,21 +73,23 @@ export class SamLogin {
 		this.db = store;
 	}
 
-	public async get(): Promise<Timesheet> {
-		if (this.getPromise) {
-			const get = await this.getPromise;
-			this.getPromise = false;
-			return get;
+	public async get(date = DateTime.now()): Promise<Timesheet> {
+		const monthYear = this.monthYear(date);
+
+		if (monthYear in this.promises) {
+			return await this.promises[monthYear];
 		} else {
-			const get = this.forceGet();
-			this.getPromise = get;
+			const get = this.forceGet(date);
+			this.promises[monthYear] = get;
+			get.then(() => {
+				delete this.promises[monthYear];
+			});
 			return await get;
 		}
 	}
 
-	private async forceGet(): Promise<Timesheet> {
+	private async forceGet(date: DateTime): Promise<Timesheet> {
 		Settings.defaultLocale = "en";
-		const date = DateTime.now();
 		await this.db.read();
 
 		const timesheetDates: DateTime[] = [date];
