@@ -10,4 +10,4 @@ export const dateWithMonthFormat: Intl.DateTimeFormatOptions = {
 	month: "long"
 };
 
-export const weekIndexFormat = "kkkkW"; // ISO week year, ISO week number > 202133
+export const weekIndexFormat = "kkkkWW"; // ISO week year, ISO week number > 202133

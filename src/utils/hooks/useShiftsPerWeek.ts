@@ -14,6 +14,7 @@ export const useShiftsPerWeek = (): {
 	const { shifts } = useTimesheet();
 
 	const shiftsWeekObject: ShiftsPerWeek = {};
+
 	shifts.forEach((shift) => {
 		const weekWithYear = shift.start.toFormat(weekIndexFormat);
 		shiftsWeekObject[weekWithYear] ??= [];

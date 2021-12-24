@@ -28,15 +28,17 @@ export const Schedule: FC = () => {
 	const JSXTableData: JSXTableData = {};
 
 	for (let i = startWeek; i <= lastWeek; i++) {
-		const shifts = shiftsWeekObject[i] ?? [];
 		const { weekNumber } = DateTime.fromFormat(
 			i.toString(),
 			weekIndexFormat
 		);
 
-		JSXTableData[weekNumber] ??= { 0: <>{weekNumber}</> };
+		if (isNaN(weekNumber)) continue;
+		const shifts = shiftsWeekObject[i] ?? [];
 
-		const row = JSXTableData[weekNumber];
+		JSXTableData[i] ??= { 0: <>{weekNumber}</> };
+
+		const row = JSXTableData[i];
 
 		if (i.toString() == DateTime.now().toFormat(weekIndexFormat)) {
 			row.currentWeek = true;
@@ -58,6 +60,8 @@ export const Schedule: FC = () => {
 			</td>
 		);
 	};
+
+	console.table(JSXTableData);
 
 	return (
 		<Container>
