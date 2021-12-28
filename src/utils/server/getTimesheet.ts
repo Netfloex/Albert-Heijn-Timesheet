@@ -5,9 +5,10 @@ import { DateTime } from "luxon";
 
 import { SamLogin, Store } from "@lib";
 import { TimesheetError } from "@utils";
+import { TimesheetData } from "@utils";
 
 import { ErrorType } from "@models/ErrorType";
-import Schema, { Timesheet } from "@models/Schema";
+import Schema from "@models/Schema";
 
 const store = new Store<Schema>(storePath, { shifts: {}, token: {} });
 
@@ -17,9 +18,7 @@ const go = new SamLogin({
 	store
 });
 
-export const getTimesheet = async (
-	date?: DateTime
-): Promise<Timesheet | TimesheetError> => {
+export const getTimesheet = async (date?: DateTime): Promise<TimesheetData> => {
 	if (!username || !password) {
 		return {
 			error: "Env is incomplete",

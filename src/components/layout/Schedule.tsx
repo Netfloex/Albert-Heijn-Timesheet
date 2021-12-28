@@ -61,8 +61,6 @@ export const Schedule: FC = () => {
 		);
 	};
 
-	console.table(JSXTableData);
-
 	return (
 		<Container>
 			<div className={styles.wrapper}>

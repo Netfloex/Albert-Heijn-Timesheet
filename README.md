@@ -6,10 +6,15 @@
 
 ### Environment Variables
 
-```
+```bash
 AH_USERNAME=pnl
 AH_PASSWORD=password
 STORE_PATH=/db
+# See https://github.com/caronc/apprise/wiki
+NOTIFIERS=apprise://
+
+# If there should be a notification on start
+NOTIFY_START=false
 ```
 
 ### Development

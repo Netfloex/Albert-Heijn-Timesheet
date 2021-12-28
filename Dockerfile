@@ -17,9 +17,20 @@ ENV NEXT_TELEMETRY_DISABLED 1
 RUN echo '{"presets":["next/babel"]}' > .babelrc
 
 RUN yarn build
+RUN yarn build:notifications
+
 RUN yarn install --production --ignore-scripts --prefer-offline
 
+
 FROM $NODE_IMAGE AS runner
+
+# Install Apprise
+
+RUN apk add --no-cache python3 py3-six py3-requests py3-cryptography && \
+	apk add --no-cache --virtual=build-dependencies py3-pip && \
+	pip3 install --no-cache-dir --upgrade apprise && \
+	apk del --purge build-dependencies
+
 WORKDIR /app
 
 ENV NODE_ENV production
@@ -32,6 +43,9 @@ COPY --from=builder /app/.next ./.next
 COPY --from=builder /app/node_modules ./node_modules
 COPY --from=builder /app/package.json ./
 COPY --from=builder /app/src/entrypoint.sh ./
+
+COPY --from=builder /app/dist/index.js ./notifications.js
+
 
 EXPOSE 3000
 

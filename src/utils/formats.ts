@@ -1,7 +1,7 @@
 import { Interval } from "luxon";
 
-export const formatInterval = (interval: Interval): string =>
-	interval.toFormat("t", {
+export const formatInterval = (interval: Interval, format?: string): string =>
+	interval.toFormat(format ?? "t", {
 		separator: " - "
 	});
 
@@ -11,3 +11,5 @@ export const dateWithMonthFormat: Intl.DateTimeFormatOptions = {
 };
 
 export const weekIndexFormat = "kkkkWW"; // ISO week year, ISO week number > 202133
+
+export const cronFormat = "m H d M EEE";

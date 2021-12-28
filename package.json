@@ -10,7 +10,8 @@
 		"typescript": "tsc --noEmit",
 		"stylelint": "stylelint **/*.scss",
 		"lint": "eslint . --cache --cache-strategy content --cache-location dist/eslint",
-		"prepare": "husky install"
+		"prepare": "husky install",
+		"build:notifications": "rollup -c src/notifications/rollup.config.ts"
 	},
 	"keywords": [],
 	"author": "",
@@ -32,6 +33,10 @@
 		"zod": "^3.11.6"
 	},
 	"devDependencies": {
+		"@rollup/plugin-commonjs": "^21.0.1",
+		"@rollup/plugin-json": "^4.1.0",
+		"@rollup/plugin-node-resolve": "^13.1.1",
+		"@rollup/plugin-run": "^2.1.0",
 		"@trivago/prettier-plugin-sort-imports": "1.4.4",
 		"@types/fs-extra": "^9.0.13",
 		"@types/humanize-duration": "^3.25.1",
@@ -44,13 +49,18 @@
 		"eslint-config-prettier": "^8.3.0",
 		"eslint-plugin-css-modules": "^2.11.0",
 		"eslint-plugin-prettier": "^4.0.0",
+		"exec-sh": "^0.4.0",
 		"husky": "^7.0.4",
 		"prettier": "^2.4.1",
+		"rollup": "^2.62.0",
+		"rollup-plugin-terser": "^7.0.2",
+		"rollup-plugin-typescript2": "^0.31.1",
 		"sass": "^1.43.4",
 		"stylelint": "^14.0.1",
 		"stylelint-config-idiomatic-order": "^8.1.0",
 		"stylelint-config-standard-scss": "^2.0.0",
 		"stylelint-scss": "^4.0.0",
-		"typescript": "^4.5.0-beta"
+		"typescript": "^4.5.0-beta",
+		"yn": "^5.0.0"
 	}
 }
