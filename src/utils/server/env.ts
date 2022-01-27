@@ -10,13 +10,19 @@ export const storePath = env.STORE_PATH
 	? resolve(env.STORE_PATH)
 	: join(process.cwd(), "data", "store.json");
 
-export const NotifyStart = yn(env.NOTIFY_START) ?? true;
+export const timesheetCacheDuration = env.TIMESHEET_CACHE
+	? +env.TIMESHEET_CACHE
+	: 3600;
+
+export const updateNotificationHours =
+	parseInt(process.env.NOTIFICATIONS_UPDATE_HOURS ?? "") || 48;
+
+export const notifyStart = yn(env.NOTIFY_START) ?? true;
 
 export const notifiers = (env.NOTIFIERS ?? "")
 	.split(",")
 	.map((e) => e.trim())
 	.filter(Boolean);
 
-export const timesheetCacheDuration = env.TIMESHEET_CACHE
-	? +env.TIMESHEET_CACHE
-	: 3600;
+export const preNotificationMinutes =
+	parseInt(process.env.NOTIFICATION_PRE_MINUTES ?? "") || 120;

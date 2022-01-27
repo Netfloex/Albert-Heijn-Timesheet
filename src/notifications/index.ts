@@ -1,12 +1,16 @@
 import { apprise } from "./apprise";
-import { notifiers, NotifyStart } from "@env";
+import {
+	notifiers,
+	notifyStart,
+	preNotificationMinutes,
+	updateNotificationHours
+} from "@env";
 
 import exec from "exec-sh";
 import { writeFile } from "fs-extra";
-import { DateTime, Duration } from "luxon";
+import { DateTime } from "luxon";
 import { homedir } from "os";
 import { join } from "path";
-import { title } from "process";
 
 import { getTimesheet, log } from "@server";
 import { isError, parseTimesheet } from "@utils";
@@ -35,7 +39,10 @@ const main = async (): Promise<void> => {
 	);
 
 	const cronList = upcomingShifts.map(({ interval }) => {
-		const cron = interval.start.minus({ minutes: 60 }).toFormat(cronFormat);
+		const cron = interval.start
+			.minus({ minutes: preNotificationMinutes })
+			.toFormat(cronFormat);
+
 		const command = apprise({
 			title: `**${formatInterval(interval, "T")}**`
 		});
@@ -43,13 +50,19 @@ const main = async (): Promise<void> => {
 		return `${cron} ${command}`;
 	});
 
+	cronList.push(
+		`* */${updateNotificationHours} * * * node /app/notifications.js`
+	);
+
 	await exec.promise(`echo "${cronList.join("\n")}" | crontab -`);
 
 	log.ScheduledNotifications(upcomingShifts.length);
-	if (NotifyStart)
+
+	if (notifyStart)
 		await exec.promise(
 			apprise({
-				title: `Scheduled ${upcomingShifts.length} Notifications`
+				title: `Scheduled ${upcomingShifts.length} Notifications`,
+				body: `**Configuration**\n\nYou will receive a notification **${preNotificationMinutes}** minutes before a shift starts.\nThe schedule updates every **${updateNotificationHours}** hours.`
 			})
 		);
 };
