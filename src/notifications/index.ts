@@ -54,7 +54,11 @@ const main = async (): Promise<void> => {
 		`* */${updateNotificationHours} * * * node /app/notifications.js`
 	);
 
-	await exec.promise(`echo "${cronList.join("\n")}" | crontab -`);
+	await exec.promise(
+		`echo "${cronList
+			.map((cmd) => `${cmd} >> /app/cron.log `)
+			.join("\n")}" | crontab -`
+	);
 
 	log.ScheduledNotifications(upcomingShifts.length);
 
