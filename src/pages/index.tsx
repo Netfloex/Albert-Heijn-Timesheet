@@ -30,7 +30,7 @@ export const getStaticProps: GetStaticProps<TimesheetData> = async () => {
 	let revalidate: number | undefined = timesheetCacheDuration;
 
 	if ("error" in timesheet) {
-		revalidate = timesheet.type == ErrorType.Incomplete ? 1 : undefined;
+		revalidate = 5;
 	}
 
 	return {

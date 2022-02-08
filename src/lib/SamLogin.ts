@@ -58,8 +58,7 @@ export class SamLogin {
 		store: Store<Schema>;
 	}) {
 		this.http = axios.create({
-			baseURL: this.urls.base,
-			timeout: 5000
+			baseURL: this.urls.base
 		});
 
 		this.http.interceptors.request.use((c) => {

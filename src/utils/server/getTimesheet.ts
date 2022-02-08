@@ -33,48 +33,54 @@ export const getTimesheet = async (date?: DateTime): Promise<TimesheetData> => {
 
 		return timesheet;
 	} catch (error) {
-		if (error instanceof TimesheetError) {
-			if (error.type == ErrorType.Incorrect) {
-				return {
-					error: "Username/Password is incorrect",
-					type: ErrorType.Incorrect
-				};
+		const timesheetError = ((): TimesheetError => {
+			if (error instanceof TimesheetError) {
+				if (error.type == ErrorType.Incorrect) {
+					return {
+						error: "Username/Password is incorrect",
+						type: ErrorType.Incorrect
+					};
+				}
+				if (error.type == ErrorType.IncorrectSaved) {
+					return {
+						error: "Username/Password was incorrect last try, didn't try again",
+						type: ErrorType.IncorrectSaved
+					};
+				}
+
+				if (error.type == ErrorType.NoCookies) {
+					return {
+						error: "No cookies were received from one of the requests, you could try again",
+						type: ErrorType.NoCookies
+					};
+				}
+
+				if (error.type == ErrorType.NoToken) {
+					return {
+						error: "Token was not found before a request, you could try again.",
+						type: ErrorType.NoToken
+					};
+				}
 			}
-			if (error.type == ErrorType.IncorrectSaved) {
+
+			if (axios.isAxiosError(error)) {
 				return {
-					error: "Username/Password was incorrect last try, didn't try again",
-					type: ErrorType.IncorrectSaved
+					error: `Error while requesting: '${error.config.url}', ${error.message}`,
+					type: ErrorType.AxiosError
 				};
 			}
 
-			if (error.type == ErrorType.NoCookies) {
-				return {
-					error: "No cookies were received from one of the requests, you could try again",
-					type: ErrorType.NoCookies
-				};
-			}
+			console.log("Error catched in getTimesheet.ts:");
+			console.error(error);
 
-			if (error.type == ErrorType.NoToken) {
-				return {
-					error: "Token was not found before a request, you could try again.",
-					type: ErrorType.NoToken
-				};
-			}
-		}
-
-		console.log("Error catched in getTimesheet.ts:");
-		console.error(error);
-
-		if (axios.isAxiosError(error)) {
 			return {
-				error: `Error while requesting: '${error.config.url}', ${error.message}`,
-				type: ErrorType.AxiosError
+				error: error instanceof Error ? error.toString() : "",
+				type: ErrorType.Unknown
 			};
-		}
+		})();
 
-		return {
-			error: error instanceof Error ? error.toString() : "",
-			type: ErrorType.Unknown
-		};
+		console.log("Error in getTimesheet.ts: ", timesheetError);
+
+		return timesheetError;
 	}
 };
