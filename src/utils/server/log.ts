@@ -1,5 +1,5 @@
 import { AxiosRequestConfig } from "axios";
-import chalk from "chalk";
+import chalk from "chalk-template";
 
 const isNotifications = { value: false };
 
