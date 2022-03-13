@@ -31,3 +31,7 @@ export const calDavUrl = process.env.CALDAV_URL || false;
 export const calDavUsername = process.env.CALDAV_USERNAME || false;
 export const calDavPassword = process.env.CALDAV_PASSWORD || false;
 export const calDavCalendarName = process.env.CALDAV_CALENDAR_NAME || "Shifts";
+export const calDavNotifyMinutes = (process.env.CALDAV_NOTIFY_MINUTES ?? "60")
+	.split(",")
+	.map((i) => parseInt(i))
+	.filter(Boolean);

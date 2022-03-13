@@ -1,4 +1,4 @@
-import { calDavCalendarName } from "@env";
+import { calDavCalendarName, calDavNotifyMinutes } from "@env";
 
 import axios, { AxiosResponse } from "axios";
 import { createEvents } from "ics";
@@ -29,7 +29,14 @@ const timesheetToEvents = (timesheet: LuxonTimesheet): Promise<string> => {
 					.setLocale("nl")
 					.toLocaleString(DateTime.DATETIME_MED)}`,
 				productId: "Netfloex/Appie",
-				calName: calDavCalendarName
+				calName: calDavCalendarName,
+				alarms: calDavNotifyMinutes.map((minutes) => ({
+					action: "display",
+					trigger: {
+						before: true,
+						minutes
+					}
+				}))
 			})),
 			(err, data) => {
 				if (err) return rej(err);
@@ -52,6 +59,7 @@ export const updateCalendar = async (
 	}
 ): Promise<AxiosResponse | void> => {
 	const data = await timesheetToEvents(timesheet);
+	console.log(data);
 
 	return axios
 		.put(calDavUrl!, data, {
