@@ -54,6 +54,10 @@ const NoNotifiers = (): void =>
 const ScheduledNotifications = (count: number): void =>
 	done(chalk`Scheduled {green ${count}} notifications`);
 
+// Caldav
+const CaldavInvalidCredentials = (): void =>
+	error(chalk`[{green CALDAV}] Invalid Credentials`);
+
 export const log = {
 	isNotifications,
 	AxiosRequest,
@@ -68,5 +72,6 @@ export const log = {
 	TokenIncorrect,
 	NotifStart,
 	NoNotifiers,
-	ScheduledNotifications
+	ScheduledNotifications,
+	CaldavInvalidCredentials
 };

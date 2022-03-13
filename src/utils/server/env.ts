@@ -26,3 +26,8 @@ export const notifiers = (env.NOTIFIERS ?? "")
 
 export const preNotificationMinutes =
 	parseInt(process.env.NOTIFICATION_PRE_MINUTES ?? "") || 120;
+
+export const calDavUrl = process.env.CALDAV_URL || false;
+export const calDavUsername = process.env.CALDAV_USERNAME || false;
+export const calDavPassword = process.env.CALDAV_PASSWORD || false;
+export const calDavCalendarName = process.env.CALDAV_CALENDAR_NAME || "Shifts";

@@ -1,11 +1,18 @@
-import { password, storePath, username } from "@env";
+import {
+	calDavPassword,
+	calDavUrl,
+	calDavUsername,
+	password,
+	storePath,
+	username
+} from "@env";
 
 import axios from "axios";
 import { DateTime } from "luxon";
 
-import { SamLogin, Store } from "@lib";
+import { updateCalendar, SamLogin, Store } from "@lib";
 import { TimesheetError } from "@utils";
-import { TimesheetData } from "@utils";
+import { TimesheetData, parseTimesheet } from "@utils";
 
 import { ErrorType } from "@models/ErrorType";
 import Schema from "@models/Schema";
@@ -30,6 +37,14 @@ export const getTimesheet = async (date?: DateTime): Promise<TimesheetData> => {
 
 	try {
 		const timesheet = await go.get(date);
+
+		if (calDavUrl && calDavUsername && calDavPassword) {
+			await updateCalendar(parseTimesheet(timesheet), {
+				calDavUrl,
+				calDavUsername,
+				calDavPassword
+			});
+		}
 
 		return timesheet;
 	} catch (error) {

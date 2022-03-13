@@ -52,6 +52,7 @@
 		"eslint-plugin-prettier": "^4.0.0",
 		"exec-sh": "^0.4.0",
 		"husky": "^7.0.4",
+		"ics": "^2.35.0",
 		"prettier": "^2.5.1",
 		"rollup": "^2.66.1",
 		"rollup-plugin-terser": "^7.0.2",
