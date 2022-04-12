@@ -36,14 +36,23 @@ export const getTimesheet = async (date?: DateTime): Promise<TimesheetData> => {
 	await store.init();
 
 	try {
-		const timesheet = await go.get(date);
+		const [timesheet, fromCache] = await go.get(date);
 
-		if (calDavUrl && calDavUsername && calDavPassword) {
-			await updateCalendar(parseTimesheet(timesheet), {
-				calDavUrl,
-				calDavUsername,
-				calDavPassword
-			});
+		if (!fromCache && calDavUrl && calDavUsername && calDavPassword) {
+			const allShifts = Object.values(store.data.shifts).flatMap(
+				(e) => e.parsed
+			);
+			await updateCalendar(
+				parseTimesheet({
+					parsed: allShifts,
+					updated: timesheet.updated
+				}),
+				{
+					calDavUrl,
+					calDavUsername,
+					calDavPassword
+				}
+			);
 		}
 
 		return timesheet;

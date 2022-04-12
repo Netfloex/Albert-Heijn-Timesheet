@@ -59,7 +59,6 @@ export const updateCalendar = async (
 	}
 ): Promise<AxiosResponse | void> => {
 	const data = await timesheetToEvents(timesheet);
-	console.log(data);
 
 	return axios
 		.put(calDavUrl!, data, {

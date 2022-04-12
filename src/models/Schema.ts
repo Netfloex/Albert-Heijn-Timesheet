@@ -7,6 +7,8 @@ export type Timesheet = {
 	parsed: Shift[];
 };
 
+export type GetTimesheet = [timesheet: Timesheet, fromCache: boolean];
+
 type Token = {
 	token?: string;
 	created?: string;

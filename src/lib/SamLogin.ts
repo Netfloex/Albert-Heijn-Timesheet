@@ -9,7 +9,7 @@ import { log } from "@server";
 import { TimesheetError } from "@utils";
 
 import { ErrorType } from "@models/ErrorType";
-import Schema, { Timesheet, Shift } from "@models/Schema";
+import Schema, { Timesheet, Shift, GetTimesheet } from "@models/Schema";
 
 export class SamLogin {
 	private db: Store<Schema>;
@@ -18,7 +18,7 @@ export class SamLogin {
 	private username?: string;
 	private password?: string;
 
-	private promises: Record<string, Promise<Timesheet>> = {};
+	private promises: Record<string, Promise<GetTimesheet>> = {};
 
 	private urls = {
 		base: "https://sam.ahold.com/",
@@ -72,7 +72,7 @@ export class SamLogin {
 		this.db = store;
 	}
 
-	public async get(date = DateTime.now()): Promise<Timesheet> {
+	public async get(date = DateTime.now()): Promise<GetTimesheet> {
 		const monthYear = this.monthYear(date);
 
 		if (monthYear in this.promises) {
@@ -87,7 +87,7 @@ export class SamLogin {
 		}
 	}
 
-	private async forceGet(date: DateTime): Promise<Timesheet> {
+	private async forceGet(date: DateTime): Promise<GetTimesheet> {
 		Settings.defaultLocale = "en";
 		await this.db.read();
 
@@ -118,10 +118,13 @@ export class SamLogin {
 			log.TimesheetDone();
 		}
 
-		return {
-			updated: timesheets[0].updated,
-			parsed: timesheets.flatMap((t) => t.parsed)
-		};
+		return [
+			{
+				updated: timesheets[0].updated,
+				parsed: timesheets.flatMap((t) => t.parsed)
+			},
+			needsFetch
+		];
 	}
 
 	private async login(): Promise<void> {
