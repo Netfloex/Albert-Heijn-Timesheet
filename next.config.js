@@ -49,6 +49,9 @@ const config = {
 	i18n: {
 		locales: languages,
 		defaultLocale: "nl"
+	},
+	experimental: {
+		outputStandalone: true
 	}
 };
 
