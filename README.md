@@ -1,20 +1,24 @@
 # Albert Heijn Shifts Timesheet
 
-<!-- ### Features
-
--   Albert Heijn shifts timesheet -->
-
 ### Environment Variables
 
 ```bash
+# Required
 AH_USERNAME=pnl
 AH_PASSWORD=password
-STORE_PATH=/db
-# See https://github.com/caronc/apprise/wiki
-NOTIFIERS=apprise://
 
-# If there should be a notification on start
-NOTIFY_START=false
+# Optional
+TZ=Europe/Amsterdam
+STORE_PATH=/db
+
+# The calendar to *overwrite* with shifts data
+CALDAV_URL=https://radicale
+CALDAV_USERNAME=user
+CALDAV_PASSWORD=password
+
+# (Optional) amount of minutes when your calendar should remind you
+# Default is 60 minutes
+CALDAV_NOTIFY_MINUTES=120,15
 ```
 
 ### Development
