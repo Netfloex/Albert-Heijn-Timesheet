@@ -1,5 +1,6 @@
 // @ts-check
 const { join } = require("path");
+const withPWA = require("next-pwa");
 
 const languages = [
 	"ar",
@@ -30,11 +31,12 @@ const languages = [
 	"tr",
 	"zh"
 ];
+
 /**
  * @type {import('next').NextConfig}
  **/
 
-module.exports = {
+const config = {
 	eslint: {
 		ignoreDuringBuilds: true
 	},
@@ -49,3 +51,11 @@ module.exports = {
 		defaultLocale: "nl"
 	}
 };
+
+module.exports = withPWA({
+	pwa: {
+		dest: "public",
+		disable: process.env.NODE_ENV === "development"
+	},
+	...config
+});
