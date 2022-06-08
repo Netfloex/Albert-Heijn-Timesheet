@@ -1,10 +1,8 @@
 version: "3"
 services:
     appie:
-        image: netfloex/appie:latest
+        image: netfloex/appie:v1.1.0
         container_name: appie
-        ports:
-            - 2000:3000
         volumes:
             - ./data:/data
         environment:
