@@ -1,7 +1,14 @@
 {
 	"name": "Albert Heijn Rooster",
 	"short_name": "Shifts",
-	"icons": [],
+	"icons": [
+		{
+			"src": "/logo-bg.svg",
+			"sizes": "any",
+			"purpose": "maskable",
+			"type": "image/svg+xml"
+		}
+	],
 	"theme_color": "#222",
 	"background_color": "#222",
 	"start_url": "/",
