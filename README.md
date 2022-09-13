@@ -1,5 +1,7 @@
 # Albert Heijn Shifts Timesheet
 
+![albert-heijn-timesheet](https://user-images.githubusercontent.com/38650595/190021928-1de52e0a-41c7-45f9-a23a-57c1caad6c7e.png)
+
 ### Environment Variables
 
 ```bash
