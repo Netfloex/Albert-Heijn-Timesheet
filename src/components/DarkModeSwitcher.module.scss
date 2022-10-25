@@ -21,15 +21,15 @@ $slider-size: math.div($width, 3);
 		width: $width;
 		padding: $padding-y $padding-x;
 		border: 0;
-		background-color: colors.$button-background;
 		border-radius: $width;
+		background-color: colors.$button-background;
 
 		.slider {
 			width: $slider-size;
 			height: $slider-size;
 			padding: $slider-padding;
-			background-color: colors.$tertiary-background;
 			border-radius: 100%;
+			background-color: colors.$tertiary-background;
 			transition: transform 0.3s;
 		}
 	}

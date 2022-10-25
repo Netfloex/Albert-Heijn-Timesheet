@@ -1,8 +1,7 @@
 /* eslint css-modules/no-unused-class: [2, { markAsUsed: ["sm"] }] */
 import styles from "./Table.module.scss";
 
-import { FC } from "react";
-
+import type { FCC } from "@models/FCC";
 import { ColData, RenderCell, RowData } from "@models/Table";
 
 /**
@@ -15,7 +14,7 @@ const defaultRenderCell: RenderCell = ({ children }): JSX.Element => (
 	<td>{children}</td>
 );
 
-export const Table: FC<{
+export const Table: FCC<{
 	data: RowData[];
 	colDef: ColData[];
 	className?: string;

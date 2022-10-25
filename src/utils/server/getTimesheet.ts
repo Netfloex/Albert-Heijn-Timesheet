@@ -89,7 +89,7 @@ export const getTimesheet = async (date?: DateTime): Promise<TimesheetData> => {
 
 			if (axios.isAxiosError(error)) {
 				return {
-					error: `Error while requesting: '${error.config.url}', ${error.message}`,
+					error: `Error while requesting: '${error.config?.url}', ${error.message}`,
 					type: ErrorType.AxiosError
 				};
 			}

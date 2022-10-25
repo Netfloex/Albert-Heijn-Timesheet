@@ -1,7 +1,7 @@
 import styles from "./Container.module.scss";
 
-import type { FC } from "react";
+import { FCC } from "@models/FCC";
 
-export const Container: FC = ({ children }) => {
+export const Container: FCC = ({ children }) => {
 	return <div className={styles.container}>{children}</div>;
 };

@@ -1,6 +1,6 @@
 // @ts-check
 const { join } = require("path");
-const withPWA = require("next-pwa");
+const nextPwa = require("next-pwa");
 
 const languages = [
 	"ar",
@@ -44,21 +44,16 @@ const config = {
 		includePaths: [join(__dirname, "src", "styles")]
 	},
 	env: {
-		TIMESHEET_CACHE: process.env.TIMESHEET_CACHE
+		TIMESHEET_CACHE: process.env.TIMESHEET_CACHE ?? ""
 	},
 	i18n: {
 		locales: languages,
 		defaultLocale: "nl"
 	},
-	experimental: {
-		outputStandalone: true
-	}
+	output: "standalone"
 };
 
-module.exports = withPWA({
-	pwa: {
-		dest: "public",
-		disable: process.env.NODE_ENV === "development"
-	},
-	...config
-});
+module.exports = nextPwa({
+	dest: "public",
+	disable: process.env.NODE_ENV === "development"
+})(config);

@@ -1,7 +1,7 @@
 import styles from "./Center.module.scss";
 
-import type { FC } from "react";
+import { FCC } from "@models/FCC";
 
-export const Center: FC = ({ children }) => (
+export const Center: FCC = ({ children }) => (
 	<div className={styles.center}>{children}</div>
 );

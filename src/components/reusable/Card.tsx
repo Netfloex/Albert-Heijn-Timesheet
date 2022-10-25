@@ -1,8 +1,10 @@
 import styles from "./Card.module.scss";
 
-import type { FC, ReactNode } from "react";
+import type { ReactNode } from "react";
 
-export const Card: FC<{ title: ReactNode; paddingContent?: boolean }> = ({
+import { FCC } from "@models/FCC";
+
+export const Card: FCC<{ title: ReactNode; paddingContent?: boolean }> = ({
 	title,
 	paddingContent = true,
 	children

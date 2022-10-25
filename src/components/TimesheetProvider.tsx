@@ -1,5 +1,6 @@
-import { createContext, FC, useState } from "react";
+import { createContext, useState } from "react";
 
+import { FCC } from "@models/FCC";
 import type { Timesheet } from "@models/Schema";
 import type Context from "@models/TimesheetContext";
 
@@ -8,7 +9,7 @@ export const TimesheetContext = createContext<Context>({
 	updateTimesheet: undefined
 });
 
-export const TimesheetProvider: FC<{ timesheet?: Timesheet }> = ({
+export const TimesheetProvider: FCC<{ timesheet?: Timesheet }> = ({
 	timesheet,
 	children
 }) => {

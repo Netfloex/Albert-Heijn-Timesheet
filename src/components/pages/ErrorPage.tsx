@@ -17,7 +17,7 @@ export const ErrorPage: FC<{
 				<>
 					Request to
 					<> </>
-					<span className={styles.dim}>{swr.config.url}</span>
+					<span className={styles.dim}>{swr.config?.url}</span>
 					<> </>
 					failed:
 					<div className={styles.mt}>{swr.message}</div>

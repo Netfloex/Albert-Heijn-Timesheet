@@ -27,22 +27,18 @@ export const LanguageSwitcher: FC = () => {
 		>
 			<div className={styles.popup}>
 				{Children.map(locales, (loc) => (
-					<Link locale={loc} href={asPath}>
-						<a
-							className={
-								loc == locales[0] ? styles.first : undefined
-							}
-							onClick={(): void => {
-								setOpen(false);
-								document.cookie = `NEXT_LOCALE=${loc}; expires=${DateTime.now()
-									.plus({ years: 10 })
-									.toHTTP()}`;
-							}}
-						>
-							<span suppressHydrationWarning>
-								{languageOf(loc)}
-							</span>
-						</a>
+					<Link
+						locale={loc}
+						href={asPath}
+						className={loc == locales[0] ? styles.first : undefined}
+						onClick={(): void => {
+							setOpen(false);
+							document.cookie = `NEXT_LOCALE=${loc}; expires=${DateTime.now()
+								.plus({ years: 10 })
+								.toHTTP()}`;
+						}}
+					>
+						<span suppressHydrationWarning>{languageOf(loc)}</span>
 					</Link>
 				))}
 			</div>
