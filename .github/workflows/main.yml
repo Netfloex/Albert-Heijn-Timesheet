@@ -4,6 +4,8 @@ on:
     push:
         branches:
             - master
+        tags:
+            - "v[0-9]+.[0-9]+.[0-9]+"
 
 jobs:
     tests:
@@ -12,20 +14,36 @@ jobs:
             - name: Setup yarn and install dependencies
               uses: netfloex/actions/yarn@master
 
-            - name: Test Typescript
+            - name: Check Types
               run: yarn typescript
+
             - name: Test ESLint
               run: yarn lint
+
             - name: Test Stylelint
               run: yarn stylelint
 
     docker:
         runs-on: ubuntu-latest
         needs: tests
+
         steps:
+            - name: Docker meta
+              id: meta
+              uses: docker/metadata-action@v4
+              with:
+                  images: |
+                      netfloex/appie
+                  tags: |
+                      type=semver,pattern=v{{major}}.{{minor}}.{{patch}}
+                      type=semver,pattern=v{{major}}.{{minor}}
+                      type=semver,pattern=v{{major}}
+                      type=raw,value=latest
+
             - name: Build and push to docker hub
               uses: netfloex/actions/docker@master
               with:
                   username: netfloex
                   token: ${{ secrets.DOCKERHUB_TOKEN }}
-                  tags: netfloex/appie:latest
+                  tags: ${{ steps.meta.outputs.tags }}
+                  labels: ${{ steps.meta.outputs.labels }}

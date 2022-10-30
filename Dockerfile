@@ -1,4 +1,4 @@
-ARG NODE_IMAGE=node:12-alpine
+ARG NODE_IMAGE=node:16-alpine
 
 FROM $NODE_IMAGE AS deps
 WORKDIR /app
