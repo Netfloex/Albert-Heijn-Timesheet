@@ -13,6 +13,9 @@ AH_PASSWORD=password
 TZ=Europe/Amsterdam
 STORE_PATH=/db
 
+
+CALENDAR_NOTIFY_MINUTES=15,120 # In minutes, use a "," to use multiple reminders
+
 ```
 
 ### Calendar Synchronization

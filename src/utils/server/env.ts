@@ -12,3 +12,10 @@ export const storePath = env.STORE_PATH
 export const timesheetCacheDuration = env.TIMESHEET_CACHE
 	? +env.TIMESHEET_CACHE
 	: 3600;
+
+export const calendarNotifyMinutes = (
+	process.env.CALENDAR_NOTIFY_MINUTES ?? "60"
+)
+	.split(",")
+	.map((i) => parseInt(i))
+	.filter(Boolean);

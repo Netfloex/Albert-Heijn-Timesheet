@@ -10,6 +10,7 @@ export interface IcsEvent {
 	end: DateTime;
 	description: string;
 	summary: string;
+	alarms: number[];
 }
 
 const formatTime = (date: DateTime): string =>
@@ -32,6 +33,16 @@ export const createIcs = (
 	];
 
 	events.forEach((event) => {
+		const alarms = event.alarms.map((alarm) =>
+			[
+				"BEGIN:VALARM",
+				`TRIGGER:-PT${alarm}M`,
+				"ACTION:DISPLAY",
+				`DESCRIPTION:${event.summary}`,
+				"END:VALARM"
+			].join("\r\n")
+		);
+
 		ics.push(
 			...[
 				"BEGIN:VEVENT",
@@ -42,6 +53,7 @@ export const createIcs = (
 				`DESCRIPTION:${event.description}`,
 				"STATUS:CONFIRMED",
 				`UID:${event.end.toMillis() + "-" + event.start.toMillis()}`,
+				...alarms,
 				"END:VEVENT"
 			]
 		);

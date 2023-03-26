@@ -1,3 +1,5 @@
+import { calendarNotifyMinutes } from "./env";
+
 import { DateTime } from "luxon";
 
 import { createIcs, IcsEvent } from "@server";
@@ -12,7 +14,8 @@ export const timesheetToIcs = (timesheet: LuxonTimesheet): string => {
 
 		description: `Geüpdated op ${timesheet.updated
 			.setLocale("nl")
-			.toLocaleString(DateTime.DATETIME_MED)}`
+			.toLocaleString(DateTime.DATETIME_MED)}`,
+		alarms: calendarNotifyMinutes
 	}));
 
 	return createIcs({ name: "Shifts", updated: timesheet.updated }, events);
