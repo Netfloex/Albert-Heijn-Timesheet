@@ -13,15 +13,11 @@ AH_PASSWORD=password
 TZ=Europe/Amsterdam
 STORE_PATH=/db
 
-# The calendar to *overwrite* with shifts data
-CALDAV_URL=https://radicale
-CALDAV_USERNAME=user
-CALDAV_PASSWORD=password
-
-# (Optional) amount of minutes when your calendar should remind you
-# Default is 60 minutes
-CALDAV_NOTIFY_MINUTES=120,15
 ```
+
+### Calendar Synchronization
+
+There is an api endpoint at `http://localhost:3000/api/ics` that allows synchronizing with a calendar.
 
 ### Development
 

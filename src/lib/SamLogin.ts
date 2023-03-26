@@ -161,7 +161,7 @@ export class SamLogin {
 	private getCache(date: DateTime): Timesheet | false {
 		const key = this.monthYear(date);
 
-		const cache = this.db.data.shifts;
+		const cache = this.db.data.shifts ?? {};
 
 		if (key in cache) {
 			const value = cache[key];

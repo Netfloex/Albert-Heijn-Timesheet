@@ -30,7 +30,6 @@
 		"react-dom": "^18.2.0",
 		"react-spinners": "^0.13.8",
 		"swr": "^2.1.1",
-		"yn": "^5.0.0",
 		"zod": "^3.21.4"
 	},
 	"devDependencies": {

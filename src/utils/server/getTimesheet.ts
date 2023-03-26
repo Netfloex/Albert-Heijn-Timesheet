@@ -1,23 +1,13 @@
-import {
-	calDavPassword,
-	calDavUrl,
-	calDavUsername,
-	password,
-	storePath,
-	username
-} from "@env";
+import { store } from "./store";
+import { password, username } from "@env";
 
 import axios from "axios";
 import { DateTime } from "luxon";
 
-import { updateCalendar, SamLogin, Store } from "@lib";
-import { TimesheetError } from "@utils";
-import { TimesheetData, parseTimesheet } from "@utils";
+import { SamLogin } from "@lib";
+import { TimesheetData, TimesheetError } from "@utils";
 
 import { ErrorType } from "@models/ErrorType";
-import Schema from "@models/Schema";
-
-const store = new Store<Schema>(storePath, { shifts: {}, token: {} });
 
 const go = new SamLogin({
 	username,
@@ -36,25 +26,7 @@ export const getTimesheet = async (date?: DateTime): Promise<TimesheetData> => {
 	await store.init();
 
 	try {
-		const [timesheet, fromCache] = await go.get(date);
-
-		if (!fromCache && calDavUrl && calDavUsername && calDavPassword) {
-			const allShifts = Object.values(store.data.shifts).flatMap(
-				(e) => e.parsed
-			);
-			await updateCalendar(
-				parseTimesheet({
-					parsed: allShifts,
-					updated: timesheet.updated
-				}),
-				{
-					calDavUrl,
-					calDavUsername,
-					calDavPassword
-				}
-			);
-		}
-
+		const [timesheet] = await go.get(date);
 		return timesheet;
 	} catch (error) {
 		const timesheetError = ((): TimesheetError => {

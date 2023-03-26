@@ -44,20 +44,6 @@ const TokenIncorrect = (): void =>
 
 // Notifications
 
-const NotifStart = (): void => info("(Re)scheduling notifications");
-
-const NoNotifiers = (): void =>
-	info(
-		chalk`Disabled notifications because no notifiers are set, to enable add the {dim {bold NOTIFIERS}} env variable`
-	);
-
-const ScheduledNotifications = (count: number): void =>
-	done(chalk`Scheduled {green ${count}} notifications`);
-
-// Caldav
-const CaldavInvalidCredentials = (): void =>
-	error(chalk`[{green CALDAV}] Invalid Credentials`);
-
 export const log = {
 	isNotifications,
 	AxiosRequest,
@@ -69,9 +55,5 @@ export const log = {
 	TimesheetDone,
 	ErrorKey,
 	LoginFailed,
-	TokenIncorrect,
-	NotifStart,
-	NoNotifiers,
-	ScheduledNotifications,
-	CaldavInvalidCredentials
+	TokenIncorrect
 };
