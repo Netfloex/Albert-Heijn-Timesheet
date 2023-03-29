@@ -1,7 +1,7 @@
 version: "3"
 services:
     appie:
-        image: netfloex/appie:v1.1.0
+        image: netfloex/appie:v2.0.0
         container_name: appie
         volumes:
             - ./data:/data
