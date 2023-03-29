@@ -1,9 +1,9 @@
-import { FCC } from "@models/FCC";
+import { FCC } from "@models/FCC"
 
-export type RowData = Record<string, JSX.Element>;
+export type RowData = Record<string, JSX.Element>
 export type ColData = {
-	id: number;
-	name: string;
-};
+	id: number
+	name: string
+}
 
-export type RenderCell = FCC<{ row: RowData; col: ColData }>;
+export type RenderCell = FCC<{ row: RowData; col: ColData }>

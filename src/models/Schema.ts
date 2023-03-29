@@ -1,25 +1,25 @@
 export type Shift = {
-	start: string;
-	end: string;
-};
+	start: string
+	end: string
+}
 export type Timesheet = {
-	updated: string;
-	parsed: Shift[];
-};
+	updated: string
+	parsed: Shift[]
+}
 
-export type GetTimesheet = [timesheet: Timesheet, fromCache: boolean];
+export type GetTimesheet = [timesheet: Timesheet, fromCache: boolean]
 
 type Token = {
-	token?: string;
-	created?: string;
-	updated?: string;
-};
+	token?: string
+	created?: string
+	updated?: string
+}
 
 type Schema = {
-	error?: boolean;
+	error?: boolean
 
-	token: Token;
-	shifts: Record<string, Timesheet>;
-};
+	token: Token
+	shifts: Record<string, Timesheet>
+}
 
-export default Schema;
+export default Schema

@@ -1,16 +1,16 @@
-import styles from "./Footer.module.scss";
+import styles from "./Footer.module.scss"
 
-import type { FC } from "react";
+import type { FC } from "react"
 
-import { DarkModeSwitcher, LanguageSwitcher } from "@components";
-import { HumanizeTime } from "@components/reusable";
+import { DarkModeSwitcher, LanguageSwitcher } from "@components"
+import { HumanizeTime } from "@components/reusable"
 
-import { useTimesheet } from "@hooks";
+import { useTimesheet } from "@hooks"
 
-import { cx } from "@utils";
+import { cx } from "@utils"
 
 export const Footer: FC = () => {
-	const { updated } = useTimesheet();
+	const { updated } = useTimesheet()
 	return (
 		<>
 			<div className={styles.footerSize}></div>
@@ -27,5 +27,5 @@ export const Footer: FC = () => {
 				<DarkModeSwitcher />
 			</footer>
 		</>
-	);
-};
+	)
+}

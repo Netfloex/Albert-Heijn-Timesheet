@@ -1,11 +1,11 @@
-import styles from "./ShiftItem.module.scss";
+import styles from "./ShiftItem.module.scss"
 
-import { DateTime } from "luxon";
-import type { FC } from "react";
+import { DateTime } from "luxon"
+import type { FC } from "react"
 
-import { formatInterval } from "@formats";
+import { formatInterval } from "@formats"
 
-import type { LuxonShift } from "@models/LuxonTimesheet";
+import type { LuxonShift } from "@models/LuxonTimesheet"
 
 export const ShiftItem: FC<{ shift: LuxonShift }> = ({ shift }) => (
 	<div
@@ -19,9 +19,9 @@ export const ShiftItem: FC<{ shift: LuxonShift }> = ({ shift }) => (
 		<div>
 			{shift.start.toLocaleString({
 				day: "numeric",
-				month: "long"
+				month: "long",
 			})}
 		</div>
 		{formatInterval(shift.interval)}
 	</div>
-);
+)

@@ -1,3 +1,3 @@
-import { FC, PropsWithChildren } from "react";
+import { FC, PropsWithChildren } from "react"
 
-export type FCC<P = unknown> = FC<PropsWithChildren<P>>;
+export type FCC<P = unknown> = FC<PropsWithChildren<P>>

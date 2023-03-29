@@ -1,19 +1,19 @@
-import styles from "./Upcoming.module.scss";
+import styles from "./Upcoming.module.scss"
 
-import { DateTime } from "luxon";
-import { FC } from "react";
+import { DateTime } from "luxon"
+import { FC } from "react"
 
-import { Container, Card } from "@components/reusable";
+import { Card, Container } from "@components/reusable"
 
-import { useTimesheet } from "@hooks";
+import { useTimesheet } from "@hooks"
 
-import { dateWithMonthFormat, formatInterval } from "@formats";
+import { dateWithMonthFormat, formatInterval } from "@formats"
 
 export const Upcoming: FC = () => {
-	const timesheet = useTimesheet();
+	const timesheet = useTimesheet()
 	const upcomingShifts = timesheet.shifts
 		.filter((shift) => shift.start > DateTime.now())
-		.slice(0, 3);
+		.slice(0, 3)
 
 	return (
 		<Container>
@@ -23,7 +23,7 @@ export const Upcoming: FC = () => {
 						<div className={styles.date}>
 							{shift.start.toLocaleString({
 								weekday: "long",
-								...dateWithMonthFormat
+								...dateWithMonthFormat,
 							})}
 							:
 						</div>
@@ -32,5 +32,5 @@ export const Upcoming: FC = () => {
 				))}
 			</Card>
 		</Container>
-	);
-};
+	)
+}

@@ -1,35 +1,35 @@
-import { NextApiHandler } from "next";
+import { NextApiHandler } from "next"
 
-import { store, getTimesheet, timesheetToIcs } from "@server";
-import { isError, parseTimesheet } from "@utils";
+import { getTimesheet, store, timesheetToIcs } from "@server"
+import { isError, parseTimesheet } from "@utils"
 
 const Ics: NextApiHandler = async (req, res) => {
-	await store.init();
+	await store.init()
 
 	try {
-		const timesheet = await getTimesheet();
+		const timesheet = await getTimesheet()
 
 		if (isError(timesheet)) {
-			return res.status(500).json(timesheet);
+			return res.status(500).json(timesheet)
 		}
 
 		const allShifts = Object.values(store.data.shifts).flatMap(
-			(e) => e.parsed
-		);
+			(e) => e.parsed,
+		)
 
 		const parsed = parseTimesheet({
 			parsed: allShifts,
-			updated: timesheet.updated
-		});
+			updated: timesheet.updated,
+		})
 
-		const ics = timesheetToIcs(parsed);
+		const ics = timesheetToIcs(parsed)
 
-		return res.end(ics);
+		return res.end(ics)
 	} catch (error) {
-		res.status(500).end("Unexpected Error");
+		res.status(500).end("Unexpected Error")
 
-		throw error;
+		throw error
 	}
-};
+}
 
-export default Ics;
+export default Ics

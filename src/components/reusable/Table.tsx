@@ -1,8 +1,8 @@
 /* eslint css-modules/no-unused-class: [2, { markAsUsed: ["sm"] }] */
-import styles from "./Table.module.scss";
+import styles from "./Table.module.scss"
 
-import type { FCC } from "@models/FCC";
-import { ColData, RenderCell, RowData } from "@models/Table";
+import type { FCC } from "@models/FCC"
+import { ColData, RenderCell, RowData } from "@models/Table"
 
 /**
  * Creates a responsive table
@@ -12,13 +12,13 @@ import { ColData, RenderCell, RowData } from "@models/Table";
 
 const defaultRenderCell: RenderCell = ({ children }): JSX.Element => (
 	<td>{children}</td>
-);
+)
 
 export const Table: FCC<{
-	data: RowData[];
-	colDef: ColData[];
-	className?: string;
-	RenderCell: RenderCell;
+	data: RowData[]
+	colDef: ColData[]
+	className?: string
+	RenderCell: RenderCell
 }> = ({ data, colDef, className = "", RenderCell = defaultRenderCell }) => (
 	<table className={`${styles.styledTable} ${className}`.trim()}>
 		<thead>
@@ -40,4 +40,4 @@ export const Table: FCC<{
 			))}
 		</tbody>
 	</table>
-);
+)

@@ -1,2 +1,2 @@
-export { SamLogin } from "./SamLogin";
-export { Store } from "./Store";
+export { SamLogin } from "./SamLogin"
+export { Store } from "./Store"

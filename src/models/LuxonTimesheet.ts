@@ -1,14 +1,14 @@
-import { DateTime, Interval } from "luxon";
+import { DateTime, Interval } from "luxon"
 
 export type LuxonShift = {
-	start: DateTime;
-	end: DateTime;
-	interval: Interval;
-};
+	start: DateTime
+	end: DateTime
+	interval: Interval
+}
 
 type LuxonTimesheet = {
-	updated: DateTime;
-	shifts: LuxonShift[];
-};
+	updated: DateTime
+	shifts: LuxonShift[]
+}
 
-export default LuxonTimesheet;
+export default LuxonTimesheet

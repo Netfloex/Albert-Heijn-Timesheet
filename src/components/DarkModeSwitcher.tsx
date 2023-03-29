@@ -1,17 +1,17 @@
-import styles from "./DarkModeSwitcher.module.scss";
+import styles from "./DarkModeSwitcher.module.scss"
 
-import { useTheme } from "next-themes";
-import type { FC } from "react";
+import { useTheme } from "next-themes"
+import type { FC } from "react"
 
 export const DarkModeSwitcher: FC = () => {
-	const { theme, setTheme } = useTheme();
+	const { theme, setTheme } = useTheme()
 
 	return (
 		<div
 			className={styles.switcher}
 			onMouseDown={(e): void => {
-				e.preventDefault();
-				setTheme(theme == "dark" ? "light" : "dark");
+				e.preventDefault()
+				setTheme(theme == "dark" ? "light" : "dark")
 			}}
 		>
 			<div className={styles.text}>Darkmode</div>
@@ -19,5 +19,5 @@ export const DarkModeSwitcher: FC = () => {
 				<div className={styles.slider}></div>
 			</button>
 		</div>
-	);
-};
+	)
+}

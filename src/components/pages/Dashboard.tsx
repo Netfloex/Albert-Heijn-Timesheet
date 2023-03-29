@@ -1,18 +1,17 @@
-import { timesheetCacheDuration } from "@env";
+import { timesheetCacheDuration } from "@env"
+import { NextSeo } from "next-seo"
+import { FC } from "react"
 
-import { NextSeo } from "next-seo";
-import { FC } from "react";
+import { Footer, Schedule, Upcoming } from "@components/layout"
 
-import { Footer, Schedule, Upcoming } from "@components/layout";
-
-import { useSWRUpdateTimesheet, useTimesheet } from "@hooks";
+import { useSWRUpdateTimesheet, useTimesheet } from "@hooks"
 
 export const Dashboard: FC = () => {
 	// When the timesheet on the client is old/stale refetch from server
-	const { updated } = useTimesheet();
+	const { updated } = useTimesheet()
 	const stale =
-		updated.diffNow().negate().as("seconds") > timesheetCacheDuration;
-	useSWRUpdateTimesheet(stale);
+		updated.diffNow().negate().as("seconds") > timesheetCacheDuration
+	useSWRUpdateTimesheet(stale)
 
 	return (
 		<>
@@ -23,5 +22,5 @@ export const Dashboard: FC = () => {
 
 			<Footer />
 		</>
-	);
-};
+	)
+}

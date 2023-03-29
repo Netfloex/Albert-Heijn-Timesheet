@@ -1,32 +1,32 @@
-import { AxiosError } from "axios";
-import { useContext, useEffect } from "react";
-import useSWR from "swr";
+import { AxiosError } from "axios"
+import { useContext, useEffect } from "react"
+import useSWR from "swr"
 
-import { TimesheetContext } from "@components/TimesheetProvider";
+import { TimesheetContext } from "@components/TimesheetProvider"
 
-import { fetcher, TimesheetError } from "@utils";
+import { TimesheetError, fetcher } from "@utils"
 
-import type { Timesheet } from "@models/Schema";
+import type { Timesheet } from "@models/Schema"
 
-type Response = Timesheet | TimesheetError;
+type Response = Timesheet | TimesheetError
 
 export const useSWRUpdateTimesheet = (
-	run = true
+	run = true,
 ): Partial<{
-	data: Response;
-	error: AxiosError;
+	data: Response
+	error: AxiosError
 }> => {
-	const { updateTimesheet } = useContext(TimesheetContext);
+	const { updateTimesheet } = useContext(TimesheetContext)
 	const { data, error } = useSWR<Response, AxiosError>(
 		run ? "/api" : null,
-		fetcher
-	);
+		fetcher,
+	)
 
 	useEffect(() => {
 		if (data && "parsed" in data) {
-			updateTimesheet?.(data);
+			updateTimesheet?.(data)
 		}
-	}, [data, updateTimesheet]);
+	}, [data, updateTimesheet])
 
-	return { data, error };
-};
+	return { data, error }
+}

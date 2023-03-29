@@ -5,5 +5,5 @@ export enum ErrorType {
 	AxiosError,
 	NoCookies,
 	NoToken,
-	Unknown
+	Unknown,
 }

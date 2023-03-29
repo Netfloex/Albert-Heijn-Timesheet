@@ -3,17 +3,19 @@
 /** @type {import("@ianvs/prettier-plugin-sort-imports").PrettierConfig} */
 
 module.exports = {
-	trailingComma: "none",
+	trailingComma: "all",
 	useTabs: true,
-	semi: true,
+	semi: false,
 	singleQuote: false,
 	tabWidth: 4,
 	printWidth: 80,
 	arrowParens: "always",
 	importOrderSeparation: true,
+	importOrderSortSpecifiers: true,
+	importOrderMergeDuplicateImports: true,
 	importOrder: [
 		".*scss$",
-		"^\\w+",
+		"<THIRD_PARTY_MODULES>",
 		"^@components.*",
 		"^@hooks$",
 		"^(@lib)|(@utils)|(@server)$",

@@ -1,7 +1,7 @@
-import { storePath } from "@env";
+import { storePath } from "@env"
 
-import { Store } from "@lib";
+import { Store } from "@lib"
 
-import Schema from "@models/Schema";
+import Schema from "@models/Schema"
 
-export const store = new Store<Schema>(storePath, { shifts: {}, token: {} });
+export const store = new Store<Schema>(storePath, { shifts: {}, token: {} })

@@ -1,23 +1,23 @@
-import styles from "./LanguageSwitcher.module.scss";
+import styles from "./LanguageSwitcher.module.scss"
 
-import { DateTime } from "luxon";
-import Link from "next/link";
-import { useRouter } from "next/router";
-import { Children, FC, useState } from "react";
+import { DateTime } from "luxon"
+import Link from "next/link"
+import { useRouter } from "next/router"
+import { Children, FC, useState } from "react"
 
-import { useOnClickOutside } from "@hooks";
+import { useOnClickOutside } from "@hooks"
 
-import { cx, languageOf } from "@utils";
+import { cx, languageOf } from "@utils"
 
 export const LanguageSwitcher: FC = () => {
-	const { locales, locale, asPath } = useRouter();
-	const [open, setOpen] = useState<boolean>(false);
+	const { locales, locale, asPath } = useRouter()
+	const [open, setOpen] = useState<boolean>(false)
 
 	const outsideRef = useOnClickOutside(() => {
-		setOpen(false);
-	});
+		setOpen(false)
+	})
 	if (!locale || !locales) {
-		return <></>;
+		return <></>
 	}
 
 	return (
@@ -32,10 +32,10 @@ export const LanguageSwitcher: FC = () => {
 						href={asPath}
 						className={loc == locales[0] ? styles.first : undefined}
 						onClick={(): void => {
-							setOpen(false);
+							setOpen(false)
 							document.cookie = `NEXT_LOCALE=${loc}; expires=${DateTime.now()
 								.plus({ years: 10 })
-								.toHTTP()}`;
+								.toHTTP()}`
 						}}
 					>
 						<span suppressHydrationWarning>{languageOf(loc)}</span>
@@ -50,5 +50,5 @@ export const LanguageSwitcher: FC = () => {
 				<span className={styles.caret} />
 			</div>
 		</div>
-	);
-};
+	)
+}

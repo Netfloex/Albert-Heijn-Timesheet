@@ -1,9 +1,9 @@
-import { useRouter } from "next/router";
+import { useRouter } from "next/router"
 
 export const useLocale = (): string => {
-	const { locale } = useRouter();
+	const { locale } = useRouter()
 	if (!locale) {
-		throw new Error("No locale in useRouter");
+		throw new Error("No locale in useRouter")
 	}
-	return locale;
-};
+	return locale
+}

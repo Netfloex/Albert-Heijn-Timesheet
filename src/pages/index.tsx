@@ -1,14 +1,13 @@
-import { timesheetCacheDuration } from "@env";
+import { timesheetCacheDuration } from "@env"
+import type { GetStaticProps, NextPage } from "next"
 
-import type { GetStaticProps, NextPage } from "next";
+import { TimesheetProvider } from "@components"
+import { Dashboard, ErrorPage, Incomplete } from "@components/pages"
 
-import { TimesheetProvider } from "@components";
-import { Dashboard, ErrorPage, Incomplete } from "@components/pages";
+import { getTimesheet } from "@server"
+import { TimesheetData, isError } from "@utils"
 
-import { getTimesheet } from "@server";
-import { isError, TimesheetData } from "@utils";
-
-import { ErrorType } from "@models/ErrorType";
+import { ErrorType } from "@models/ErrorType"
 
 const Home: NextPage<TimesheetData> = (props) => (
 	<TimesheetProvider timesheet={isError(props) ? undefined : props}>
@@ -22,21 +21,21 @@ const Home: NextPage<TimesheetData> = (props) => (
 			<Dashboard />
 		)}
 	</TimesheetProvider>
-);
+)
 
 export const getStaticProps: GetStaticProps<TimesheetData> = async () => {
-	const timesheet = await getTimesheet();
+	const timesheet = await getTimesheet()
 
-	let revalidate: number | undefined = timesheetCacheDuration;
+	let revalidate: number | undefined = timesheetCacheDuration
 
 	if ("error" in timesheet) {
-		revalidate = 5;
+		revalidate = 5
 	}
 
 	return {
 		props: timesheet,
-		revalidate
-	};
-};
+		revalidate,
+	}
+}
 
-export default Home;
+export default Home

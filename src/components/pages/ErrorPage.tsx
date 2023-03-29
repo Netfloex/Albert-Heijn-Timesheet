@@ -1,15 +1,15 @@
-import styles from "./ErrorPage.module.scss";
+import styles from "./ErrorPage.module.scss"
 
-import { AxiosError } from "axios";
-import type { FC } from "react";
+import { AxiosError } from "axios"
+import type { FC } from "react"
 
-import { Center, Card } from "@components/reusable";
+import { Card, Center } from "@components/reusable"
 
-import type { TimesheetError } from "@utils";
+import type { TimesheetError } from "@utils"
 
 export const ErrorPage: FC<{
-	swr?: AxiosError;
-	timesheet?: TimesheetError;
+	swr?: AxiosError
+	timesheet?: TimesheetError
 }> = ({ swr, timesheet }) => (
 	<Center>
 		<Card title="Error">
@@ -26,4 +26,4 @@ export const ErrorPage: FC<{
 			{timesheet && timesheet.error}
 		</Card>
 	</Center>
-);
+)

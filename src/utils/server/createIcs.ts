@@ -1,36 +1,36 @@
-import { DateTime } from "luxon";
+import { DateTime } from "luxon"
 
 export interface CalendarOptions {
-	name: string;
-	updated: DateTime;
+	name: string
+	updated: DateTime
 }
 
 export interface IcsEvent {
-	start: DateTime;
-	end: DateTime;
-	description: string;
-	summary: string;
-	alarms: number[];
+	start: DateTime
+	end: DateTime
+	description: string
+	summary: string
+	alarms: number[]
 }
 
 const formatTime = (date: DateTime): string =>
 	date.set({ millisecond: 0 }).toISO({
 		includeOffset: false,
 		suppressMilliseconds: true,
-		format: "basic"
-	});
+		format: "basic",
+	})
 
 export const createIcs = (
 	options: CalendarOptions,
-	events: IcsEvent[]
+	events: IcsEvent[],
 ): string => {
 	const ics = [
 		"BEGIN:VCALENDAR",
 		"VERSION:2.0",
 		"PRODID:-//netfloex//appie//NL",
 		`NAME:${options.name}`,
-		`X-WR-CALNAME:${options.name}`
-	];
+		`X-WR-CALNAME:${options.name}`,
+	]
 
 	events.forEach((event) => {
 		const alarms = event.alarms.map((alarm) =>
@@ -39,9 +39,9 @@ export const createIcs = (
 				`TRIGGER:-PT${alarm}M`,
 				"ACTION:DISPLAY",
 				`DESCRIPTION:${event.summary}`,
-				"END:VALARM"
-			].join("\r\n")
-		);
+				"END:VALARM",
+			].join("\r\n"),
+		)
 
 		ics.push(
 			...[
@@ -54,12 +54,12 @@ export const createIcs = (
 				"STATUS:CONFIRMED",
 				`UID:${event.end.toMillis() + "-" + event.start.toMillis()}`,
 				...alarms,
-				"END:VEVENT"
-			]
-		);
-	});
+				"END:VEVENT",
+			],
+		)
+	})
 
-	ics.push("END:VCALENDAR");
+	ics.push("END:VCALENDAR")
 
-	return ics.join("\r\n");
-};
+	return ics.join("\r\n")
+}

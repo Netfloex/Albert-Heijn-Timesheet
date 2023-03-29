@@ -1,11 +1,11 @@
-import "@styles/globals.scss";
+import "@styles/globals.scss"
 
-import { DefaultSeo } from "next-seo";
-import { ThemeProvider } from "next-themes";
-import type { AppProps } from "next/app";
-import Head from "next/head";
+import { DefaultSeo } from "next-seo"
+import { ThemeProvider } from "next-themes"
+import type { AppProps } from "next/app"
+import Head from "next/head"
 
-import SEO from "@seo-default";
+import SEO from "@seo-default"
 
 const App = ({ Component, pageProps }: AppProps): JSX.Element => (
 	<>
@@ -17,6 +17,6 @@ const App = ({ Component, pageProps }: AppProps): JSX.Element => (
 			<Component {...pageProps} />
 		</ThemeProvider>
 	</>
-);
+)
 
-export default App;
+export default App
