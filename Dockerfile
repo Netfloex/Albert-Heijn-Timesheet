@@ -13,8 +13,6 @@ COPY . .
 COPY --from=deps /app/node_modules ./node_modules
 ENV NEXT_TELEMETRY_DISABLED 1
 
-# Temporary until Next.js swc updates for arm
-RUN echo '{"presets":["next/babel"]}' > .babelrc
 
 RUN yarn build
 
