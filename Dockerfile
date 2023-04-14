@@ -4,6 +4,8 @@ FROM $NODE_IMAGE AS deps
 WORKDIR /app
 
 COPY package.json yarn.lock ./
+
+RUN yarn config set network-timeout 600000 -g
 RUN yarn install --frozen-lockfile
 
 FROM $NODE_IMAGE AS builder
@@ -12,7 +14,6 @@ WORKDIR /app
 COPY . .
 COPY --from=deps /app/node_modules ./node_modules
 ENV NEXT_TELEMETRY_DISABLED 1
-
 
 RUN yarn build
 
