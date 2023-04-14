@@ -52,7 +52,7 @@ export const createIcs = (
 				`SUMMARY:${event.summary}`,
 				`DESCRIPTION:${event.description}`,
 				"STATUS:CONFIRMED",
-				`UID:${event.end.toMillis() + "-" + event.start.toMillis()}`,
+				`UID:${event.end.toMillis() + "" + event.start.toMillis()}`,
 				...alarms,
 				"END:VEVENT",
 			],
