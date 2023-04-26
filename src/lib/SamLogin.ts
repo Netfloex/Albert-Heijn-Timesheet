@@ -213,12 +213,19 @@ export class SamLogin {
 			const [start, end] = $("p span", element)
 				.toArray()
 				.map((el) =>
-					new Date(`${date} ${$(el.firstChild!).text()}`).toJSON(),
+					DateTime.fromFormat(
+						`${date} ${$(el.firstChild!).text()}`,
+						"MM/dd/yyyy T",
+					),
 				)
 
+			if (start > end) {
+				end.plus({ days: 1 })
+			}
+
 			return {
-				start,
-				end,
+				start: start.toJSON(),
+				end: end.toJSON(),
 			}
 		})
 		return shifts
