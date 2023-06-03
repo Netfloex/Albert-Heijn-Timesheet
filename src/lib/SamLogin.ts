@@ -17,8 +17,6 @@ export class SamLogin {
 	private username?: string
 	private password?: string
 
-	private promises: Record<string, Promise<GetTimesheet>> = {}
-
 	private urls = {
 		base: "https://sam.ahold.com/",
 		timesheet: "wrkbrn_jct/etm/time/timesheet/etmTnsMonth.jsp",
@@ -72,21 +70,6 @@ export class SamLogin {
 	}
 
 	public async get(date = DateTime.now()): Promise<GetTimesheet> {
-		const monthYear = this.monthYear(date)
-
-		if (monthYear in this.promises) {
-			return await this.promises[monthYear]
-		} else {
-			const get = this.forceGet(date)
-			this.promises[monthYear] = get
-			get.then(() => {
-				delete this.promises[monthYear]
-			})
-			return await get
-		}
-	}
-
-	private async forceGet(date: DateTime): Promise<GetTimesheet> {
 		Settings.defaultLocale = "en"
 		await this.db.read()
 
